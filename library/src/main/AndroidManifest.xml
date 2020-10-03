@@ -1,5 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dylanc.grape">
+  xmlns:tools="http://schemas.android.com/tools"
+  package="com.dylanc.grape">
 
-    /
+  <application>
+
+    <provider
+      android:name="androidx.startup.InitializationProvider"
+      android:authorities="com.dylanc.grape.androidx-startup"
+      android:exported="false"
+      tools:replace="android:authorities"
+      tools:node="merge">
+      <meta-data
+        android:name="com.dylanc.grape.AppInitializer"
+        android:value="androidx.startup" />
+    </provider>
+  </application>
+
 </manifest>
