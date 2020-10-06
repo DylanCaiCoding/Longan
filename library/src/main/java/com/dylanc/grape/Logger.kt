@@ -23,6 +23,18 @@ inline val Any.TAG: String
     return if (tag.length <= 23) tag else tag.substring(0, 23)
   }
 
+val loggerConfig: LoggerConfig by lazy { LoggerConfig() }
+
+class LoggerConfig internal constructor() {
+  internal var isLoggable: (Int, String?) -> Boolean = { _, _ ->
+    true
+  }
+
+  fun isLoggable(isLoggable: (Int, String?) -> Boolean) {
+    this.isLoggable = isLoggable
+  }
+}
+
 typealias Log = com.orhanobut.logger.Logger
 
 inline fun Logger.logVerbose(message: String) = Log.t(loggerTag).v(message)
@@ -38,6 +50,20 @@ inline fun Logger.logError(message: String) = Log.t(loggerTag).e(message)
 inline fun Logger.logJson(json: String) = Log.t(loggerTag).json(json)
 
 inline fun Logger.logXml(content: String) = Log.t(loggerTag).xml(content)
+
+inline fun Any.logVerbose(message: String) = Log.t(TAG).v(message)
+
+inline fun Any.logDebug(message: String) = Log.t(TAG).d(message)
+
+inline fun Any.logInfo(message: String) = Log.t(TAG).i(message)
+
+inline fun Any.logWarn(message: String) = Log.t(TAG).w(message)
+
+inline fun Any.logError(message: String) = Log.t(TAG).e(message)
+
+inline fun Any.logJson(json: String) = Log.t(TAG).json(json)
+
+inline fun Any.logXml(content: String) = Log.t(TAG).xml(content)
 
 inline fun logVerbose(message: String) = Log.v(message)
 
