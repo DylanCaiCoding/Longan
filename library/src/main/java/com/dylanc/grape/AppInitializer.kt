@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "ObjectPropertyName")
 
 package com.dylanc.grape
 
@@ -13,20 +13,20 @@ import com.orhanobut.logger.PrettyFormatStrategy
  * @author Dylan Cai
  */
 
-private lateinit var application: Application
-val app: Application get() = application
+private lateinit var _application: Application
+val application: Application get() = _application
 
 class AppInitializer : Initializer<Unit> {
 
   override fun create(context: Context) {
-    application = context as Application
+    _application = context as Application
     val formatStrategy = PrettyFormatStrategy.newBuilder()
       .methodCount(0)
       .tag("Logger")
       .build()
     Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy) {
       override fun isLoggable(priority: Int, tag: String?): Boolean {
-        return loggerConfig.isLoggable(priority, tag)
+        return LoggerConfig.isLoggable(priority, tag)
       }
     })
   }

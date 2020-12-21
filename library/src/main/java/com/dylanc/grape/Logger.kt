@@ -23,9 +23,7 @@ inline val Any.TAG: String
     return if (tag.length <= 23) tag else tag.substring(0, 23)
   }
 
-val loggerConfig: LoggerConfig by lazy { LoggerConfig() }
-
-class LoggerConfig internal constructor() {
+object LoggerConfig {
   internal var isLoggable: (Int, String?) -> Boolean = { _, _ ->
     true
   }
