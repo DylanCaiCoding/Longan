@@ -17,6 +17,32 @@ import java.io.Serializable
  * @author Dylan Cai
  */
 
+inline fun Activity.intentBooleanExtra(name: String, defaultValue: Boolean) = lazy { intent.getBooleanExtra(name, defaultValue) }
+inline fun Activity.intentByteExtra(name: String, defaultValue: Byte) = lazy { intent.getByteExtra(name, defaultValue) }
+inline fun Activity.intentCharExtra(name: String, defaultValue: Char) = lazy { intent.getCharExtra(name, defaultValue) }
+inline fun Activity.intentDoubleExtra(name: String, defaultValue: Double) = lazy { intent.getDoubleExtra(name, defaultValue) }
+inline fun Activity.intentFloatExtra(name: String, defaultValue: Float) = lazy { intent.getFloatExtra(name, defaultValue) }
+inline fun Activity.intentIntExtra(name: String, defaultValue: Int) = lazy { intent.getIntExtra(name, defaultValue) }
+inline fun Activity.intentLongExtra(name: String, defaultValue: Long) = lazy { intent.getLongExtra(name, defaultValue) }
+inline fun Activity.intentShortExtra(name: String, defaultValue: Short) = lazy { intent.getShortExtra(name, defaultValue) }
+inline fun Activity.intentStringExtra(name: String) = lazy { intent.getStringExtra(name) }
+inline fun Activity.intentCharSequenceExtra(name: String) = lazy { intent.getCharSequenceExtra(name) }
+inline fun <T : Parcelable> Activity.intentParcelableExtra(name: String) = lazy { intent.getParcelableExtra<T?>(name) }
+@Suppress("UNCHECKED_CAST")
+inline fun <T : Serializable> Activity.intentSerializableExtra(name: String) = lazy { intent.getSerializableExtra(name) as T? }
+inline fun Activity.intentBooleanArrayExtra(name: String) = lazy { intent.getBooleanArrayExtra(name) }
+inline fun Activity.intentByteArrayExtra(name: String) = lazy { intent.getByteArrayExtra(name) }
+inline fun Activity.intentCharArrayExtra(name: String) = lazy { intent.getCharArrayExtra(name) }
+inline fun Activity.intentDoubleArrayExtra(name: String) = lazy { intent.getDoubleArrayExtra(name) }
+inline fun Activity.intentFloatArrayExtra(name: String) = lazy { intent.getFloatArrayExtra(name) }
+inline fun Activity.intentIntArrayExtra(name: String) = lazy { intent.getIntArrayExtra(name) }
+inline fun Activity.intentLongArrayExtra(name: String) = lazy { intent.getLongArrayExtra(name) }
+inline fun Activity.intentShortArrayExtra(name: String) = lazy { intent.getShortArrayExtra(name) }
+inline fun Activity.intentStringArrayExtra(name: String) = lazy { intent.getStringArrayExtra(name) }
+inline fun Activity.intentCharSequenceArrayExtra(name: String) = lazy { intent.getCharSequenceArrayExtra(name) }
+inline fun Activity.intentParcelableArrayExtra(name: String) = lazy { intent.getParcelableArrayExtra(name) }
+inline fun Activity.intentBundleExtra(name: String) = lazy { intent.getBundleExtra(name) }
+
 inline fun <reified T : Any> Context.intentOf(bundle: Bundle) =
   Intent(this, T::class.java).apply { putExtras(bundle) }
 
@@ -124,29 +150,3 @@ fun bundleOf(vararg pairs: Pair<String, Any?>) = Bundle(pairs.size).apply {
   }
 }
 
-
-inline fun Activity.intentBooleanExtra(name: String, defaultValue: Boolean) = lazy { intent.getBooleanExtra(name, defaultValue) }
-inline fun Activity.intentByteExtra(name: String, defaultValue: Byte) = lazy { intent.getByteExtra(name, defaultValue) }
-inline fun Activity.intentCharExtra(name: String, defaultValue: Char) = lazy { intent.getCharExtra(name, defaultValue) }
-inline fun Activity.intentDoubleExtra(name: String, defaultValue: Double) = lazy { intent.getDoubleExtra(name, defaultValue) }
-inline fun Activity.intentFloatExtra(name: String, defaultValue: Float) = lazy { intent.getFloatExtra(name, defaultValue) }
-inline fun Activity.intentIntExtra(name: String, defaultValue: Int) = lazy { intent.getIntExtra(name, defaultValue) }
-inline fun Activity.intentLongExtra(name: String, defaultValue: Long) = lazy { intent.getLongExtra(name, defaultValue) }
-inline fun Activity.intentShortExtra(name: String, defaultValue: Short) = lazy { intent.getShortExtra(name, defaultValue) }
-inline fun Activity.intentStringExtra(name: String) = lazy { intent.getStringExtra(name) }
-inline fun Activity.intentCharSequenceExtra(name: String) = lazy { intent.getCharSequenceExtra(name) }
-inline fun <T : Parcelable> Activity.intentParcelableExtra(name: String) = lazy { intent.getParcelableExtra<T?>(name) }
-@Suppress("UNCHECKED_CAST")
-inline fun <T : Serializable> Activity.intentSerializableExtra(name: String) = lazy { intent.getSerializableExtra(name) as T? }
-inline fun Activity.intentBooleanArrayExtra(name: String) = lazy { intent.getBooleanArrayExtra(name) }
-inline fun Activity.intentByteArrayExtra(name: String) = lazy { intent.getByteArrayExtra(name) }
-inline fun Activity.intentCharArrayExtra(name: String) = lazy { intent.getCharArrayExtra(name) }
-inline fun Activity.intentDoubleArrayExtra(name: String) = lazy { intent.getDoubleArrayExtra(name) }
-inline fun Activity.intentFloatArrayExtra(name: String) = lazy { intent.getFloatArrayExtra(name) }
-inline fun Activity.intentIntArrayExtra(name: String) = lazy { intent.getIntArrayExtra(name) }
-inline fun Activity.intentLongArrayExtra(name: String) = lazy { intent.getLongArrayExtra(name) }
-inline fun Activity.intentShortArrayExtra(name: String) = lazy { intent.getShortArrayExtra(name) }
-inline fun Activity.intentStringArrayExtra(name: String) = lazy { intent.getStringArrayExtra(name) }
-inline fun Activity.intentCharSequenceArrayExtra(name: String) = lazy { intent.getCharSequenceArrayExtra(name) }
-inline fun Activity.intentParcelableArrayExtra(name: String) = lazy { intent.getParcelableArrayExtra(name) }
-inline fun Activity.intentBundleExtra(name: String) = lazy { intent.getBundleExtra(name) }

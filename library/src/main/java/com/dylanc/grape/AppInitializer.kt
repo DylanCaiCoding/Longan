@@ -13,25 +13,24 @@ import com.orhanobut.logger.PrettyFormatStrategy
  * @author Dylan Cai
  */
 
-private lateinit var _application: Application
-val application: Application get() = _application
+val application: Application get() = AppInitializer.application
 
-class AppInitializer : Initializer<Unit> {
+internal class AppInitializer : Initializer<Unit> {
 
   override fun create(context: Context) {
-    _application = context as Application
+    application = context as Application
     val formatStrategy = PrettyFormatStrategy.newBuilder()
       .methodCount(0)
-      .tag("Logger")
+      .tag("Grape")
       .build()
-    Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy) {
-      override fun isLoggable(priority: Int, tag: String?): Boolean {
-        return LoggerConfig.isLoggable(priority, tag)
-      }
-    })
+    Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
   }
 
   override fun dependencies(): MutableList<Class<out Initializer<*>>> {
     return mutableListOf()
+  }
+
+  companion object {
+    internal lateinit var application: Application
   }
 }

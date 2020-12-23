@@ -3,6 +3,7 @@ package com.dylanc.grape.sample
 import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.dylanc.grape.Logger
 import com.dylanc.grape.PermissionResultLauncher
 import com.dylanc.grape.logDebug
 import com.dylanc.grape.toast
