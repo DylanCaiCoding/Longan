@@ -1,25 +1,28 @@
 package com.dylanc.grape.sample
 
-import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.dylanc.grape.Logger
-import com.dylanc.grape.PermissionResultLauncher
-import com.dylanc.grape.logDebug
+import com.dylanc.grape.TakePictureResultLauncher
+import com.dylanc.grape.sample.databinding.ActivityMainBinding
 import com.dylanc.grape.toast
 
 class MainActivity : AppCompatActivity() {
 
-  private val launcher = PermissionResultLauncher()
+  private val takePictureResultLauncher = TakePictureResultLauncher()
+
+  private lateinit var binding: ActivityMainBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    launcher.launch(Manifest.permission.CAMERA) {
-      if (it)
-        toast("success")
-      else
-        toast("failure")
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+
+    binding.btn.setOnClickListener {
+      takePictureResultLauncher.launch({
+        toast(it)
+      }, {
+        toast(it)
+      })
     }
   }
 }

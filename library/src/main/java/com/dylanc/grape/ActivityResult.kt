@@ -1,32 +1,96 @@
-@file:Suppress("unused", "NOTHING_TO_INLINE", "FunctionName")
+@file:Suppress("unused", "NOTHING_TO_INLINE", "FunctionName", "MemberVisibilityCanBePrivate")
 
 package com.dylanc.grape
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import java.io.File
 
 /**
  * @author Dylan Cai
  */
 
-fun ComponentActivity.ActivityResultLauncher() = ActivityResultLauncher({ this }, this::registerForActivityResult)
+fun ComponentActivity.ActivityResultLauncher() =
+  ActivityResultLauncher({ this }, this::registerForActivityResult)
 
-fun Fragment.ActivityResultLauncher() = ActivityResultLauncher({ requireContext() }, this::registerForActivityResult)
+fun Fragment.ActivityResultLauncher() =
+  ActivityResultLauncher({ requireContext() }, this::registerForActivityResult)
 
-fun ComponentActivity.PermissionResultLauncher() = PermissionResultLauncher(this::registerForActivityResult)
+fun ComponentActivity.PermissionResultLauncher() =
+  PermissionResultLauncher(
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) this::shouldShowRequestPermissionRationale else null,
+    this::registerForActivityResult
+  )
 
-fun Fragment.PermissionResultLauncher() = PermissionResultLauncher(this::registerForActivityResult)
+fun Fragment.PermissionResultLauncher() =
+  PermissionResultLauncher(this::shouldShowRequestPermissionRationale, this::registerForActivityResult)
 
-fun ComponentActivity.MultiplePermissionsResultLauncher() = MultiplePermissionsResultLauncher(this::registerForActivityResult)
+fun ComponentActivity.MultiplePermissionsResultLauncher() =
+  MultiplePermissionsResultLauncher(this::registerForActivityResult)
 
-fun Fragment.MultiplePermissionsResultLauncher() = MultiplePermissionsResultLauncher(this::registerForActivityResult)
+fun Fragment.MultiplePermissionsResultLauncher() =
+  MultiplePermissionsResultLauncher(this::registerForActivityResult)
+
+fun ComponentActivity.TakePicturePreviewResultLauncher() =
+  TakePicturePreviewResultLauncher(this::registerForActivityResult)
+
+fun Fragment.TakePicturePreviewResultLauncher() =
+  TakePicturePreviewResultLauncher(this::registerForActivityResult)
+
+fun ComponentActivity.TakePictureResultLauncher() =
+  TakePictureResultLauncher({ this }, PermissionResultLauncher(), this::registerForActivityResult)
+
+fun Fragment.TakePictureResultLauncher() =
+  TakePictureResultLauncher({ requireContext() }, PermissionResultLauncher(), this::registerForActivityResult)
+
+fun ComponentActivity.TakeVideoResultLauncher() =
+  TakeVideoResultLauncher(this::registerForActivityResult)
+
+fun Fragment.TakeVideoResultLauncher() =
+  TakeVideoResultLauncher(this::registerForActivityResult)
+
+fun ComponentActivity.PickContactResultLauncher() =
+  PickContactResultLauncher(this::registerForActivityResult)
+
+fun Fragment.PickContactResultLauncher() =
+  PickContactResultLauncher(this::registerForActivityResult)
+
+fun ComponentActivity.GetContentResultLauncher() =
+  GetContentResultLauncher(this::registerForActivityResult)
+
+fun Fragment.GetContentResultLauncher() =
+  GetContentResultLauncher(this::registerForActivityResult)
+
+fun ComponentActivity.CreateDocumentResultLauncher() =
+  CreateDocumentResultLauncher(this::registerForActivityResult)
+
+fun Fragment.CreateDocumentResultLauncher() =
+  CreateDocumentResultLauncher(this::registerForActivityResult)
+
+fun ComponentActivity.OpenMultipleDocumentsResultLauncher() =
+  OpenMultipleDocumentsResultLauncher(this::registerForActivityResult)
+
+fun Fragment.OpenMultipleDocumentsResultLauncher() =
+  OpenMultipleDocumentsResultLauncher(this::registerForActivityResult)
+
+fun ComponentActivity.OpenDocumentTreeResultLauncher() =
+  OpenDocumentTreeResultLauncher(this::registerForActivityResult)
+
+fun Fragment.OpenDocumentTreeResultLauncher() =
+  OpenDocumentTreeResultLauncher(this::registerForActivityResult)
 
 typealias RegisterForActivityResult<I, O> =
       (ActivityResultContract<I, O>, ActivityResultCallback<O>) -> androidx.activity.result.ActivityResultLauncher<I>
@@ -35,17 +99,17 @@ open class BaseLauncher<I, O>(
   registerForActivityResult: RegisterForActivityResult<I, O>,
   activityResultContract: ActivityResultContract<I, O>
 ) {
-  private var observer: ((O) -> Unit)? = null
+  private var onActivityResult: ((O) -> Unit)? = null
 
   private val launcher: androidx.activity.result.ActivityResultLauncher<I> =
     registerForActivityResult(activityResultContract) { result ->
-      observer?.invoke(result)
-      observer = null
+      onActivityResult?.invoke(result)
+      onActivityResult = null
     }
 
-  fun launch(input: I, observer: (O) -> Unit) {
+  fun launch(input: I, onActivityResult: (O) -> Unit) {
     launcher.launch(input)
-    this.observer = observer
+    this.onActivityResult = onActivityResult
   }
 }
 
@@ -55,22 +119,94 @@ class ActivityResultLauncher(
 ) :
   BaseLauncher<Intent, ActivityResult>(registerForActivityResult, ActivityResultContracts.StartActivityForResult()) {
 
-  fun <T : Activity> launch(clazz: Class<T>, block: (ActivityResult) -> Unit) {
-    launch(Intent(getContext(), clazz), block)
+  fun <T : Activity> launch(clazz: Class<T>, onActivityResult: (ActivityResult) -> Unit) {
+    launch(Intent(getContext(), clazz), onActivityResult)
   }
 
-  inline fun <reified T : Activity> launch(noinline block: (ActivityResult) -> Unit) {
-    launch(T::class.java, block)
+  inline fun <reified T : Activity> launch(noinline onActivityResult: (ActivityResult) -> Unit) {
+    launch(T::class.java, onActivityResult)
   }
 }
 
 class PermissionResultLauncher(
+  private val shouldShowRequestPermissionRationale: ((String) -> Boolean)?,
   registerForActivityResult: RegisterForActivityResult<String, Boolean>
 ) :
-  BaseLauncher<String, Boolean>(registerForActivityResult, ActivityResultContracts.RequestPermission())
+  BaseLauncher<String, Boolean>(registerForActivityResult, ActivityResultContracts.RequestPermission()) {
 
-class MultiplePermissionsResultLauncher(
-  registerForActivityResult: RegisterForActivityResult<Array<String>, Map<String, Boolean>>
+  fun launch(
+    permission: String,
+    onGranted: () -> Unit,
+    onDenied: () -> Unit = {},
+    onShowRationale: () -> Unit = {}
+  ) {
+    launch(permission) {
+      when {
+        it -> onGranted()
+        shouldShowRequestPermissionRationale?.invoke(permission) == true -> onShowRationale()
+        else -> onDenied()
+      }
+    }
+  }
+}
+
+class MultiplePermissionsResultLauncher(registerForActivityResult: RegisterForActivityResult<Array<String>, Map<String, Boolean>>) :
+  BaseLauncher<Array<String>, Map<String, Boolean>>(registerForActivityResult, ActivityResultContracts.RequestMultiplePermissions()) {
+
+  fun launch(vararg permissions: String, onActivityResult: (Map<String, Boolean>) -> Unit) {
+    launch(arrayOf(*permissions), onActivityResult)
+  }
+}
+
+class TakePicturePreviewResultLauncher(registerForActivityResult: RegisterForActivityResult<Void, Bitmap>) :
+  BaseLauncher<Void, Bitmap>(registerForActivityResult, ActivityResultContracts.TakePicturePreview())
+
+class TakePictureResultLauncher(
+  private val getContext: () -> Context,
+  private val permissionResultLauncher: PermissionResultLauncher,
+  registerForActivityResult: RegisterForActivityResult<Uri, Boolean>
 ) :
-  BaseLauncher<Array<String>, Map<String, Boolean>>(registerForActivityResult, ActivityResultContracts.RequestMultiplePermissions())
+  BaseLauncher<Uri, Boolean>(registerForActivityResult, ActivityResultContracts.TakePicture()) {
 
+  fun launch(onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    val path = "${getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath}/${System.currentTimeMillis()}.jpg"
+    launch(path, onSuccess, onFailure)
+  }
+
+  fun launch(path: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    permissionResultLauncher.launch(Manifest.permission.CAMERA) {
+      if (it) {
+        val fileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+          FileProvider.getUriForFile(getContext(), "${getContext().packageName}.chooseProvider", File(path))
+        } else {
+          Uri.fromFile(File(path))
+        }
+        launch(fileUri) { takeSuccess ->
+          if (takeSuccess) {
+            onSuccess(path)
+          }
+        }
+      } else {
+        onFailure("Failed to request camera permission.")
+      }
+    }
+  }
+}
+
+class TakeVideoResultLauncher(registerForActivityResult: RegisterForActivityResult<Uri, Bitmap>) :
+  BaseLauncher<Uri, Bitmap>(registerForActivityResult, ActivityResultContracts.TakeVideo())
+
+class PickContactResultLauncher(registerForActivityResult: RegisterForActivityResult<Void, Uri>) :
+  BaseLauncher<Void, Uri>(registerForActivityResult, ActivityResultContracts.PickContact())
+
+class GetContentResultLauncher(registerForActivityResult: RegisterForActivityResult<String, Uri>) :
+  BaseLauncher<String, Uri>(registerForActivityResult, ActivityResultContracts.GetContent())
+
+class CreateDocumentResultLauncher(registerForActivityResult: RegisterForActivityResult<String, Uri>) :
+  BaseLauncher<String, Uri>(registerForActivityResult, ActivityResultContracts.CreateDocument())
+
+class OpenMultipleDocumentsResultLauncher(registerForActivityResult: RegisterForActivityResult<Array<String>, List<Uri>>) :
+  BaseLauncher<Array<String>, List<Uri>>(registerForActivityResult, ActivityResultContracts.OpenMultipleDocuments())
+
+class OpenDocumentTreeResultLauncher(registerForActivityResult: RegisterForActivityResult<Uri, Uri>) :
+  BaseLauncher<Uri, Uri>(registerForActivityResult, ActivityResultContracts.OpenDocumentTree())

@@ -46,7 +46,7 @@ publish {
     repoName = 'maven'
     groupId = 'com.dylanc'
     artifactId = 'grape'
-    publishVersion = '0.1.0'
+    publishVersion = '0.1.1'
     desc = 'Rich kotlin utils for Android.'
     website = 'https://github.com/DylanCaiCoding/Grape'
 }
