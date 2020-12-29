@@ -3,8 +3,8 @@ package com.dylanc.grape.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dylanc.grape.TakePictureResultLauncher
+import com.dylanc.grape.logDebug
 import com.dylanc.grape.sample.databinding.ActivityMainBinding
-import com.dylanc.grape.toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,12 +17,13 @@ class MainActivity : AppCompatActivity() {
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-    binding.btn.setOnClickListener {
-      takePictureResultLauncher.launch({
-        toast(it)
-      }, {
-        toast(it)
-      })
+    binding.apply {
+      btnTakePicture.setOnClickListener {
+        takePictureResultLauncher.launch({ file, uri ->
+          logDebug(file.path)
+          ivPicture.setImageURI(uri)
+        })
+      }
     }
   }
 }

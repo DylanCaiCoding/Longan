@@ -2,9 +2,7 @@
 
 package com.dylanc.grape
 
-import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -24,10 +22,10 @@ import java.io.File
  */
 
 fun ComponentActivity.ActivityResultLauncher() =
-  ActivityResultLauncher({ this }, this::registerForActivityResult)
+  ActivityResultLauncher(this::registerForActivityResult)
 
 fun Fragment.ActivityResultLauncher() =
-  ActivityResultLauncher({ requireContext() }, this::registerForActivityResult)
+  ActivityResultLauncher(this::registerForActivityResult)
 
 fun ComponentActivity.PermissionResultLauncher() =
   PermissionResultLauncher(
@@ -51,10 +49,10 @@ fun Fragment.TakePicturePreviewResultLauncher() =
   TakePicturePreviewResultLauncher(this::registerForActivityResult)
 
 fun ComponentActivity.TakePictureResultLauncher() =
-  TakePictureResultLauncher({ this }, PermissionResultLauncher(), this::registerForActivityResult)
+  TakePictureResultLauncher(this::registerForActivityResult)
 
 fun Fragment.TakePictureResultLauncher() =
-  TakePictureResultLauncher({ requireContext() }, PermissionResultLauncher(), this::registerForActivityResult)
+  TakePictureResultLauncher(this::registerForActivityResult)
 
 fun ComponentActivity.TakeVideoResultLauncher() =
   TakeVideoResultLauncher(this::registerForActivityResult)
@@ -114,13 +112,15 @@ open class BaseLauncher<I, O>(
 }
 
 class ActivityResultLauncher(
-  private val getContext: () -> Context,
   registerForActivityResult: RegisterForActivityResult<Intent, ActivityResult>
 ) :
-  BaseLauncher<Intent, ActivityResult>(registerForActivityResult, ActivityResultContracts.StartActivityForResult()) {
+  BaseLauncher<Intent, ActivityResult>(
+    registerForActivityResult,
+    ActivityResultContracts.StartActivityForResult()
+  ) {
 
   fun <T : Activity> launch(clazz: Class<T>, onActivityResult: (ActivityResult) -> Unit) {
-    launch(Intent(getContext(), clazz), onActivityResult)
+    launch(Intent(application, clazz), onActivityResult)
   }
 
   inline fun <reified T : Activity> launch(noinline onActivityResult: (ActivityResult) -> Unit) {
@@ -150,8 +150,13 @@ class PermissionResultLauncher(
   }
 }
 
-class MultiplePermissionsResultLauncher(registerForActivityResult: RegisterForActivityResult<Array<String>, Map<String, Boolean>>) :
-  BaseLauncher<Array<String>, Map<String, Boolean>>(registerForActivityResult, ActivityResultContracts.RequestMultiplePermissions()) {
+class MultiplePermissionsResultLauncher(
+  registerForActivityResult: RegisterForActivityResult<Array<String>, Map<String, Boolean>>
+) :
+  BaseLauncher<Array<String>, Map<String, Boolean>>(
+    registerForActivityResult,
+    ActivityResultContracts.RequestMultiplePermissions()
+  ) {
 
   fun launch(vararg permissions: String, onActivityResult: (Map<String, Boolean>) -> Unit) {
     launch(arrayOf(*permissions), onActivityResult)
@@ -162,35 +167,31 @@ class TakePicturePreviewResultLauncher(registerForActivityResult: RegisterForAct
   BaseLauncher<Void, Bitmap>(registerForActivityResult, ActivityResultContracts.TakePicturePreview())
 
 class TakePictureResultLauncher(
-  private val getContext: () -> Context,
-  private val permissionResultLauncher: PermissionResultLauncher,
   registerForActivityResult: RegisterForActivityResult<Uri, Boolean>
-) :
-  BaseLauncher<Uri, Boolean>(registerForActivityResult, ActivityResultContracts.TakePicture()) {
+) : BaseLauncher<Uri, Boolean>(registerForActivityResult, ActivityResultContracts.TakePicture()) {
 
-  fun launch(onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
-    val path = "${getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath}/${System.currentTimeMillis()}.jpg"
+  fun launch(onSuccess: (File, Uri) -> Unit, onFailure: () -> Unit = {}) {
     launch(path, onSuccess, onFailure)
   }
 
-  fun launch(path: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
-    permissionResultLauncher.launch(Manifest.permission.CAMERA) {
-      if (it) {
-        val fileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-          FileProvider.getUriForFile(getContext(), "${getContext().packageName}.chooseProvider", File(path))
-        } else {
-          Uri.fromFile(File(path))
-        }
-        launch(fileUri) { takeSuccess ->
-          if (takeSuccess) {
-            onSuccess(path)
-          }
-        }
+  fun launch(path: String, onSuccess: (File, Uri) -> Unit, onFailure: () -> Unit = {}) {
+    val context = application
+    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      FileProvider.getUriForFile(context, "${context.packageName}.chooseProvider", File(path))
+    } else {
+      Uri.fromFile(File(path))
+    }
+    launch(uri) { takeSuccess ->
+      if (takeSuccess) {
+        onSuccess(uri.toFile(), uri)
       } else {
-        onFailure("Failed to request camera permission.")
+        onFailure()
       }
     }
   }
+
+  val path: String
+    get() = "${application.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath}/${System.currentTimeMillis()}.jpg"
 }
 
 class TakeVideoResultLauncher(registerForActivityResult: RegisterForActivityResult<Uri, Bitmap>) :
@@ -206,7 +207,10 @@ class CreateDocumentResultLauncher(registerForActivityResult: RegisterForActivit
   BaseLauncher<String, Uri>(registerForActivityResult, ActivityResultContracts.CreateDocument())
 
 class OpenMultipleDocumentsResultLauncher(registerForActivityResult: RegisterForActivityResult<Array<String>, List<Uri>>) :
-  BaseLauncher<Array<String>, List<Uri>>(registerForActivityResult, ActivityResultContracts.OpenMultipleDocuments())
+  BaseLauncher<Array<String>, List<Uri>>(
+    registerForActivityResult,
+    ActivityResultContracts.OpenMultipleDocuments()
+  )
 
 class OpenDocumentTreeResultLauncher(registerForActivityResult: RegisterForActivityResult<Uri, Uri>) :
   BaseLauncher<Uri, Uri>(registerForActivityResult, ActivityResultContracts.OpenDocumentTree())
