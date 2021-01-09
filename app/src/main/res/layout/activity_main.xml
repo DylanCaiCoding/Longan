@@ -11,7 +11,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:text="Hello World!"
+    android:text="take picture"
     app:layout_constraintHorizontal_bias="0.494"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
@@ -21,11 +21,20 @@
     android:id="@+id/iv_picture"
     android:layout_width="300dp"
     android:layout_height="300dp"
-    android:layout_marginStart="52dp"
     android:scaleType="centerCrop"
     app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+  <Button
+    android:id="@+id/btn_second"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="second"
+    app:layout_constraintEnd_toEndOf="@+id/btn_take_picture"
+    app:layout_constraintStart_toStartOf="@+id/btn_take_picture"
+    app:layout_constraintTop_toBottomOf="@+id/btn_take_picture" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

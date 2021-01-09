@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dylanc.grape.TakePictureResultLauncher
 import com.dylanc.grape.logDebug
 import com.dylanc.grape.sample.databinding.ActivityMainBinding
+import com.dylanc.grape.startActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
           logDebug(file.path)
           ivPicture.setImageURI(uri)
         })
+      }
+      btnSecond.setOnClickListener {
+        startActivity<SecondActivity>()
       }
     }
   }
