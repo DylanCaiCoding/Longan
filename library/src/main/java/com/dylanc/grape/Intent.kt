@@ -28,6 +28,7 @@ inline fun Activity.intentShortExtra(name: String, defaultValue: Short) = lazy {
 inline fun Activity.intentStringExtra(name: String) = lazy { intent.getStringExtra(name) }
 inline fun Activity.intentCharSequenceExtra(name: String) = lazy { intent.getCharSequenceExtra(name) }
 inline fun <T : Parcelable> Activity.intentParcelableExtra(name: String) = lazy { intent.getParcelableExtra<T?>(name) }
+
 @Suppress("UNCHECKED_CAST")
 inline fun <T : Serializable> Activity.intentSerializableExtra(name: String) = lazy { intent.getSerializableExtra(name) as T? }
 inline fun Activity.intentBooleanArrayExtra(name: String) = lazy { intent.getBooleanArrayExtra(name) }
@@ -135,7 +136,7 @@ fun bundleOf(vararg pairs: Pair<String, Any?>) = Bundle(pairs.size).apply {
       is Serializable -> putSerializable(key, value)
 
       else -> {
-        if (Build.VERSION.SDK_INT >= 18 && value is Binder) {
+        if (value is Binder) {
           putBinder(key, value)
         } else if (Build.VERSION.SDK_INT >= 21 && value is Size) {
           putSize(key, value)
