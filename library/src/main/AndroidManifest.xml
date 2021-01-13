@@ -8,7 +8,8 @@
       android:name="androidx.startup.InitializationProvider"
       android:authorities="${applicationId}.androidx-startup"
       android:exported="false"
-      tools:node="merge">
+      tools:node="merge"
+      tools:replace="android:authorities">
       <meta-data
         android:name="com.dylanc.grape.AppInitializer"
         android:value="androidx.startup" />
