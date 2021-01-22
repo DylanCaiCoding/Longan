@@ -4,6 +4,10 @@ package com.dylanc.grape
 
 import android.app.Activity
 import android.content.Context
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.annotation.StringRes
+
 
 val activityList = mutableListOf<Activity>()
 
@@ -29,3 +33,26 @@ fun finishAllActivities() =
     it.finish()
     true
   }
+
+private var lastBackTime: Long = 0
+private const val TIP_EXIT_APP = "再次点击退出应用"
+
+fun ComponentActivity.exitAfterBackPressedTwice(toastText: String = TIP_EXIT_APP, delayMillis: Long = 2000) =
+  exitAfterBackPressedTwice(delayMillis) { toast(toastText) }
+
+fun ComponentActivity.exitAfterBackPressedTwice(@StringRes toastText: Int, delayMillis: Long = 2000) =
+  exitAfterBackPressedTwice(delayMillis) { toast(toastText) }
+
+fun ComponentActivity.exitAfterBackPressedTwice(delayMillis: Long = 2000, onFirstBackPressed: () -> Unit) {
+  onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+    override fun handleOnBackPressed() {
+      val currentTime = System.currentTimeMillis()
+      if (currentTime - lastBackTime > delayMillis) {
+        onFirstBackPressed()
+        lastBackTime = currentTime
+      } else {
+        finishAllActivities()
+      }
+    }
+  })
+}
