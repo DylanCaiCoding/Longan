@@ -35,9 +35,8 @@ fun finishAllActivities() =
   }
 
 private var lastBackTime: Long = 0
-private const val TIP_EXIT_APP = "再次点击退出应用"
 
-fun ComponentActivity.exitAfterBackPressedTwice(toastText: String = TIP_EXIT_APP, delayMillis: Long = 2000) =
+fun ComponentActivity.exitAfterBackPressedTwice(toastText: String, delayMillis: Long = 2000) =
   exitAfterBackPressedTwice(delayMillis) { toast(toastText) }
 
 fun ComponentActivity.exitAfterBackPressedTwice(@StringRes toastText: Int, delayMillis: Long = 2000) =
