@@ -11,8 +11,12 @@ import kotlin.reflect.KProperty
  * @author Dylan Cai
  */
 
+private val defaultSharedPreferencesOwner by lazy { object : SharedPreferencesOwner {} }
+
+private val Any.sharedPreferencesOwner: SharedPreferencesOwner
+  get() = if (this is SharedPreferencesOwner) this else defaultSharedPreferencesOwner
+
 var defaultSharedPreferences = sharedPreferencesOf()
-val defaultSharedPreferencesOwner by lazy { object : SharedPreferencesOwner {} }
 
 fun sharedPreferencesOf(name: String = packageName, mode: Int = Context.MODE_PRIVATE): SharedPreferences =
   application.getSharedPreferences(name, mode)
@@ -22,9 +26,6 @@ fun <T : Any> Any.sharedPreferences(key: String? = null, default: T) =
 
 fun Any.sharedPreferences(key: String? = null) =
   SharedPreferencesStringValue(key, sharedPreferencesOwner.sharedPreferences)
-
-private val Any.sharedPreferencesOwner: SharedPreferencesOwner
-  get() = if (this is SharedPreferencesOwner) this else defaultSharedPreferencesOwner
 
 fun <T : Any> SharedPreferences.put(key: String, value: T) {
   edit().apply {
