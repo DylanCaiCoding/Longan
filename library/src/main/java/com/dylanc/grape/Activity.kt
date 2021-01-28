@@ -7,6 +7,8 @@ import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
 
 
 val activityList = mutableListOf<Activity>()
@@ -55,3 +57,11 @@ fun ComponentActivity.exitAfterBackPressedTwice(delayMillis: Long = 2000, onFirs
     }
   })
 }
+
+val Context.context: Context get() = this
+
+val Activity.activity: Activity get() = this
+
+val FragmentActivity.fragmentActivity: FragmentActivity get() = this
+
+val ComponentActivity.lifecycleOwner: LifecycleOwner get() = this

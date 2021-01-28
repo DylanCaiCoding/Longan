@@ -34,7 +34,10 @@ fun ComponentActivity.PermissionResultLauncher() =
   )
 
 fun Fragment.PermissionResultLauncher() =
-  PermissionResultLauncher(this::shouldShowRequestPermissionRationale, this::registerForActivityResult)
+  PermissionResultLauncher(
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) this::shouldShowRequestPermissionRationale else null,
+    this::registerForActivityResult
+  )
 
 fun ComponentActivity.MultiplePermissionsResultLauncher() =
   MultiplePermissionsResultLauncher(this::registerForActivityResult)

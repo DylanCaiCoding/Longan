@@ -6,14 +6,14 @@ package com.dylanc.grape
  * @author Dylan Cai
  */
 
+const val XML = 0
+const val JSON = 1
 const val VERBOSE = 2
 const val DEBUG = 3
 const val INFO = 4
 const val WARN = 5
 const val ERROR = 6
 const val ASSERT = 7
-const val JSON = 8
-const val XML = 9
 
 interface Logger {
   val loggerTag: String get() = TAG
@@ -103,14 +103,14 @@ typealias Log = com.orhanobut.logger.Logger
 class GrapeLoggerPrinter : LoggerPrinter {
   override fun log(priority: Int, tag: String?, message: String) {
     when (priority) {
+      XML -> if (tag != null) Log.t(tag).xml(message) else Log.xml(message)
+      JSON -> if (tag != null) Log.t(tag).json(message) else Log.json(message)
       VERBOSE -> if (tag != null) Log.t(tag).v(message) else Log.v(message)
       DEBUG -> if (tag != null) Log.t(tag).d(message) else Log.d(message)
       INFO -> if (tag != null) Log.t(tag).i(message) else Log.i(message)
       WARN -> if (tag != null) Log.t(tag).w(message) else Log.w(message)
       ERROR -> if (tag != null) Log.t(tag).e(message) else Log.e(message)
       ASSERT -> if (tag != null) Log.t(tag).wtf(message) else Log.wtf(message)
-      JSON -> if (tag != null) Log.t(tag).json(message) else Log.json(message)
-      XML -> if (tag != null) Log.t(tag).xml(message) else Log.xml(message)
     }
   }
 }
