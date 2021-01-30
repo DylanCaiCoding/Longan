@@ -28,11 +28,11 @@ fun TabLayout.customTab(@LayoutRes layoutId: Int, onBindView: View.(Int) -> Unit
 fun TabLayout.setupWithViewPager2(
   viewPager: ViewPager2,
   autoRefresh: Boolean = true,
-  smoothScroll: Boolean = true,
+  enableScroll: Boolean = true,
   tabConfigurationStrategy: (TabLayout.Tab, Int) -> Unit
 ) {
-  viewPager.isUserInputEnabled = smoothScroll
-  TabLayoutMediator(this, viewPager, autoRefresh, smoothScroll, tabConfigurationStrategy).attach()
+  viewPager.isUserInputEnabled = enableScroll
+  TabLayoutMediator(this, viewPager, autoRefresh, enableScroll, tabConfigurationStrategy).attach()
 }
 
 fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, onBindView: View.() -> Unit) {
