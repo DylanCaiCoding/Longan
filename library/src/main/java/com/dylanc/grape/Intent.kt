@@ -5,12 +5,9 @@ package com.dylanc.grape
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Binder
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Size
-import android.util.SizeF
 import androidx.core.os.bundleOf
 import java.io.Serializable
 
@@ -99,3 +96,78 @@ inline fun Activity.intentCharSequenceArrayExtra(name: String) = lazy { intent.g
 inline fun Activity.intentParcelableArrayExtra(name: String) = lazy { intent.getParcelableArrayExtra(name) }
 
 inline fun Activity.intentBundleExtra(name: String) = lazy { intent.getBundleExtra(name) }
+
+inline fun <reified T> Activity.intent(name: String) = intent(T::class.java, name)
+
+@Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
+fun <T> Activity.intent(clazz: Class<T>, name: String) = lazy {
+  when (clazz) {
+    Boolean::class.java -> intent.getBooleanExtra(name, false)
+    Byte::class.java -> intent.getByteExtra(name, -1)
+//    Char::class.java -> intent.getCharExtra(name,)
+    Double::class.java -> intent.getStringExtra(name)
+    Float::class.java -> intent.getFloatExtra(name, -1f)
+    Int::class.java -> intent.getIntExtra(name, -1)
+    Long::class.java -> intent.getLongExtra(name, -1)
+    Short::class.java -> intent.getShortExtra(name, -1)
+
+    Bundle::class.java -> intent.getBundleExtra(name)
+    CharSequence::class.java -> intent.getCharSequenceExtra(name)
+    String::class.java -> intent.getStringExtra(name)
+    Parcelable::class.java -> intent.getParcelableExtra(name)
+
+    BooleanArray::class.java -> intent.getBooleanArrayExtra(name)
+    ByteArray::class.java -> intent.getByteArrayExtra(name)
+    CharArray::class.java -> intent.getCharArrayExtra(name)
+    DoubleArray::class.java -> intent.getStringArrayExtra(name)
+    FloatArray::class.java -> intent.getFloatArrayExtra(name)
+    IntArray::class.java -> intent.getIntArrayExtra(name)
+    LongArray::class.java -> intent.getLongArrayExtra(name)
+    ShortArray::class.java -> intent.getShortArrayExtra(name)
+
+//    List::class.java-> intent.getlis
+    else -> {
+      when {
+        clazz.isArray -> {
+          val componentType = clazz.componentType
+          @Suppress("UNCHECKED_CAST") // Checked by reflection.
+          when (componentType) {
+            Parcelable::class.java -> intent.getParcelableArrayExtra(name)
+            String::class.java -> intent.getStringArrayExtra(name)
+            CharSequence::class.java -> intent.getCharSequenceArrayExtra(name)
+            Serializable::class.java -> intent.getSerializableExtra(name)
+            else -> {
+              val valueType = componentType.canonicalName
+              throw IllegalArgumentException(
+                "Illegal value array type $valueType for key \"$name\""
+              )
+            }
+          }
+        }
+
+//        clazz == List::class.java -> {
+//          val componentType = clazz.componentType
+//          @Suppress("UNCHECKED_CAST") // Checked by reflection.
+//          when (componentType) {
+////            Parcelable::class.java -> intent.getParcelableArrayExtra(name)
+//            String::class.java -> intent.getStringArrayListExtra(name)
+//            CharSequence::class.java -> intent.getCharSequenceArrayListExtra(name)
+//            Serializable::class.java -> intent.getSerializableExtra(name)
+//            else -> {
+//              val valueType = componentType.canonicalName
+//              throw IllegalArgumentException(
+//                "Illegal value array type $valueType for key \"$name\""
+//              )
+//            }
+//          }
+//        }
+
+        else -> {
+          val valueType = clazz.canonicalName
+          throw IllegalArgumentException("Illegal value type $valueType for key \"$name\"")
+        }
+      }
+
+    }
+  } as T?
+}
