@@ -36,6 +36,7 @@ fun Uri.toFile(): File =
     val cursor = toCursor()
     val path: String? = cursor?.let {
       if (cursor.moveToFirst()) {
+        @Suppress("DEPRECATION")
         cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
       } else {
         null
