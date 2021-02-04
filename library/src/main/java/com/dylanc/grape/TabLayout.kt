@@ -2,11 +2,9 @@
 
 package com.dylanc.grape
 
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.LayoutRes
-import androidx.viewbinding.ViewBinding
+import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -15,12 +13,16 @@ import com.google.android.material.tabs.TabLayoutMediator
  * @author Dylan Cai
  */
 
-fun TabLayout.customTab(@LayoutRes layoutId: Int, onBindView: View.(Int) -> Unit) {
+fun TabLayout.setupWithViewPager(
+  viewPager: ViewPager,
+  autoRefresh: Boolean = true,
+  tabConfigurationStrategy: (TabLayout.Tab, Int) -> Unit
+) {
+  setupWithViewPager(viewPager, autoRefresh)
   for (i in 0 until tabCount) {
     val tab = getTabAt(i)
     if (tab != null) {
-      tab.setCustomView(layoutId)
-      onBindView(tab.customView!!, i)
+      tabConfigurationStrategy(tab, i)
     }
   }
 }
@@ -38,14 +40,4 @@ fun TabLayout.setupWithViewPager2(
 fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, onBindView: View.() -> Unit) {
   setCustomView(layoutId)
   onBindView(customView!!)
-}
-
-fun <VB : ViewBinding> TabLayout.Tab.setCustomView(
-  context: Context,
-  inflate: (LayoutInflater) -> VB,
-  onBindView: VB.() -> Unit
-) {
-  val binding = inflate(LayoutInflater.from(context))
-  customView = binding.root
-  onBindView(binding)
 }
