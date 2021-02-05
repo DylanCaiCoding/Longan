@@ -4,6 +4,7 @@ package com.dylanc.grape
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
@@ -13,8 +14,8 @@ import androidx.lifecycle.LifecycleOwner
 
 val activityList = mutableListOf<Activity>()
 
-inline fun <reified T : Activity> Context.startActivity(vararg pairs: Pair<String, *>) =
-  intentOf<T>(*pairs).also { startActivity(it) }
+inline fun <reified T : Activity> Context.startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
+  startActivity(intentOf<T>(*pairs).apply(block))
 
 val topActivity: Activity get() = activityList.last()
 
