@@ -13,7 +13,7 @@ import org.json.JSONObject
 
 inline fun <reified T> String.toInstance() = Json.decodeFromString<T>(this)
 
-inline fun <reified T> Any.toJson() = Json.encodeToString(this)
+inline fun <reified T> Any.toJson(): String = Json.encodeToString(this)
 
 /**
  * Returns the string is a JSON string.
