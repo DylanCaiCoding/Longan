@@ -210,10 +210,7 @@ class CreateDocumentResultLauncher(registerForActivityResult: RegisterForActivit
   BaseLauncher<String, Uri>(registerForActivityResult, ActivityResultContracts.CreateDocument())
 
 class OpenMultipleDocumentsResultLauncher(registerForActivityResult: RegisterForActivityResult<Array<String>, List<Uri>>) :
-  BaseLauncher<Array<String>, List<Uri>>(
-    registerForActivityResult,
-    ActivityResultContracts.OpenMultipleDocuments()
-  )
+  BaseLauncher<Array<String>, List<Uri>>(registerForActivityResult, ActivityResultContracts.OpenMultipleDocuments())
 
 class OpenDocumentTreeResultLauncher(registerForActivityResult: RegisterForActivityResult<Uri, Uri>) :
   BaseLauncher<Uri, Uri>(registerForActivityResult, ActivityResultContracts.OpenDocumentTree())
