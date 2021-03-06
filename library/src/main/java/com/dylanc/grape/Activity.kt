@@ -17,6 +17,9 @@ val activityList = mutableListOf<Activity>()
 inline fun <reified T : Activity> Context.startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
   startActivity(intentOf<T>(*pairs).apply(block))
 
+inline fun <reified T : Activity> startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
+  with(topActivity) { startActivity(intentOf<T>(*pairs).apply(block)) }
+
 val topActivity: Activity get() = activityList.last()
 
 inline fun <reified T : Activity> isActivityExistsInStack() = isActivityExistsInStack(T::class.java)

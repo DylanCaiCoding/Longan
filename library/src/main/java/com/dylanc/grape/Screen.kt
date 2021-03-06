@@ -1,5 +1,11 @@
+@file:Suppress("unused")
+
 package com.dylanc.grape
 
+
+/**
+ * @author Dylan Cai
+ */
 
 val screenWith: Int get() = application.resources.displayMetrics.widthPixels
 
