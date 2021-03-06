@@ -32,16 +32,15 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
     implementation "androidx.startup:startup-runtime:1.0.0"
     implementation 'com.orhanobut:logger:2.2.0'
-    implementation 'androidx.fragment:fragment-ktx:1.3.0-rc02'
+    implementation 'androidx.fragment:fragment-ktx:1.3.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
-    implementation 'androidx.core:core-ktx:1.5.0-beta01'
+    implementation 'androidx.core:core-ktx:1.5.0-beta02'
 
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
@@ -52,7 +51,7 @@ publish {
     repoName = 'maven'
     groupId = 'com.dylanc'
     artifactId = 'grape'
-    publishVersion = '0.1.5'
+    publishVersion = '0.2.0'
     desc = 'Rich kotlin utils for Android.'
     website = 'https://github.com/DylanCaiCoding/Grape'
 }
