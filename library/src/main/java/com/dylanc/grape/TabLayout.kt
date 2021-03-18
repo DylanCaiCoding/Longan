@@ -41,3 +41,6 @@ fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, onBindView: View.() ->
   setCustomView(layoutId)
   onBindView(customView!!)
 }
+
+fun TabLayout.addTab(text: String? = null, block: TabLayout.Tab.() -> Unit = {}) =
+  addTab(newTab().apply { this.text = text }.apply(block))
