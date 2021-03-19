@@ -22,4 +22,8 @@ inline fun <reified T> Fragment.arguments(key: String, defaultValue: T): Lazy<T>
   arguments[key] ?: defaultValue
 }
 
+inline fun <reified T> Fragment.safeArguments(name: String) = lazy {
+  checkNotNull(arguments[name]) { "No intent value for key \"$name\"" }
+}
+
 val Fragment.lifecycleOwner: LifecycleOwner get() = this

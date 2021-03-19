@@ -12,10 +12,10 @@ import androidx.core.os.bundleOf
  * @author Dylan Cai
  */
 
-inline fun <reified T : Any> Context.intentOf(bundle: Bundle) =
+inline fun <reified T> Context.intentOf(bundle: Bundle) =
   Intent(this, T::class.java).apply { putExtras(bundle) }
 
-inline fun <reified T : Any> Context.intentOf(vararg pairs: Pair<String, *>) =
+inline fun <reified T> Context.intentOf(vararg pairs: Pair<String, *>) =
   Intent(this, T::class.java).apply { putExtras(bundleOf(*pairs)) }
 
 inline fun Intent.clearTask(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK) }
