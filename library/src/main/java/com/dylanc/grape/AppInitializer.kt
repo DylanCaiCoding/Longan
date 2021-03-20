@@ -7,6 +7,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.startup.Initializer
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
@@ -26,11 +27,10 @@ internal class AppInitializer : Initializer<Unit> {
       .tag("Grape")
       .build()
     Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
+    AndroidThreeTen.init(application)
   }
 
-  override fun dependencies(): MutableList<Class<out Initializer<*>>> {
-    return mutableListOf()
-  }
+  override fun dependencies() = mutableListOf<Class<Initializer<*>>>()
 
   private val activityLifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
 
