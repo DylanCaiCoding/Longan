@@ -44,3 +44,30 @@ fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, onBindView: View.() ->
 
 fun TabLayout.addTab(text: String? = null, block: TabLayout.Tab.() -> Unit = {}) =
   addTab(newTab().apply { this.text = text }.apply(block))
+
+fun TabLayout.doOnTabSelected(action: (TabLayout.Tab) -> Unit) =
+  addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+    override fun onTabSelected(tab: TabLayout.Tab) {
+      action(tab)
+    }
+    override fun onTabUnselected(tab: TabLayout.Tab) {}
+    override fun onTabReselected(tab: TabLayout.Tab) {}
+  })
+
+fun TabLayout.onTabUnselected(action: (TabLayout.Tab) -> Unit) =
+  addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+    override fun onTabSelected(tab: TabLayout.Tab) {}
+    override fun onTabUnselected(tab: TabLayout.Tab) {
+      action(tab)
+    }
+    override fun onTabReselected(tab: TabLayout.Tab) {}
+  })
+
+fun TabLayout.onTabReselected(action: (TabLayout.Tab) -> Unit) =
+  addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+    override fun onTabSelected(tab: TabLayout.Tab) {}
+    override fun onTabUnselected(tab: TabLayout.Tab) {}
+    override fun onTabReselected(tab: TabLayout.Tab) {
+      action(tab)
+    }
+  })
