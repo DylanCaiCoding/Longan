@@ -36,9 +36,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
     implementation "androidx.startup:startup-runtime:1.0.0"
     implementation 'com.orhanobut:logger:2.2.0'
-    implementation 'androidx.fragment:fragment-ktx:1.3.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
-    implementation 'androidx.core:core-ktx:1.5.0-beta02'
+    implementation 'androidx.fragment:fragment-ktx:1.3.1'
+    implementation 'androidx.core:core-ktx:1.5.0-beta03'
+    api 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    api 'com.jakewharton.threetenabp:threetenabp:1.3.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

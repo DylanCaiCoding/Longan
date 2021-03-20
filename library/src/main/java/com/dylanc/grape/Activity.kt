@@ -40,8 +40,6 @@ fun finishAllActivities() =
     true
   }
 
-private var lastBackTime: Long = 0
-
 fun ComponentActivity.exitAfterBackPressedTwice(toastText: String, delayMillis: Long = 2000) =
   exitAfterBackPressedTwice(delayMillis) { toast(toastText) }
 
@@ -50,6 +48,8 @@ fun ComponentActivity.exitAfterBackPressedTwice(@StringRes toastText: Int, delay
 
 fun ComponentActivity.exitAfterBackPressedTwice(delayMillis: Long = 2000, onFirstBackPressed: () -> Unit) {
   onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+    private var lastBackTime: Long = 0
+
     override fun handleOnBackPressed() {
       val currentTime = System.currentTimeMillis()
       if (currentTime - lastBackTime > delayMillis) {
