@@ -44,6 +44,6 @@ inline fun <reified T> Activity.intentExtras(name: String, defaultValue: T): Laz
   intent.extras[name] ?: defaultValue
 }
 
-inline fun <reified T> Activity.safeIntentExtras(name: String) = lazy {
+inline fun <reified T> Activity.safeIntentExtras(name: String): Lazy<T> = lazy {
   checkNotNull(intent.extras[name]) { "No intent value for key \"$name\"" }
 }

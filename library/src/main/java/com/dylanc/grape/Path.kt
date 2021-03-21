@@ -41,7 +41,3 @@ val externalMoviesDirPath get() = application.getExternalFilesDir(Environment.DI
 val externalDownloadsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath
 
 val externalDocumentsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.absolutePath
-
-val externalScreenshotsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_SCREENSHOTS)?.absolutePath
-
-val externalAudiobooksDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_AUDIOBOOKS)?.absolutePath
