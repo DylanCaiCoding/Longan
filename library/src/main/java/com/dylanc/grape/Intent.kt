@@ -5,8 +5,13 @@ package com.dylanc.grape
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
+import java.io.File
 
 /**
  * @author Dylan Cai
@@ -47,3 +52,24 @@ inline fun <reified T> Activity.intentExtras(name: String, defaultValue: T): Laz
 inline fun <reified T> Activity.safeIntentExtras(name: String): Lazy<T> = lazy {
   checkNotNull(intent.extras[name]) { "No intent value for key \"$name\"" }
 }
+
+fun sharePdfIntentOf(pdfFile: File, title: String? = null, sender: IntentSender? = null): Intent {
+  val pdfUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    FileProvider.getUriForFile(application, "$packageName.provider", pdfFile)
+  } else {
+    Uri.fromFile(pdfFile)
+  }
+  return sharePdfIntentOf(pdfUri, title, sender)
+}
+
+fun sharePdfIntentOf(pdfUri: Uri, title: String? = null, sender: IntentSender? = null): Intent =
+  Intent(Intent.ACTION_SEND).apply {
+    type = "application/pdf"
+    putExtra(Intent.EXTRA_STREAM, pdfUri)
+  }.let {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+      Intent.createChooser(it, title, sender)
+    } else {
+      it
+    }
+  }

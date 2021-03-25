@@ -1,4 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-  <external-files-path path="/" name="Pictures/" />
+  <external-cache-path
+    name="/"
+    path="/" />
+  <external-files-path
+    name="Music/"
+    path="/" />
+  <external-files-path
+    name="Podcasts/"
+    path="/" />
+  <external-files-path
+    name="Ringtones/"
+    path="/" />
+  <external-files-path
+    name="Alarms/"
+    path="/" />
+  <external-files-path
+    name="Notifications/"
+    path="/" />
+  <external-files-path
+    name="Pictures/"
+    path="/" />
+  <external-files-path
+    name="Movies/"
+    path="/" />
+  <external-files-path
+    name="Download/"
+    path="/" />
+  <external-files-path
+    name="Documents/"
+    path="/" />
 </paths>

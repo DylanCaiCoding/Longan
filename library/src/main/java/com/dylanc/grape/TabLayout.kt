@@ -50,23 +50,29 @@ fun TabLayout.doOnTabSelected(action: (TabLayout.Tab) -> Unit) =
     override fun onTabSelected(tab: TabLayout.Tab) {
       action(tab)
     }
+
     override fun onTabUnselected(tab: TabLayout.Tab) {}
+
     override fun onTabReselected(tab: TabLayout.Tab) {}
   })
 
 fun TabLayout.onTabUnselected(action: (TabLayout.Tab) -> Unit) =
   addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab) {}
+
     override fun onTabUnselected(tab: TabLayout.Tab) {
       action(tab)
     }
+
     override fun onTabReselected(tab: TabLayout.Tab) {}
   })
 
 fun TabLayout.onTabReselected(action: (TabLayout.Tab) -> Unit) =
   addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab) {}
+
     override fun onTabUnselected(tab: TabLayout.Tab) {}
+
     override fun onTabReselected(tab: TabLayout.Tab) {
       action(tab)
     }

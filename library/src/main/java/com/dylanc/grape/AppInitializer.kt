@@ -35,7 +35,7 @@ internal class AppInitializer : Initializer<Unit> {
   private val activityLifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-      activityList.add(activity)
+      activityCache.add(activity)
     }
 
     override fun onActivityStarted(activity: Activity) {}
@@ -49,7 +49,7 @@ internal class AppInitializer : Initializer<Unit> {
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
     override fun onActivityDestroyed(activity: Activity) {
-      activityList.remove(activity)
+      activityCache.remove(activity)
     }
   }
 

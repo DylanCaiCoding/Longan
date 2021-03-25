@@ -175,26 +175,29 @@ class TakePictureResultLauncher(
 ) : BaseResultLauncher<Uri, Boolean>(registerForActivityResult, ActivityResultContracts.TakePicture()) {
 
   fun launch(onSuccess: (String, Uri) -> Unit, onFailure: () -> Unit = {}) {
-    launch(path, onSuccess, onFailure)
+    launch(pathname, onSuccess, onFailure)
   }
 
-  fun launch(path: String, onSuccess: (String, Uri) -> Unit, onFailure: () -> Unit = {}) {
+  fun launch(pathname: String, onSuccess: (String, Uri) -> Unit, onFailure: () -> Unit = {}) {
+    launch(File(pathname), onSuccess, onFailure)
+  }
+
+  fun launch(file: File, onSuccess: (String, Uri) -> Unit, onFailure: () -> Unit = {}) {
     val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      FileProvider.getUriForFile(application, "${packageName}.chooseProvider", File(path))
+      FileProvider.getUriForFile(application, "${packageName}.provider", file)
     } else {
-      Uri.fromFile(File(path))
+      Uri.fromFile(file)
     }
     launch(uri) { takeSuccess ->
       if (takeSuccess) {
-        onSuccess(path, uri)
+        onSuccess(file.path, uri)
       } else {
         onFailure()
       }
     }
   }
 
-  val path: String
-    get() = "$cacheDirPath/${System.currentTimeMillis()}.jpg"
+  val pathname: String get() = "$externalCacheDirPath/${System.currentTimeMillis()}.jpg"
 }
 
 class TakeVideoResultLauncher(registerForActivityResult: RegisterForActivityResult<Uri, Bitmap>) :
