@@ -8,36 +8,36 @@ import android.os.Environment
  * @author Dylan Cai
  */
 
-val cacheDirPath
+inline val cacheDirPath
   get() = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || !Environment.isExternalStorageRemovable())
     externalCacheDirPath
   else
     internalCacheDirPath
 
-val internalCacheDirPath: String get() = application.cacheDir.absolutePath
+inline val internalCacheDirPath: String get() = application.cacheDir.absolutePath
 
-val internalFileDirPath: String get() = application.filesDir.absolutePath
+inline val internalFileDirPath: String get() = application.filesDir.absolutePath
 
-val internalMusicDirPath get() = application.getFileStreamPath(Environment.DIRECTORY_MUSIC)?.absolutePath
+inline val internalMusicDirPath get() = application.getFileStreamPath(Environment.DIRECTORY_MUSIC)?.absolutePath
 
-val externalCacheDirPath get() = application.externalCacheDir?.absolutePath
+inline val externalCacheDirPath get() = application.externalCacheDir?.absolutePath
 
-val externalFilesDirPath get() = application.getExternalFilesDir(null)
+inline val externalFilesDirPath get() = application.getExternalFilesDir(null)
 
-val externalMusicDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath
+inline val externalMusicDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath
 
-val externalPodcastsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)?.absolutePath
+inline val externalPodcastsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)?.absolutePath
 
-val externalRingtonesDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_RINGTONES)?.absolutePath
+inline val externalRingtonesDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_RINGTONES)?.absolutePath
 
-val externalAlarmsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_ALARMS)?.absolutePath
+inline val externalAlarmsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_ALARMS)?.absolutePath
 
-val externalNotificationsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_NOTIFICATIONS)?.absolutePath
+inline val externalNotificationsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_NOTIFICATIONS)?.absolutePath
 
-val externalPicturesDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+inline val externalPicturesDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
 
-val externalMoviesDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_MOVIES)?.absolutePath
+inline val externalMoviesDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_MOVIES)?.absolutePath
 
-val externalDownloadsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath
+inline val externalDownloadsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath
 
-val externalDocumentsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.absolutePath
+inline val externalDocumentsDirPath get() = application.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.absolutePath

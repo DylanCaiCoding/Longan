@@ -53,7 +53,7 @@ inline fun <reified T> Activity.safeIntentExtras(name: String): Lazy<T> = lazy {
   checkNotNull(intent.extras[name]) { "No intent value for key \"$name\"" }
 }
 
-fun sharePdfIntentOf(pdfFile: File, title: String? = null, sender: IntentSender? = null): Intent {
+inline fun sharePdfIntentOf(pdfFile: File, title: String? = null, sender: IntentSender? = null): Intent {
   val pdfUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
     FileProvider.getUriForFile(application, "$packageName.provider", pdfFile)
   } else {
@@ -62,7 +62,7 @@ fun sharePdfIntentOf(pdfFile: File, title: String? = null, sender: IntentSender?
   return sharePdfIntentOf(pdfUri, title, sender)
 }
 
-fun sharePdfIntentOf(pdfUri: Uri, title: String? = null, sender: IntentSender? = null): Intent =
+inline fun sharePdfIntentOf(pdfUri: Uri, title: String? = null, sender: IntentSender? = null): Intent =
   Intent(Intent.ACTION_SEND).apply {
     type = "application/pdf"
     putExtra(Intent.EXTRA_STREAM, pdfUri)

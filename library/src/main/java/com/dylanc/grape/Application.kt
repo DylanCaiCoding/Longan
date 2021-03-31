@@ -8,4 +8,4 @@ import android.app.Application
 
 val application: Application get() = AppInitializer.application
 
-val packageName: String get() = application.packageName
+inline val packageName: String get() = application.packageName

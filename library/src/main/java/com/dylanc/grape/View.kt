@@ -44,6 +44,18 @@ inline fun View.locationOnScreen(crossinline block: LocationOnScreen.() -> Unit)
   block(LocationOnScreen(left, top, right, bottom))
 }
 
+inline fun View.findTouchedChild(view: View, x: Int, y: Int): View? {
+  var targetView: View? = null
+  val touchableViews = view.touchables
+  for (child in touchableViews) {
+    if (child.isTouchedAt(x, y)) {
+      targetView = child
+      break
+    }
+  }
+  return targetView
+}
+
 data class LocationOnScreen(
   val left: Int,
   val top: Int,

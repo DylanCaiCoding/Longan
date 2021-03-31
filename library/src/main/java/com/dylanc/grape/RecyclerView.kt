@@ -1,15 +1,16 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.grape
 
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 
 /**
  * @author Dylan Cai
  */
 
-fun RecyclerView.Adapter<*>.observeDataEmpty(emptyView: View) {
+inline fun RecyclerView.Adapter<*>.observeDataEmpty(emptyView: View) {
   registerAdapterDataObserver(AdapterDataEmptyObserver(this, emptyView))
 }
 
@@ -34,10 +35,6 @@ class AdapterDataEmptyObserver(
   }
 
   private fun checkEmpty() {
-    if (adapter.itemCount == 0) {
-      emptyView.visibility = View.VISIBLE
-    } else {
-      emptyView.visibility = View.GONE
-    }
+    emptyView.isVisible = adapter.itemCount == 0
   }
 }

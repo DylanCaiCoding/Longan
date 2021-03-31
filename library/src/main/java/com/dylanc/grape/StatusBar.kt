@@ -10,13 +10,13 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 
 
-var Activity.isStatusBarLightMode: Boolean
+inline var Activity.isStatusBarLightMode: Boolean
   get() = window.isStatusBarLightMode
   set(value) {
     window.isStatusBarLightMode = value
   }
 
-var Window.isStatusBarLightMode: Boolean
+inline var Window.isStatusBarLightMode: Boolean
   get() =
     when {
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ->

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.dylanc.grape
 
 import android.Manifest.permission.ACCESS_NETWORK_STATE

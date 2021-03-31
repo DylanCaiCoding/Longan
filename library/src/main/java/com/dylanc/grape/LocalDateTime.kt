@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.grape
 
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
  * @author Dylan Cai
  */
 
-fun Long.toLocalDateTime(
+inline fun Long.toLocalDateTime(
   timeUnit: TimeUnit = TimeUnit.SECONDS,
   zoneOffset: ZoneOffset = ZoneOffset.ofHours(8)
 ): LocalDateTime =
@@ -24,50 +24,50 @@ fun Long.toLocalDateTime(
     else -> throw IllegalArgumentException("This time unit is not supported")
   }
 
-fun String.toLocalDateTime(pattern: String): LocalDateTime =
+inline fun String.toLocalDateTime(pattern: String): LocalDateTime =
   LocalDateTime.parse(this, DateTimeFormatter.ofPattern(pattern))
 
-fun LocalDateTime.toEpochMilli(zoneOffset: ZoneOffset = ZoneOffset.ofHours(8)) =
+inline fun LocalDateTime.toEpochMilli(zoneOffset: ZoneOffset = ZoneOffset.ofHours(8)) =
   toInstant(zoneOffset).toEpochMilli()
 
-fun LocalDateTime.format(pattern: String): String =
+inline fun LocalDateTime.format(pattern: String): String =
   format(DateTimeFormatter.ofPattern(pattern))
 
-fun LocalDateTime.firstDayOfMonth(): LocalDateTime =
+inline fun LocalDateTime.firstDayOfMonth(): LocalDateTime =
   with(TemporalAdjusters.firstDayOfMonth())
 
-fun LocalDateTime.firstDayOfNextMonth(): LocalDateTime =
+inline fun LocalDateTime.firstDayOfNextMonth(): LocalDateTime =
   with(TemporalAdjusters.firstDayOfNextMonth())
 
-fun LocalDateTime.firstDayOfNextYear(): LocalDateTime =
+inline fun LocalDateTime.firstDayOfNextYear(): LocalDateTime =
   with(TemporalAdjusters.firstDayOfNextYear())
 
-fun LocalDateTime.firstDayOfYear(): LocalDateTime =
+inline fun LocalDateTime.firstDayOfYear(): LocalDateTime =
   with(TemporalAdjusters.firstDayOfYear())
 
-fun LocalDateTime.firstInMonth(dayOfWeek: DayOfWeek): LocalDateTime =
+inline fun LocalDateTime.firstInMonth(dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.firstInMonth(dayOfWeek))
 
-fun LocalDateTime.next(dayOfWeek: DayOfWeek): LocalDateTime =
+inline fun LocalDateTime.next(dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.next(dayOfWeek))
 
-fun LocalDateTime.nextOrSame(dayOfWeek: DayOfWeek): LocalDateTime =
+inline fun LocalDateTime.nextOrSame(dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.nextOrSame(dayOfWeek))
 
-fun LocalDateTime.previous(dayOfWeek: DayOfWeek): LocalDateTime =
+inline fun LocalDateTime.previous(dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.previous(dayOfWeek))
 
-fun LocalDateTime.previousOrSame(dayOfWeek: DayOfWeek): LocalDateTime =
+inline fun LocalDateTime.previousOrSame(dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.previousOrSame(dayOfWeek))
 
-fun LocalDateTime.firstDayOfYear(ordinal: Int, dayOfWeek: DayOfWeek): LocalDateTime =
+inline fun LocalDateTime.firstDayOfYear(ordinal: Int, dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.dayOfWeekInMonth(ordinal, dayOfWeek))
 
-fun LocalDateTime.lastDayOfMonth(): LocalDateTime =
+inline fun LocalDateTime.lastDayOfMonth(): LocalDateTime =
   with(TemporalAdjusters.lastDayOfMonth())
 
-fun LocalDateTime.lastDayOfYear(): LocalDateTime =
+inline fun LocalDateTime.lastDayOfYear(): LocalDateTime =
   with(TemporalAdjusters.lastDayOfYear())
 
-fun LocalDateTime.lastDayOfMonth(dayOfWeek: DayOfWeek): LocalDateTime =
+inline fun LocalDateTime.lastDayOfMonth(dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.lastInMonth(dayOfWeek))

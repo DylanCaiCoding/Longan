@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.grape
 
@@ -9,7 +9,7 @@ import android.graphics.Paint
  * @author Dylan Cai
  */
 
-fun Canvas.drawCenterText(text: String, centerX: Float, centerY: Float, paint: Paint) {
+inline fun Canvas.drawCenterText(text: String, centerX: Float, centerY: Float, paint: Paint) {
   val textAlign = paint.textAlign
   paint.textAlign = Paint.Align.CENTER
   val fontMetrics = paint.fontMetrics

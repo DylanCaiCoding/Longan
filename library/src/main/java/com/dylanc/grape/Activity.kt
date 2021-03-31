@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.grape
 
@@ -43,13 +43,13 @@ fun finishAllActivities() =
     true
   }
 
-fun ComponentActivity.exitAfterBackPressedTwice(toastText: String, delayMillis: Long = 2000) =
+inline fun ComponentActivity.exitAfterBackPressedTwice(toastText: String, delayMillis: Long = 2000) =
   exitAfterBackPressedTwice(delayMillis) { toast(toastText) }
 
-fun ComponentActivity.exitAfterBackPressedTwice(@StringRes toastText: Int, delayMillis: Long = 2000) =
+inline fun ComponentActivity.exitAfterBackPressedTwice(@StringRes toastText: Int, delayMillis: Long = 2000) =
   exitAfterBackPressedTwice(delayMillis) { toast(toastText) }
 
-fun ComponentActivity.exitAfterBackPressedTwice(delayMillis: Long = 2000, onFirstBackPressed: () -> Unit) {
+inline fun ComponentActivity.exitAfterBackPressedTwice(delayMillis: Long = 2000, crossinline onFirstBackPressed: () -> Unit) {
   onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
     private var lastBackTime: Long = 0
 
@@ -65,10 +65,10 @@ fun ComponentActivity.exitAfterBackPressedTwice(delayMillis: Long = 2000, onFirs
   })
 }
 
-val Context.context: Context get() = this
+inline val Context.context: Context get() = this
 
-val Activity.activity: Activity get() = this
+inline val Activity.activity: Activity get() = this
 
-val FragmentActivity.fragmentActivity: FragmentActivity get() = this
+inline val FragmentActivity.fragmentActivity: FragmentActivity get() = this
 
-val ComponentActivity.lifecycleOwner: LifecycleOwner get() = this
+inline val ComponentActivity.lifecycleOwner: LifecycleOwner get() = this

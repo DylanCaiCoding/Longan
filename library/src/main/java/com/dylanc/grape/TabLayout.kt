@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.grape
 
@@ -13,7 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator
  * @author Dylan Cai
  */
 
-fun TabLayout.setupWithViewPager(
+inline fun TabLayout.setupWithViewPager(
   viewPager: ViewPager,
   autoRefresh: Boolean = true,
   tabConfigurationStrategy: (TabLayout.Tab, Int) -> Unit
@@ -27,25 +27,25 @@ fun TabLayout.setupWithViewPager(
   }
 }
 
-fun TabLayout.setupWithViewPager2(
+inline fun TabLayout.setupWithViewPager2(
   viewPager: ViewPager2,
   autoRefresh: Boolean = true,
   enableScroll: Boolean = true,
-  tabConfigurationStrategy: (TabLayout.Tab, Int) -> Unit
+  noinline tabConfigurationStrategy: (TabLayout.Tab, Int) -> Unit
 ) {
   viewPager.isUserInputEnabled = enableScroll
   TabLayoutMediator(this, viewPager, autoRefresh, enableScroll, tabConfigurationStrategy).attach()
 }
 
-fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, onBindView: View.() -> Unit) {
+inline fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, onBindView: View.() -> Unit) {
   setCustomView(layoutId)
   onBindView(customView!!)
 }
 
-fun TabLayout.addTab(text: String? = null, block: TabLayout.Tab.() -> Unit = {}) =
+inline fun TabLayout.addTab(text: String? = null, block: TabLayout.Tab.() -> Unit = {}) =
   addTab(newTab().apply { this.text = text }.apply(block))
 
-fun TabLayout.doOnTabSelected(action: (TabLayout.Tab) -> Unit) =
+inline fun TabLayout.doOnTabSelected(crossinline action: (TabLayout.Tab) -> Unit) =
   addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab) {
       action(tab)
@@ -56,7 +56,7 @@ fun TabLayout.doOnTabSelected(action: (TabLayout.Tab) -> Unit) =
     override fun onTabReselected(tab: TabLayout.Tab) {}
   })
 
-fun TabLayout.onTabUnselected(action: (TabLayout.Tab) -> Unit) =
+inline fun TabLayout.onTabUnselected(crossinline action: (TabLayout.Tab) -> Unit) =
   addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab) {}
 
@@ -67,7 +67,7 @@ fun TabLayout.onTabUnselected(action: (TabLayout.Tab) -> Unit) =
     override fun onTabReselected(tab: TabLayout.Tab) {}
   })
 
-fun TabLayout.onTabReselected(action: (TabLayout.Tab) -> Unit) =
+inline fun TabLayout.onTabReselected(crossinline action: (TabLayout.Tab) -> Unit) =
   addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab) {}
 

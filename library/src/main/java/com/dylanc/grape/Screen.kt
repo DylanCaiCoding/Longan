@@ -7,9 +7,9 @@ package com.dylanc.grape
  * @author Dylan Cai
  */
 
-val screenWith: Int get() = application.resources.displayMetrics.widthPixels
+inline val screenWith: Int get() = application.resources.displayMetrics.widthPixels
 
-val screenHeight: Int get() = application.resources.displayMetrics.widthPixels
+inline val screenHeight: Int get() = application.resources.displayMetrics.widthPixels
 
 //var Activity.isFullScreen: Boolean
 //  get() = TODO()

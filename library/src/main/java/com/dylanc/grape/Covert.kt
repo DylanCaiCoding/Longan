@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.grape
 
@@ -18,16 +18,16 @@ import java.net.URI
  * @author Dylan Cai
  */
 
-val Long.dp
+inline val Long.dp
   get() = toFloat().dp
 
-val Int.dp
+inline val Int.dp
   get() = toFloat().dp
 
-val Float.dp
+inline val Float.dp
   get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
 
-fun View.toBitmap(defaultColor: Int = Color.WHITE): Bitmap {
+inline fun View.toBitmap(defaultColor: Int = Color.WHITE): Bitmap {
   val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
   val canvas = Canvas(bitmap)
   canvas.drawColor(defaultColor)

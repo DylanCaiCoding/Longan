@@ -9,8 +9,8 @@ import androidx.core.view.WindowInsetsControllerCompat
  * @author Dylan Cai
  */
 
-val View.windowInsetsCompat: WindowInsetsCompat?
+inline val View.windowInsetsCompat: WindowInsetsCompat?
   get() = ViewCompat.getRootWindowInsets(this)
 
-val View.windowInsetsControllerCompat: WindowInsetsControllerCompat?
+inline val View.windowInsetsControllerCompat: WindowInsetsControllerCompat?
   get() = ViewCompat.getWindowInsetsController(this)

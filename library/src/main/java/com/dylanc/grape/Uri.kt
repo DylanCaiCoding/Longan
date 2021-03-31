@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.dylanc.grape
 
 import android.content.ContentResolver
@@ -46,10 +48,10 @@ fun Uri.toFile(): File =
     File(requireNotNull(path) { "Uri path is null: $this" })
   }
 
-val Uri.fileExtension: String?
+inline val Uri.fileExtension: String?
   get() = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
 
-val Uri.fileName: String?
+inline val Uri.fileName: String?
   get() {
     val cursor = toCursor(arrayOf(OpenableColumns.DISPLAY_NAME))
     cursor?.let {
@@ -60,13 +62,13 @@ val Uri.fileName: String?
     return null
   }
 
-val Uri.mimeType: String?
+inline val Uri.mimeType: String?
   get() = application.contentResolver.getType(this)
 
-val Uri.inputStream: InputStream?
+inline val Uri.inputStream: InputStream?
   get() = application.contentResolver.openInputStream(this)
 
-fun Uri.toCursor(
+inline fun Uri.toCursor(
   projection: Array<String>? = null,
   selection: String? = null,
   selectionArgs: Array<String>? = null,
