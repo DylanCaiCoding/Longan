@@ -44,6 +44,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.6.0-alpha01'
     api 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
     api 'com.jakewharton.threetenabp:threetenabp:1.3.0'
+    api 'me.drakeet.support:toastcompat:1.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -56,7 +57,7 @@ publish {
     repoName = 'maven'
     groupId = 'com.dylanc'
     artifactId = 'grape'
-    publishVersion = '0.5.2'
+    publishVersion = '0.5.4'
     desc = 'Rich kotlin utils for Android.'
     website = 'https://github.com/DylanCaiCoding/Grape'
 }
