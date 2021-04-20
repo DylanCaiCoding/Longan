@@ -20,8 +20,10 @@ val activityList: List<Activity> get() = activityCache.toList()
 inline fun <reified T : Activity> Context.startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
   startActivity(intentOf<T>(*pairs).apply(block))
 
+inline fun startActivity(intent: Intent) = topActivity.run { startActivity(intent) }
+
 inline fun <reified T : Activity> startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
-  with(topActivity) { startActivity(intentOf<T>(*pairs).apply(block)) }
+  startActivity(topActivity.intentOf<T>(*pairs).apply(block))
 
 val topActivity: Activity get() = activityCache.last()
 
@@ -43,13 +45,13 @@ fun finishAllActivities() =
     true
   }
 
-inline fun ComponentActivity.exitAfterBackPressedTwice(toastText: String, delayMillis: Long = 2000) =
-  exitAfterBackPressedTwice(delayMillis) { toast(toastText) }
+inline fun ComponentActivity.pressBackTwiceToExit(toastText: String, delayMillis: Long = 2000) =
+  pressBackTwiceToExit(delayMillis) { toast(toastText) }
 
-inline fun ComponentActivity.exitAfterBackPressedTwice(@StringRes toastText: Int, delayMillis: Long = 2000) =
-  exitAfterBackPressedTwice(delayMillis) { toast(toastText) }
+inline fun ComponentActivity.pressBackTwiceToExit(@StringRes toastText: Int, delayMillis: Long = 2000) =
+  pressBackTwiceToExit(delayMillis) { toast(toastText) }
 
-inline fun ComponentActivity.exitAfterBackPressedTwice(delayMillis: Long = 2000, crossinline onFirstBackPressed: () -> Unit) {
+inline fun ComponentActivity.pressBackTwiceToExit(delayMillis: Long = 2000, crossinline onFirstBackPressed: () -> Unit) {
   onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
     private var lastBackTime: Long = 0
 
@@ -61,6 +63,14 @@ inline fun ComponentActivity.exitAfterBackPressedTwice(delayMillis: Long = 2000,
       } else {
         finishAllActivities()
       }
+    }
+  })
+}
+
+inline fun ComponentActivity.pressBackToNotExit() {
+  onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+    override fun handleOnBackPressed() {
+      moveTaskToBack(false)
     }
   })
 }

@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE")
+
 package com.dylanc.grape
 
 import java.io.File
@@ -5,18 +7,8 @@ import java.io.File
 /**
  * @author Dylan Cai
  */
-object CrashHandler : Thread.UncaughtExceptionHandler {
-
-  private var defaultCrashHandler: Thread.UncaughtExceptionHandler? = null
-  private lateinit var dirPath: String
-
-  fun init(dirPath: String? = null) {
-    defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler()
-    Thread.setDefaultUncaughtExceptionHandler(this)
-    this.dirPath = dirPath ?: cacheDirPath.orEmpty()
-  }
-
-  override fun uncaughtException(t: Thread, e: Throwable) {
+inline fun saveCrashLogLocally(dirPath: String = cacheDirPath) {
+  handleUncaughtException { thread, e ->
     val time = nowLocalDateTime.format("yyyy-MM-dd HH:mm:ss")
     val file = File(dirPath, "crash_${time.replace(" ", "_")}.txt")
     printTo(file) {
@@ -25,9 +17,17 @@ object CrashHandler : Thread.UncaughtExceptionHandler {
       println("OS version:    Android $sdkVersionName ($sdkVersionCode)")
       println("Manufacturer:  $deviceManufacturer")
       println("Model:         $deviceModel")
+      println("Thread:        ${thread.name}")
       println()
       e.printStackTrace(this)
     }
-    defaultCrashHandler?.uncaughtException(t, e) ?: relaunchApp()
+  }
+}
+
+inline fun handleUncaughtException(crossinline block: (Thread, Throwable) -> Unit) {
+  val defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler()
+  Thread.setDefaultUncaughtExceptionHandler { t, e ->
+    block(t, e)
+    defaultCrashHandler?.uncaughtException(t, e)
   }
 }
