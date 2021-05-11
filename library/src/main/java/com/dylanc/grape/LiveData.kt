@@ -14,8 +14,7 @@ import androidx.lifecycle.Observer
 
 class EventLiveData<T> : WrapObserverLiveData<T, EventLiveData.ObserverWrapper<T>>() {
 
-  override fun onCreateObserverWrapper(observer: Observer<in T>) =
-    ObserverWrapper(observer)
+  override fun onCreateObserverWrapper(observer: Observer<in T>) = ObserverWrapper(observer)
 
   @MainThread
   override fun setValue(t: T?) {
@@ -23,10 +22,13 @@ class EventLiveData<T> : WrapObserverLiveData<T, EventLiveData.ObserverWrapper<T
     super.setValue(t)
   }
 
+  override fun postValue(value: T?) {
+    mainThread { setValue(value) }
+  }
+
   class ObserverWrapper<T>(
     observer: Observer<in T>
   ) : WrapObserverLiveData.ObserverWrapper<T>(observer) {
-
     var pending = false
 
     override fun onChanged(t: T) {
@@ -40,8 +42,7 @@ class EventLiveData<T> : WrapObserverLiveData<T, EventLiveData.ObserverWrapper<T
 
 class ClearableLiveData<T> : WrapObserverLiveData<T, ClearableLiveData.ObserverWrapper<T>>() {
 
-  override fun onCreateObserverWrapper(observer: Observer<in T>) =
-    ObserverWrapper(observer)
+  override fun onCreateObserverWrapper(observer: Observer<in T>) = ObserverWrapper(observer)
 
   @MainThread
   fun clear() {
@@ -52,7 +53,6 @@ class ClearableLiveData<T> : WrapObserverLiveData<T, ClearableLiveData.ObserverW
   class ObserverWrapper<T>(
     observer: Observer<in T>
   ) : WrapObserverLiveData.ObserverWrapper<T>(observer) {
-
     var cleared = false
 
     override fun onChanged(t: T?) {

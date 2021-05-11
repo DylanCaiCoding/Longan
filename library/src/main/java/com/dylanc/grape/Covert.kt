@@ -3,13 +3,13 @@
 package com.dylanc.grape
 
 import android.content.res.Resources
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.print.PrintAttributes
 import android.util.TypedValue
-import android.view.View
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.net.URI
@@ -18,22 +18,14 @@ import java.net.URI
  * @author Dylan Cai
  */
 
-inline val Long.dp
-  get() = toFloat().dp
+inline val Long.dp get() = toFloat().dp
 
-inline val Int.dp
-  get() = toFloat().dp
+inline val Int.dp get() = toFloat().dp
+
+inline val Double.dp get() = toFloat().dp
 
 inline val Float.dp
   get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
-
-inline fun View.toBitmap(defaultColor: Int = Color.WHITE): Bitmap {
-  val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-  val canvas = Canvas(bitmap)
-  canvas.drawColor(defaultColor)
-  draw(canvas)
-  return bitmap
-}
 
 fun Bitmap.toPdfFile(
   pathname: String,
@@ -68,30 +60,30 @@ fun List<Bitmap>.toPdfFile(
   pageWidth: Int = defaultPageWidth,
   pageHeight: Int = defaultPdfPageHeight
 ) =
-  toPdfFile(File(pathname), pageWidth, pageHeight)
+  writeToPdfFile(File(pathname), pageWidth, pageHeight)
 
 fun List<Bitmap>.toPdfFile(
   parent: String?, child: String,
   pageWidth: Int = defaultPageWidth,
   pageHeight: Int = defaultPdfPageHeight
 ) =
-  toPdfFile(File(parent, child), pageWidth, pageHeight)
+  writeToPdfFile(File(parent, child), pageWidth, pageHeight)
 
 fun List<Bitmap>.toPdfFile(
   parent: File?, child: String,
   pageWidth: Int = defaultPageWidth,
   pageHeight: Int = defaultPdfPageHeight
 ) =
-  toPdfFile(File(parent, child), pageWidth, pageHeight)
+  writeToPdfFile(File(parent, child), pageWidth, pageHeight)
 
 fun List<Bitmap>.toPdfFile(
   uri: URI,
   pageWidth: Int = defaultPageWidth,
   pageHeight: Int = defaultPdfPageHeight
 ) =
-  toPdfFile(File(uri), pageWidth, pageHeight)
+  writeToPdfFile(File(uri), pageWidth, pageHeight)
 
-private fun List<Bitmap>.toPdfFile(
+private fun List<Bitmap>.writeToPdfFile(
   file: File,
   pageWidth: Int,
   pageHeight: Int
@@ -114,9 +106,7 @@ private fun List<Bitmap>.toPdfFile(
   try {
     outputStream = FileOutputStream(file)
     doc.writeTo(outputStream)
-  } catch (e: FileNotFoundException) {
-    e.printStackTrace()
-  } catch (e: IOException) {
+  } catch (e: Exception) {
     e.printStackTrace()
   } finally {
     doc.close()

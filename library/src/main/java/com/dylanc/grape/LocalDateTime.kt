@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit
  * @author Dylan Cai
  */
 
+inline val nowLocalDateTime: LocalDateTime get() = LocalDateTime.now()
+
 inline fun Long.toLocalDateTime(
   timeUnit: TimeUnit = TimeUnit.SECONDS,
   zoneOffset: ZoneOffset = ZoneOffset.ofHours(8)

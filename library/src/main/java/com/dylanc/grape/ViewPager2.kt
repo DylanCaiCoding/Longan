@@ -4,8 +4,6 @@ package com.dylanc.grape
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 
@@ -13,43 +11,26 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
  * @author Dylan Cai
  */
 
-inline fun FragmentStateAdapter(fragmentActivity: FragmentActivity, fragmentList: List<Fragment>) =
-  object : FragmentStateAdapter(fragmentActivity) {
+inline fun FragmentActivity.FragmentStateAdapter(fragmentList: List<Fragment>) =
+  object : FragmentStateAdapter(this) {
     override fun getItemCount() = fragmentList.size
     override fun createFragment(position: Int) = fragmentList[position]
   }
 
-inline fun FragmentStateAdapter(fragment: Fragment, fragmentList: List<Fragment>) =
-  object : FragmentStateAdapter(fragment) {
+inline fun Fragment.FragmentStateAdapter(fragmentList: List<Fragment>) =
+  object : FragmentStateAdapter(this) {
     override fun getItemCount() = fragmentList.size
     override fun createFragment(position: Int) = fragmentList[position]
   }
 
-inline fun FragmentStateAdapter(
-  fragmentManager: FragmentManager,
-  lifecycle: Lifecycle,
-  itemCount: Int,
-  crossinline createFragment: (Int) -> Fragment
-) =
-  object : FragmentStateAdapter(fragmentManager, lifecycle) {
+inline fun FragmentActivity.FragmentStateAdapter(itemCount: Int, crossinline block: (Int) -> Fragment) =
+  object : FragmentStateAdapter(this) {
     override fun getItemCount() = itemCount
-    override fun createFragment(position: Int) = createFragment(position)
+    override fun createFragment(position: Int) = block(position)
   }
 
-inline fun FragmentStateAdapter(fragmentActivity: FragmentActivity, itemCount: Int, crossinline createFragment: (Int) -> Fragment) =
-  object : FragmentStateAdapter(fragmentActivity) {
+inline fun Fragment.FragmentStateAdapter(itemCount: Int, crossinline block: (Int) -> Fragment) =
+  object : FragmentStateAdapter(this) {
     override fun getItemCount() = itemCount
-    override fun createFragment(position: Int) = createFragment(position)
-  }
-
-inline fun FragmentStateAdapter(fragment: Fragment, itemCount: Int, crossinline createFragment: (Int) -> Fragment) =
-  object : FragmentStateAdapter(fragment) {
-    override fun getItemCount() = itemCount
-    override fun createFragment(position: Int) = createFragment(position)
-  }
-
-inline fun FragmentStateAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, fragmentList: List<Fragment>) =
-  object : FragmentStateAdapter(fragmentManager, lifecycle) {
-    override fun getItemCount() = fragmentList.size
-    override fun createFragment(position: Int) = fragmentList[position]
+    override fun createFragment(position: Int) = block(position)
   }

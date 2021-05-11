@@ -37,18 +37,18 @@ inline fun TabLayout.setupWithViewPager2(
   TabLayoutMediator(this, viewPager, autoRefresh, enableScroll, tabConfigurationStrategy).attach()
 }
 
-inline fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, onBindView: View.() -> Unit) {
+inline fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, block: View.() -> Unit) {
   setCustomView(layoutId)
-  onBindView(customView!!)
+  block(customView!!)
 }
 
 inline fun TabLayout.addTab(text: String? = null, block: TabLayout.Tab.() -> Unit = {}) =
   addTab(newTab().apply { this.text = text }.apply(block))
 
-inline fun TabLayout.doOnTabSelected(crossinline action: (TabLayout.Tab) -> Unit) =
+inline fun TabLayout.doOnTabSelected(crossinline block: (TabLayout.Tab) -> Unit) =
   addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab) {
-      action(tab)
+      block(tab)
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -56,24 +56,24 @@ inline fun TabLayout.doOnTabSelected(crossinline action: (TabLayout.Tab) -> Unit
     override fun onTabReselected(tab: TabLayout.Tab) {}
   })
 
-inline fun TabLayout.onTabUnselected(crossinline action: (TabLayout.Tab) -> Unit) =
+inline fun TabLayout.doOnTabUnselected(crossinline block: (TabLayout.Tab) -> Unit) =
   addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab) {}
 
     override fun onTabUnselected(tab: TabLayout.Tab) {
-      action(tab)
+      block(tab)
     }
 
     override fun onTabReselected(tab: TabLayout.Tab) {}
   })
 
-inline fun TabLayout.onTabReselected(crossinline action: (TabLayout.Tab) -> Unit) =
+inline fun TabLayout.doOnTabReselected(crossinline block: (TabLayout.Tab) -> Unit) =
   addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab) {}
 
     override fun onTabUnselected(tab: TabLayout.Tab) {}
 
     override fun onTabReselected(tab: TabLayout.Tab) {
-      action(tab)
+      block(tab)
     }
   })

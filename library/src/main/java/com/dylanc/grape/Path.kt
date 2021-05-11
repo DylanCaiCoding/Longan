@@ -8,9 +8,21 @@ import android.os.Environment
  * @author Dylan Cai
  */
 
+
+// Checks if a volume containing external storage is available for read and write.
+inline val isExternalStorageWritable: Boolean
+  get() = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+
+// Checks if a volume containing external storage is available to at least read.
+inline val isExternalStorageReadable: Boolean
+  get() = Environment.getExternalStorageState() in setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
+
+inline val isExternalStorageRemovable: Boolean
+  get() = Environment.isExternalStorageRemovable()
+
 inline val cacheDirPath
-  get() = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || !Environment.isExternalStorageRemovable())
-    externalCacheDirPath
+  get() = if (isExternalStorageWritable || !isExternalStorageRemovable)
+    externalCacheDirPath.orEmpty()
   else
     internalCacheDirPath
 

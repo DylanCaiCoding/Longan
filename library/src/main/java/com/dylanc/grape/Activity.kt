@@ -5,9 +5,11 @@ package com.dylanc.grape
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import java.util.*
@@ -82,3 +84,7 @@ inline val Activity.activity: Activity get() = this
 inline val FragmentActivity.fragmentActivity: FragmentActivity get() = this
 
 inline val ComponentActivity.lifecycleOwner: LifecycleOwner get() = this
+
+fun checkPermission(permission: String) =
+   ActivityCompat.checkSelfPermission(topActivity, permission) != PackageManager.PERMISSION_GRANTED
+

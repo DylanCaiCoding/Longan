@@ -27,38 +27,6 @@ fun <T : Any> Any.sharedPreferences(key: String? = null, default: T) =
 fun Any.sharedPreferences(key: String? = null) =
   SharedPreferencesStringValue(key, sharedPreferencesOwner.sharedPreferences)
 
-fun <T : Any> SharedPreferences.put(key: String, value: T) {
-  edit().apply {
-    when (value) {
-      is Long -> putLong(key, value)
-      is String -> putString(key, value)
-      is Int -> putInt(key, value)
-      is Boolean -> putBoolean(key, value)
-      is Float -> putFloat(key, value)
-      else -> {
-        val valueType = value.javaClass.canonicalName
-        throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
-      }
-    }
-  }.apply()
-}
-
-@Suppress("UNCHECKED_CAST")
-fun <T : Any> SharedPreferences.getOrDefault(key: String, default: T) =
-  run {
-    when (default) {
-      is Long -> getLong(key, default)
-      is String -> getString(key, default)
-      is Int -> getInt(key, default)
-      is Boolean -> getBoolean(key, default)
-      is Float -> getFloat(key, default)
-      else -> {
-        val valueType = default.javaClass.canonicalName
-        throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
-      }
-    } as T
-  }
-
 interface SharedPreferencesOwner {
   val sharedPreferences: SharedPreferences get() = defaultSharedPreferences
 }
@@ -84,9 +52,35 @@ class SharedPreferencesValueWithDefault<T : Any>(
 ) : ReadWriteProperty<Any, T> {
 
   override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
-    sharedPreferences.put(key ?: property.name, value)
+    val key = key ?: property.name
+    sharedPreferences.edit().apply {
+      when (value) {
+        is Long -> putLong(key, value)
+        is String -> putString(key, value)
+        is Int -> putInt(key, value)
+        is Boolean -> putBoolean(key, value)
+        is Float -> putFloat(key, value)
+        else -> {
+          val valueType = value.javaClass.canonicalName
+          throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
+        }
+      }
+    }.apply()
   }
-  override fun getValue(thisRef: Any, property: KProperty<*>): T {
-    return sharedPreferences.getOrDefault(key ?: property.name, default)
-  }
+
+  @Suppress("UNCHECKED_CAST")
+  override fun getValue(thisRef: Any, property: KProperty<*>): T  =
+    sharedPreferences.run {
+      when (default) {
+        is Long -> getLong(key, default)
+        is String -> getString(key, default)
+        is Int -> getInt(key, default)
+        is Boolean -> getBoolean(key, default)
+        is Float -> getFloat(key, default)
+        else -> {
+          val valueType = default.javaClass.canonicalName
+          throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
+        }
+      } as T
+    }
 }

@@ -3,54 +3,64 @@
 package com.dylanc.grape
 
 import android.Manifest.permission.ACCESS_NETWORK_STATE
-import android.Manifest.permission.INTERNET
-import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.NetworkCapabilities.*
 import android.net.NetworkRequest
 import android.os.Build
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.LiveData
 
+
 /**
  * @author Dylan Cai
  */
 
-class NetworkConnectedLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constructor() : LiveData<Boolean>() {
+@Suppress("DEPRECATION")
+@get:RequiresPermission(ACCESS_NETWORK_STATE)
+inline val isNetworkAvailable: Boolean
+  get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
+      hasCapability(NET_CAPABILITY_INTERNET) && hasCapability(NET_CAPABILITY_VALIDATED)
+    }
+  } else {
+    connectivityManager.activeNetworkInfo?.isConnectedOrConnecting
+  } ?: false
 
-  private val connectivityManager: ConnectivityManager =
-    application.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+@RequiresPermission(ACCESS_NETWORK_STATE)
+fun isNetworkAvailable2() = false
 
-  private val networkRequest by lazy {
-    NetworkRequest.Builder()
-      .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-      .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-      .build()
-  }
+class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constructor() : LiveData<Boolean>() {
 
   @RequiresPermission(ACCESS_NETWORK_STATE)
   override fun onActive() {
     super.onActive()
     when {
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ->
-        connectivityManager.registerDefaultNetworkCallback(connectivityManagerCallback)
+        connectivityManager.registerDefaultNetworkCallback(networkCallback)
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ->
-        connectivityManager.registerNetworkCallback(networkRequest, connectivityManagerCallback)
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
     }
   }
 
   override fun onInactive() {
     super.onInactive()
-    connectivityManager.unregisterNetworkCallback(connectivityManagerCallback)
+    connectivityManager.unregisterNetworkCallback(networkCallback)
   }
 
-  private val connectivityManagerCallback by lazy {
+  private val networkRequest by lazy {
+    NetworkRequest.Builder()
+      .addTransportType(TRANSPORT_CELLULAR)
+      .addTransportType(TRANSPORT_ETHERNET)
+      .addTransportType(TRANSPORT_WIFI)
+      .build()
+  }
+
+  private val networkCallback by lazy {
     object : ConnectivityManager.NetworkCallback() {
       override fun onAvailable(network: Network) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-          Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-        ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
           postValue(true)
         }
       }
@@ -58,11 +68,7 @@ class NetworkConnectedLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
       override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
           networkCapabilities.run {
-            if (hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-              hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-            ) {
-              postValue(true)
-            }
+            postValue(hasCapability(NET_CAPABILITY_INTERNET) && hasCapability(NET_CAPABILITY_VALIDATED))
           }
         }
       }
@@ -72,16 +78,4 @@ class NetworkConnectedLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
       }
     }
   }
-}
-
-class NetworkAvailableLiveData @RequiresPermission(INTERNET) constructor() : LiveData<Boolean>() {
-
-  override fun onActive() {
-    super.onActive()
-  }
-
-  override fun onInactive() {
-    super.onInactive()
-  }
-
 }
