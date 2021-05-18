@@ -2,6 +2,11 @@
 
 package com.dylanc.grape
 
+import android.app.Activity
+import android.view.Window
+import androidx.core.view.WindowInsetsCompat.Type
+import androidx.fragment.app.Fragment
+
 
 /**
  * @author Dylan Cai
@@ -9,22 +14,24 @@ package com.dylanc.grape
 
 inline val screenWith: Int get() = application.resources.displayMetrics.widthPixels
 
-inline val screenHeight: Int get() = application.resources.displayMetrics.widthPixels
+inline val screenHeight: Int get() = application.resources.displayMetrics.heightPixels
 
-//var Activity.isFullScreen: Boolean
-//  get() = TODO()
-//  set(value) {
-//    if (value) {
-//      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//        window.insetsController?.hide(WindowInsets.Type.statusBars())
-//      } else {
-//        @Suppress("DEPRECATION")
-//        window.setFlags(
-//          WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//          WindowManager.LayoutParams.FLAG_FULLSCREEN
-//        )
-//      }
-//    } else {
-//
-//    }
-//  }
+inline var Activity.isSystemBarVisible: Boolean
+  get() = window.isSystemBarVisible
+  set(value) {
+    window.isSystemBarVisible = value
+  }
+
+inline var Fragment.isSystemBarVisible: Boolean
+  get() = activity?.isSystemBarVisible == true
+  set(value) {
+    activity?.isSystemBarVisible = value
+  }
+
+inline var Window.isSystemBarVisible: Boolean
+  get() = decorView.rootWindowInsetsCompat?.isVisible(Type.systemBars()) == true
+  set(value) {
+    insetControllerCompat?.run {
+      if (value) show(Type.systemBars()) else hide(Type.systemBars())
+    }
+  }

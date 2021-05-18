@@ -1,18 +1,21 @@
-@file:Suppress("unused", "NOTHING_TO_INLINE", "FunctionName", "MemberVisibilityCanBePrivate")
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate", "FunctionName")
 
 package com.dylanc.grape
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
+import androidx.activity.result.contract.ActivityResultContracts.*
+import androidx.annotation.CallSuper
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import java.io.File
 
@@ -20,123 +23,108 @@ import java.io.File
  * @author Dylan Cai
  */
 
-fun ComponentActivity.ActivityResultLauncher() =
-  ActivityResultLauncher(::registerForActivityResult)
+fun ComponentActivity.ActivityResultLauncher() = ActivityResultLauncher(this)
 
-fun Fragment.ActivityResultLauncher() =
-  ActivityResultLauncher(::registerForActivityResult)
+fun Fragment.ActivityResultLauncher() = ActivityResultLauncher(this)
 
-fun ComponentActivity.PermissionResultLauncher() =
-  PermissionResultLauncher(
-    ::registerForActivityResult,
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ::shouldShowRequestPermissionRationale else null
-  )
+fun <I, O> ComponentActivity.ActivityResultLauncher(activityResultContract: ActivityResultContract<I, O>) =
+  BaseActivityResultLauncher(this, activityResultContract)
 
-fun Fragment.PermissionResultLauncher() =
-  PermissionResultLauncher(
-    ::registerForActivityResult,
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ::shouldShowRequestPermissionRationale else null
-  )
+fun <I, O> Fragment.ActivityResultLauncher(activityResultContract: ActivityResultContract<I, O>) =
+  BaseActivityResultLauncher(this, activityResultContract)
 
-fun ComponentActivity.MultiplePermissionsResultLauncher() =
-  MultiplePermissionsResultLauncher(::registerForActivityResult)
+fun ComponentActivity.PermissionLauncher() = PermissionLauncher(this)
 
-fun Fragment.MultiplePermissionsResultLauncher() =
-  MultiplePermissionsResultLauncher(::registerForActivityResult)
+fun Fragment.PermissionLauncher() = PermissionLauncher(this)
 
-fun ComponentActivity.TakePicturePreviewResultLauncher() =
-  TakePicturePreviewResultLauncher(::registerForActivityResult)
+fun ComponentActivity.MultiplePermissionsLauncher() = MultiplePermissionsLauncher(this)
 
-fun Fragment.TakePicturePreviewResultLauncher() =
-  TakePicturePreviewResultLauncher(::registerForActivityResult)
+fun Fragment.MultiplePermissionsLauncher() = MultiplePermissionsLauncher(this)
 
-fun ComponentActivity.TakePictureResultLauncher() =
-  TakePictureResultLauncher(::registerForActivityResult)
+fun ComponentActivity.TakePicturePreviewLauncher() = TakePicturePreviewLauncher(this)
 
-fun Fragment.TakePictureResultLauncher() =
-  TakePictureResultLauncher(::registerForActivityResult)
+fun Fragment.TakePicturePreviewLauncher() = TakePicturePreviewLauncher(this)
 
-fun ComponentActivity.TakeVideoResultLauncher() =
-  TakeVideoResultLauncher(::registerForActivityResult)
+fun ComponentActivity.TakePictureLauncher() = TakePictureLauncher(this)
 
-fun Fragment.TakeVideoResultLauncher() =
-  TakeVideoResultLauncher(::registerForActivityResult)
+fun Fragment.TakePictureLauncher() = TakePictureLauncher(this)
 
-fun ComponentActivity.PickContactResultLauncher() =
-  PickContactResultLauncher(::registerForActivityResult)
+fun ComponentActivity.TakeVideoLauncher() = TakeVideoLauncher(this)
 
-fun Fragment.PickContactResultLauncher() =
-  PickContactResultLauncher(::registerForActivityResult)
+fun Fragment.TakeVideoLauncher() = TakeVideoLauncher(this)
 
-fun ComponentActivity.GetContentResultLauncher() =
-  GetContentResultLauncher(::registerForActivityResult)
+fun ComponentActivity.PickContactLauncher() = PickContactLauncher(this)
 
-fun Fragment.GetContentResultLauncher() =
-  GetContentResultLauncher(::registerForActivityResult)
+fun Fragment.PickContactLauncher() = PickContactLauncher(this)
 
-fun ComponentActivity.CreateDocumentResultLauncher() =
-  CreateDocumentResultLauncher(::registerForActivityResult)
+fun ComponentActivity.GetContentLauncher() = GetContentLauncher(this)
 
-fun Fragment.CreateDocumentResultLauncher() =
-  CreateDocumentResultLauncher(::registerForActivityResult)
+fun Fragment.GetContentLauncher() = GetContentLauncher(this)
 
-fun ComponentActivity.OpenMultipleDocumentsResultLauncher() =
-  OpenMultipleDocumentsResultLauncher(::registerForActivityResult)
+fun ComponentActivity.CreateDocumentLauncher() = CreateDocumentLauncher(this)
 
-fun Fragment.OpenMultipleDocumentsResultLauncher() =
-  OpenMultipleDocumentsResultLauncher(::registerForActivityResult)
+fun Fragment.CreateDocumentLauncher() = CreateDocumentLauncher(this)
 
-fun ComponentActivity.OpenDocumentTreeResultLauncher() =
-  OpenDocumentTreeResultLauncher(::registerForActivityResult)
+fun ComponentActivity.OpenMultipleDocumentsLauncher() = OpenMultipleDocumentsLauncher(this)
 
-fun Fragment.OpenDocumentTreeResultLauncher() =
-  OpenDocumentTreeResultLauncher(::registerForActivityResult)
+fun Fragment.OpenMultipleDocumentsLauncher() = OpenMultipleDocumentsLauncher(this)
 
-typealias RegisterForActivityResult<I, O> =
-      (ActivityResultContract<I, O>, ActivityResultCallback<O>) -> androidx.activity.result.ActivityResultLauncher<I>
+fun ComponentActivity.OpenDocumentTreeLauncher() = OpenDocumentTreeLauncher(this)
 
-open class BaseResultLauncher<I, O>(
-  registerForActivityResult: RegisterForActivityResult<I, O>,
+fun Fragment.OpenDocumentTreeLauncher() = OpenDocumentTreeLauncher(this)
+
+fun ComponentActivity.CropPictureLauncher() = CropPictureLauncher(this)
+
+fun Fragment.CropPictureLauncher() = CropPictureLauncher(this)
+
+open class BaseActivityResultLauncher<I, O>(
+  activityResultCaller: ActivityResultCaller,
   activityResultContract: ActivityResultContract<I, O>
 ) {
   private var onActivityResult: ((O?) -> Unit)? = null
 
   private val launcher =
-    registerForActivityResult(activityResultContract) { result ->
+    activityResultCaller.registerForActivityResult(activityResultContract) { result ->
       onActivityResult?.invoke(result)
       onActivityResult = null
     }
 
-  fun launch(input: I, onActivityResult: (O) -> Unit) =
+  open fun launch(input: I?, onActivityResult: (O) -> Unit) =
     launchForNullableResult(input, { if (it != null) onActivityResult(it) })
 
-  fun launchForNullableResult(input: I, onActivityResult: (O?) -> Unit) {
-    launcher.launch(input)
+  open fun launchForNullableResult(input: I?, onActivityResult: (O?) -> Unit) {
     this.onActivityResult = onActivityResult
+    launcher.launch(input)
   }
 }
 
-class ActivityResultLauncher(
-  registerForActivityResult: RegisterForActivityResult<Intent, ActivityResult>
-) : BaseResultLauncher<Intent, ActivityResult>(
-  registerForActivityResult,
-  ActivityResultContracts.StartActivityForResult()
-) {
-
-  fun <T : Activity> launch(clazz: Class<T>, onActivityResult: (ActivityResult) -> Unit) {
-    launch(Intent(application, clazz), onActivityResult)
-  }
+class ActivityResultLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<Intent, ActivityResult>(activityResultCaller, StartActivityForResult()) {
 
   inline fun <reified T : Activity> launch(noinline onActivityResult: (ActivityResult) -> Unit) {
     launch(T::class.java, onActivityResult)
   }
+
+  fun <T : Activity> launch(clazz: Class<T>, onActivityResult: (ActivityResult) -> Unit) {
+    launch(Intent(application, clazz), onActivityResult)
+  }
 }
 
-class PermissionResultLauncher(
-  registerForActivityResult: RegisterForActivityResult<String, Boolean>,
-  private val shouldShowRequestPermissionRationale: ((String) -> Boolean)?
-) :
-  BaseResultLauncher<String, Boolean>(registerForActivityResult, ActivityResultContracts.RequestPermission()) {
+class PermissionLauncher(
+  activityResultCaller: ActivityResultCaller,
+  private val shouldShowRequestPermissionRationale: (String) -> Boolean
+) : BaseActivityResultLauncher<String, Boolean>(activityResultCaller, RequestPermission()) {
+
+  constructor(activity: ComponentActivity) :
+      this(activity, { ActivityCompat.shouldShowRequestPermissionRationale(activity, it) })
+
+  constructor(fragment: Fragment) : this(
+    fragment, {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        fragment.shouldShowRequestPermissionRationale(it)
+      else false
+    }
+  )
 
   fun launch(
     permission: String,
@@ -147,73 +135,169 @@ class PermissionResultLauncher(
     launch(permission) {
       when {
         it -> onGranted()
-        shouldShowRequestPermissionRationale?.invoke(permission) == true -> onShowRationale()
+        shouldShowRequestPermissionRationale(permission) -> onShowRationale()
         else -> onDenied()
       }
     }
   }
 }
 
-class MultiplePermissionsResultLauncher(
-  registerForActivityResult: RegisterForActivityResult<Array<String>, Map<String, Boolean>>
-) :
-  BaseResultLauncher<Array<String>, Map<String, Boolean>>(
-    registerForActivityResult,
-    ActivityResultContracts.RequestMultiplePermissions()
-  ) {
+class MultiplePermissionsLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<Array<String>, Map<String, Boolean>>(activityResultCaller, RequestMultiplePermissions()) {
 
   fun launch(vararg permissions: String, onActivityResult: (Map<String, Boolean>) -> Unit) {
     launch(arrayOf(*permissions), onActivityResult)
   }
 }
 
-class TakePicturePreviewResultLauncher(registerForActivityResult: RegisterForActivityResult<Void, Bitmap>) :
-  BaseResultLauncher<Void, Bitmap>(registerForActivityResult, ActivityResultContracts.TakePicturePreview())
+class TakePicturePreviewLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<Void, Bitmap>(activityResultCaller, TakePicturePreview()) {
 
-class TakePictureResultLauncher(
-  registerForActivityResult: RegisterForActivityResult<Uri, Boolean>
-) : BaseResultLauncher<Uri, Boolean>(registerForActivityResult, ActivityResultContracts.TakePicture()) {
-
-  fun launch(onSuccess: (String, Uri) -> Unit, onFailure: () -> Unit = {}) {
-    launch(pathname, onSuccess, onFailure)
-  }
-
-  fun launch(pathname: String, onSuccess: (String, Uri) -> Unit, onFailure: () -> Unit = {}) {
-    launch(File(pathname), onSuccess, onFailure)
-  }
-
-  fun launch(file: File, onSuccess: (String, Uri) -> Unit, onFailure: () -> Unit = {}) {
-    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      FileProvider.getUriForFile(application, "${packageName}.provider", file)
-    } else {
-      Uri.fromFile(file)
-    }
-    launch(uri) { takeSuccess ->
-      if (takeSuccess) {
-        onSuccess(file.path, uri)
-      } else {
-        onFailure()
-      }
-    }
-  }
-
-  val pathname: String get() = "$externalCacheDirPath/${System.currentTimeMillis()}.jpg"
+  fun launch(onActivityResult: (Bitmap) -> Unit) = launch(null, onActivityResult)
 }
 
-class TakeVideoResultLauncher(registerForActivityResult: RegisterForActivityResult<Uri, Bitmap>) :
-  BaseResultLauncher<Uri, Bitmap>(registerForActivityResult, ActivityResultContracts.TakeVideo())
+class TakePictureLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<Uri, Boolean>(activityResultCaller, TakePicture()) {
 
-class PickContactResultLauncher(registerForActivityResult: RegisterForActivityResult<Void, Uri>) :
-  BaseResultLauncher<Void, Uri>(registerForActivityResult, ActivityResultContracts.PickContact())
+  fun launch(onTakeSuccess: (Uri, String) -> Unit) {
+    val pathname = "$externalCacheDirPath/${System.currentTimeMillis()}.jpg"
+    launch(File(pathname)) { uri ->
+      onTakeSuccess(uri, pathname)
+    }
+  }
 
-class GetContentResultLauncher(registerForActivityResult: RegisterForActivityResult<String, Uri>) :
-  BaseResultLauncher<String, Uri>(registerForActivityResult, ActivityResultContracts.GetContent())
+  fun launch(pathname: String, onTakeSuccess: (Uri) -> Unit) {
+    launch(File(pathname), onTakeSuccess)
+  }
 
-class CreateDocumentResultLauncher(registerForActivityResult: RegisterForActivityResult<String, Uri>) :
-  BaseResultLauncher<String, Uri>(registerForActivityResult, ActivityResultContracts.CreateDocument())
+  fun launch(file: File, onTakeSuccess: (Uri) -> Unit) =
+    file.toUri().let {
+      launch(it) { takeSuccess ->
+        if (takeSuccess)
+          onTakeSuccess(it)
+      }
+    }
+}
 
-class OpenMultipleDocumentsResultLauncher(registerForActivityResult: RegisterForActivityResult<Array<String>, List<Uri>>) :
-  BaseResultLauncher<Array<String>, List<Uri>>(registerForActivityResult, ActivityResultContracts.OpenMultipleDocuments())
+class TakeVideoLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<Uri, Bitmap>(activityResultCaller, TakeVideo()) {
 
-class OpenDocumentTreeResultLauncher(registerForActivityResult: RegisterForActivityResult<Uri, Uri>) :
-  BaseResultLauncher<Uri, Uri>(registerForActivityResult, ActivityResultContracts.OpenDocumentTree())
+  fun launch(onTakeSuccess: (Uri, String, Bitmap?) -> Unit) {
+    val pathname = "$externalCacheDirPath/${System.currentTimeMillis()}.mp4"
+    launch(File(pathname)) { uri, bitmap ->
+      onTakeSuccess(uri, pathname, bitmap)
+    }
+  }
+
+  fun launch(pathname: String, onTakeSuccess: (Uri, Bitmap?) -> Unit) {
+    launch(File(pathname), onTakeSuccess)
+  }
+
+  fun launch(file: File, onTakeSuccess: (Uri, Bitmap?) -> Unit) =
+    file.toUri().let { uri ->
+      launchForNullableResult(uri) {
+        onTakeSuccess(uri, it)
+      }
+    }
+}
+
+class PickContactLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<Void, Uri>(activityResultCaller, PickContact()) {
+
+  fun launch(onActivityResult: (Uri) -> Unit) = launch(null, onActivityResult)
+}
+
+class GetContentLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<String, Uri>(activityResultCaller, GetContent()) {
+
+  fun launchForImage(onActivityResult: (Uri) -> Unit) = launch("image/*", onActivityResult)
+
+  fun launchForVideo(onActivityResult: (Uri) -> Unit) = launch("video/*", onActivityResult)
+
+  fun launchForAudio(onActivityResult: (Uri) -> Unit) = launch("audio/*", onActivityResult)
+}
+
+class GetMultipleContentLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<String, List<Uri>>(activityResultCaller, GetMultipleContents()) {
+
+  fun launchForImage(onActivityResult: (List<Uri>) -> Unit) = launch("image/*", onActivityResult)
+
+  fun launchForVideo(onActivityResult: (List<Uri>) -> Unit) = launch("video/*", onActivityResult)
+
+  fun launchForAudio(onActivityResult: (List<Uri>) -> Unit) = launch("audio/*", onActivityResult)
+}
+
+class CreateDocumentLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<String, Uri>(activityResultCaller, CreateDocument())
+
+class OpenMultipleDocumentsLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<Array<String>, List<Uri>>(activityResultCaller, OpenMultipleDocuments())
+
+class OpenDocumentTreeLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<Uri, Uri>(activityResultCaller, OpenDocumentTree())
+
+class CropPictureLauncher(activityResultCaller: ActivityResultCaller) :
+  BaseActivityResultLauncher<CropPictureConfig, Uri>(activityResultCaller, CropPictureContract()) {
+
+  fun launch(
+    inputUri: Uri,
+    outputUri: Uri = insertMediaImageUri()!!,
+    aspectX: Int = 1,
+    aspectY: Int = 1,
+    outputX: Int = 512,
+    outputY: Int = 512,
+    isScale: Boolean = true,
+    isScaleUpIfNeeded: Boolean = true,
+    block: (Uri) -> Unit
+  ) =
+    launch(
+      CropPictureConfig(inputUri, aspectX, aspectY, outputX, outputY, isScale, isScaleUpIfNeeded, outputUri), block
+    )
+}
+
+data class CropPictureConfig(
+  val inputUri: Uri,
+  val aspectX: Int = 1,
+  val aspectY: Int = 1,
+  val outputX: Int = 512,
+  val outputY: Int = 512,
+  val isScale: Boolean = true,
+  val isScaleUpIfNeeded: Boolean = false,
+  val outputUri: Uri = insertMediaImageUri()!!
+)
+
+class CropPictureContract : ActivityResultContract<CropPictureConfig, Uri>() {
+  private lateinit var outputUri: Uri
+
+  @CallSuper
+  override fun createIntent(context: Context, input: CropPictureConfig): Intent {
+    return Intent("com.android.camera.action.CROP")
+      .apply {
+        setDataAndType(input.inputUri, "image/*")
+        putExtra(MediaStore.EXTRA_OUTPUT, input.outputUri)
+        putExtra("aspectX", input.aspectX)
+        putExtra("aspectY", input.aspectY)
+        putExtra("outputX", input.outputX)
+        putExtra("outputY", input.outputY)
+        putExtra("scale", input.isScale)
+        putExtra("scaleUpIfNeeded", input.isScaleUpIfNeeded)
+        putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
+        putExtra("return-data", false)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+          addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        outputUri = input.outputUri
+      }
+  }
+
+  override fun getSynchronousResult(
+    context: Context,
+    input: CropPictureConfig
+  ): SynchronousResult<Uri>? {
+    return null
+  }
+
+  override fun parseResult(resultCode: Int, intent: Intent?): Uri {
+    return outputUri
+  }
+}
