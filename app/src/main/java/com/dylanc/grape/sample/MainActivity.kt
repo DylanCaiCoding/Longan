@@ -1,53 +1,39 @@
 package com.dylanc.grape.sample
 
-import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.dylanc.grape.*
+import com.dylanc.grape.addStatusBarHeightToPaddingTop
+import com.dylanc.grape.immerseStatusBar
+import com.dylanc.grape.pressBackTwiceToExit
+import com.dylanc.grape.sample.adapter.TextAdapter
 import com.dylanc.grape.sample.databinding.ActivityMainBinding
+import com.dylanc.grape.startActivity
+import com.dylanc.viewbinding.binding
 
-class MainActivity : AppCompatActivity(), SharedPreferencesOwner {
+class MainActivity : AppCompatActivity() {
 
-  private val takePictureResultLauncher = TakePictureResultLauncher()
-  private val getContentResultLauncher = GetContentResultLauncher()
-  private val permissionsResultLauncher = PermissionResultLauncher()
-  private val connectedLiveData = NetworkConnectedLiveData()
-
-  private lateinit var binding: ActivityMainBinding
+  private val binding: ActivityMainBinding by binding()
+  private val adapter = TextAdapter(::onItemClick)
+  private val items = listOf(
+    R.string.activity_result,
+    R.string.share,
+  )
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    binding = ActivityMainBinding.inflate(layoutInflater)
-    setContentView(binding.root)
+    immerseStatusBar()
     binding.apply {
-      btnTakePicture.setOnClickListener {
-        takePictureResultLauncher.launch({ path, uri ->
-          logDebug(path)
-          ivPicture.setImageURI(uri)
-        })
-      }
-      btnSelectPicture.setOnClickListener {
-        permissionsResultLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) {
-          if (it) {
-            getContentResultLauncher.launch("image/*") { uri ->
-              ivPicture.setImageURI(uri)
-            }
-          }
-        }
-      }
-      btnSecond.setOnClickListener {
-        snackbar("Are you sure?") {
-          setCustomView(R.layout.layout_custom_snackbar)
-          setAction("sure") {
-            startActivity<SecondActivity>()
-          }
-        }
-      }
+      toolbar.addStatusBarHeightToPaddingTop()
+      recyclerView.adapter = adapter
+      adapter.submitList(items)
     }
-    exitAfterBackPressedTwice("再次点击退出应用")
-    connectedLiveData.observe(lifecycleOwner){
-      toast(it.toString())
-    }
+    pressBackTwiceToExit("再次点击退出应用")
   }
 
+  private fun onItemClick(id: Int) {
+    when (id) {
+      R.string.activity_result -> startActivity<ResultLauncherActivity>()
+      R.string.share -> startActivity<ResultLauncherActivity>()
+    }
+  }
 }
