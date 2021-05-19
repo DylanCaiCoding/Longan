@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  package="com.dylanc.grape">
+  package="com.dylanc.longan">
 
   <application>
 
@@ -10,7 +10,7 @@
       android:exported="false"
       tools:node="merge">
       <meta-data
-        android:name="com.dylanc.grape.AppInitializer"
+        android:name="com.dylanc.longan.AppInitializer"
         android:value="androidx.startup" />
     </provider>
 
