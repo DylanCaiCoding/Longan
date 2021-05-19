@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.dylanc.longan.sample.databinding.ItemTextBinding
 import com.dylanc.viewbinding.BindingViewHolder
+import com.dylanc.viewbinding.onItemClick
 
 /**
  * @author Dylan Cai

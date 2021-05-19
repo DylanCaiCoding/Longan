@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dylanc.longan.*
 import com.dylanc.longan.sample.databinding.ActivityLauncherBinding
+import com.dylanc.viewbinding.binding
 import java.io.File
 
 
@@ -58,34 +59,24 @@ class ResultLauncherActivity : AppCompatActivity(), SharedPreferencesOwner {
       }
       btnPickContact.setOnClickListener {
         pickContactLauncher.launch {
-          contentResolver.query(it) { cursor ->
-//                val name = cursor.getStringFromColumnIndex(ContactsContract.Profile.DISPLAY_NAME_PRIMARY)
-//                toast("$name")
-          }
+
         }
       }
       btnCreateDocument.setOnClickListener {
-//        createDocumentLauncher.launch(null) {
-//
-//        }
-
-//        openDocumentTreeLauncher.launch(null){
-//
-//        }
-        openMultipleDocumentLauncher.launch(arrayOf()) {
+        createDocumentLauncher.launch(null) {
 
         }
-//        startActivity<SecondActivity>("test" to 1L)
-//            finish()
+      }
+      btnOpenMultipleDocument.setOnClickListener {
+        openMultipleDocumentLauncher.launch(arrayOf()){
+
+        }
+      }
+      btnOpenDocumentTree.setOnClickListener {
+        openDocumentTreeLauncher.launch(null){
+
+        }
       }
     }
-
-//        snackbar("Are you sure?") {
-//          setCustomView(R.layout.layout_custom_snackbar)
-//          setAction("sure") {
-//            startActivity<SecondActivity>("test" to 1L)
-//            finish()
-//          }
-//        }
   }
 }
