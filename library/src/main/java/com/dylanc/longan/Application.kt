@@ -9,6 +9,8 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.ConnectivityManager
 import android.os.Process
 import android.view.WindowManager
@@ -36,14 +38,16 @@ inline val appVersionName: String get() = activitiesPackageInfo.versionName
 
 inline val appVersionCode get() = PackageInfoCompat.getLongVersionCode(activitiesPackageInfo)
 
+inline val isDebug: Boolean
+  get() = application.packageManager.getApplicationInfo(packageName, 0)
+    .let { it.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 }
+
+inline val isDarkMode: Boolean
+  get() = (application.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
+
 inline fun relaunchApp(killProcess: Boolean = true) =
   launchIntent?.let {
     it.addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_CLEAR_TOP)
     startActivity(it)
     if (killProcess) Process.killProcess(Process.myPid())
-  }
-
-inline val isDebug: Boolean
-  get() = application.packageManager.getApplicationInfo(packageName, 0).let {
-    it.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
   }

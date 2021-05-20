@@ -1,16 +1,37 @@
-@file:Suppress("unused", "SpellCheckingInspection")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
 
 import androidx.annotation.MainThread
 import androidx.collection.arraySetOf
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 /**
  * @author Dylan Cai
  */
+
+inline fun <T> MutableLiveData<T>.toLiveData(): LiveData<T> = UnmodifiableLiveData(this)
+
+class UnmodifiableLiveData<T>(private val liveData: MutableLiveData<T>) : LiveData<T>() {
+
+  override fun observe(owner: LifecycleOwner, observer: Observer<in T>) =
+    liveData.observe(owner, observer)
+
+  override fun observeForever(observer: Observer<in T>) = liveData.observeForever(observer)
+
+  override fun hasActiveObservers() = liveData.hasActiveObservers()
+
+  override fun hasObservers() = liveData.hasObservers()
+
+  override fun removeObserver(observer: Observer<in T>) = liveData.removeObserver(observer)
+
+  override fun removeObservers(owner: LifecycleOwner) = liveData.removeObservers(owner)
+
+  override fun getValue() = liveData.value
+}
 
 class EventLiveData<T> : WrapObserverLiveData<T, EventLiveData.ObserverWrapper<T>>() {
 
