@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresPermission
 import androidx.core.os.bundleOf
@@ -67,5 +68,14 @@ inline fun callIntentOf(phoneNumber: String) =
 inline fun sendSmsIntentOf(phoneNumber: String, content: String?) =
   Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:${Uri.encode(phoneNumber)}"))
     .apply { putExtra("sms_body", content) }
+
+inline fun installAPKIntentOf(uri: Uri) =
+  Intent(Intent.ACTION_VIEW).apply {
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    setDataAndType(uri, "application/vnd.android.package-archive")
+  }
 
 inline val launchIntent: Intent? get() = application.packageManager.getLaunchIntentForPackage(packageName)
