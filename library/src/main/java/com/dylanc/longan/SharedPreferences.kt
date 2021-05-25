@@ -4,6 +4,7 @@ package com.dylanc.longan
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -53,7 +54,7 @@ class SharedPreferencesValueWithDefault<T : Any>(
 
   override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
     val key = key ?: property.name
-    sharedPreferences.edit().apply {
+    sharedPreferences.edit {
       when (value) {
         is Long -> putLong(key, value)
         is String -> putString(key, value)
@@ -65,7 +66,7 @@ class SharedPreferencesValueWithDefault<T : Any>(
           throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
         }
       }
-    }.apply()
+    }
   }
 
   @Suppress("UNCHECKED_CAST")

@@ -28,9 +28,6 @@ inline val isNetworkAvailable: Boolean
     connectivityManager.activeNetworkInfo?.isConnectedOrConnecting
   } ?: false
 
-@RequiresPermission(ACCESS_NETWORK_STATE)
-fun isNetworkAvailable2() = false
-
 class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constructor() : LiveData<Boolean>() {
 
   @RequiresPermission(ACCESS_NETWORK_STATE)

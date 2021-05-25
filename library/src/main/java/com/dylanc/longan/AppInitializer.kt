@@ -24,7 +24,7 @@ internal class AppInitializer : Initializer<Unit> {
 
     val formatStrategy = PrettyFormatStrategy.newBuilder()
       .methodCount(0)
-      .tag("Grape")
+      .tag("Longan")
       .build()
     Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
     AndroidThreeTen.init(application)

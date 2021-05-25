@@ -4,6 +4,7 @@ package com.dylanc.longan
 
 import android.view.View
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -41,6 +42,9 @@ inline fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, block: View.() 
   setCustomView(layoutId)
   block(customView!!)
 }
+
+inline fun TabLayout.addTab(@StringRes resId: Int, block: TabLayout.Tab.() -> Unit = {}) =
+  addTab(context.getString(resId), block)
 
 inline fun TabLayout.addTab(text: String? = null, block: TabLayout.Tab.() -> Unit = {}) =
   addTab(newTab().apply { this.text = text }.apply(block))

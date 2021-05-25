@@ -13,6 +13,7 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Size
 import android.webkit.MimeTypeMap
+import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import androidx.core.net.UriCompat
 import java.io.File
@@ -22,7 +23,7 @@ import java.io.OutputStream
 
 fun Uri.toFile(): File =
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    when (this.scheme) {
+    when (scheme) {
       ContentResolver.SCHEME_FILE -> {
         File(requireNotNull(path) { "Uri path is null: $this" })
       }
@@ -112,13 +113,12 @@ inline fun Uri.openInputStream(): InputStream? = contentResolver.openInputStream
 
 inline fun Uri.openOutputStream(): OutputStream? = contentResolver.openOutputStream(this)
 
+@RequiresApi(Build.VERSION_CODES.Q)
 inline fun Uri.loadThumbnail(width: Int, height: Int, signal: CancellationSignal? = null) =
   loadThumbnail(Size(width, height), signal)
 
-inline fun Uri.loadThumbnail(size: Size, signal: CancellationSignal? = null) {
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+@RequiresApi(Build.VERSION_CODES.Q)
+inline fun Uri.loadThumbnail(size: Size, signal: CancellationSignal? = null) =
     contentResolver.loadThumbnail(this, size, signal)
-  }
-}
 
 inline fun Uri.toSafeString() = UriCompat.toSafeString(this)

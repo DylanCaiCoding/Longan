@@ -14,10 +14,10 @@ inline fun toast(text: CharSequence?, duration: Int = Toast.LENGTH_SHORT, block:
   ToastCompat.makeText(application, text, duration).apply(block).apply { show() }
 
 inline fun toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_SHORT, block: Toast.() -> Unit = {}): Toast =
-  ToastCompat.makeText(application, resId, duration).apply(block).apply { show() }
+  ToastCompat.makeText(application, stringOf(resId), duration).apply(block).apply { show() }
 
 inline fun longToast(text: CharSequence?, block: Toast.() -> Unit = {}): Toast =
   ToastCompat.makeText(application, text, Toast.LENGTH_LONG).apply(block).apply { show() }
 
 inline fun longToast(@StringRes resId: Int, block: Toast.() -> Unit = {}): Toast =
-  ToastCompat.makeText(application, resId, Toast.LENGTH_LONG).apply(block).apply { show() }
+  ToastCompat.makeText(application, stringOf(resId), Toast.LENGTH_LONG).apply(block).apply { show() }
