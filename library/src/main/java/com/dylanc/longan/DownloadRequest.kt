@@ -8,8 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
-import androidx.core.net.toUri
-import java.io.File
 import kotlin.DeprecationLevel.ERROR
 
 
@@ -130,12 +128,7 @@ class DownloadCompleteReceiver(val downloadId: Long, private val onComplete: (Ur
       downloadManager.query(DownloadManager.Query().setFilterById(downloadId))?.use { cursor ->
         if (cursor.moveToFirst()) {
           val uriString = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-          val uri = if (uriString.startsWith("file")) {
-            File(Uri.parse(uriString).path!!).toUri()
-          } else {
-            Uri.parse(uriString)
-          }
-          onComplete(uri)
+          onComplete(Uri.parse(uriString))
         }
       }
     }

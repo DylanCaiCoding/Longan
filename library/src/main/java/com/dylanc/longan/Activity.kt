@@ -77,6 +77,9 @@ inline fun ComponentActivity.pressBackToNotExit() {
   })
 }
 
+inline fun checkPermission(permission: String) =
+  ActivityCompat.checkSelfPermission(topActivity, permission) != PackageManager.PERMISSION_GRANTED
+
 inline val Context.context: Context get() = this
 
 inline val Activity.activity: Activity get() = this
@@ -84,7 +87,3 @@ inline val Activity.activity: Activity get() = this
 inline val FragmentActivity.fragmentActivity: FragmentActivity get() = this
 
 inline val ComponentActivity.lifecycleOwner: LifecycleOwner get() = this
-
-fun checkPermission(permission: String) =
-   ActivityCompat.checkSelfPermission(topActivity, permission) != PackageManager.PERMISSION_GRANTED
-
