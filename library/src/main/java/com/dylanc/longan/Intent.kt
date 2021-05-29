@@ -17,11 +17,11 @@ import androidx.core.os.bundleOf
  * @author Dylan Cai
  */
 
+inline fun Intent(vararg pairs: Pair<String, *>) =
+  Intent().apply { putExtras(bundleOf(*pairs)) }
+
 inline fun <reified T> Context.intentOf(vararg pairs: Pair<String, *>) =
   intentOf<T>(bundleOf(*pairs))
-
-inline fun intentOf(vararg pairs: Pair<String, *>) =
-  Intent().apply { putExtras(bundleOf(*pairs)) }
 
 inline fun <reified T> Context.intentOf(bundle: Bundle) =
   Intent(this, T::class.java).apply { putExtras(bundle) }
@@ -77,5 +77,7 @@ inline fun installAPKIntentOf(uri: Uri) =
     }
     setDataAndType(uri, "application/vnd.android.package-archive")
   }
+
+inline fun urlIntentOf(url: String) = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
 inline val launchIntent: Intent? get() = application.packageManager.getLaunchIntentForPackage(packageName)

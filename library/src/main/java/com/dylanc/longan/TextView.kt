@@ -2,6 +2,7 @@
 
 package com.dylanc.longan
 
+import android.graphics.Paint
 import android.os.CountDownTimer
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -11,14 +12,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
+import kotlin.math.roundToLong
 
 /**
  * @author Dylan Cai
  */
 
-inline fun TextView.isTextEmpty() = text.toString().isEmpty()
+inline val TextView.textString: String get() = text.toString()
 
-inline fun TextView.isTextNotEmpty() = text.toString().isNotEmpty()
+inline fun TextView.isTextEmpty() = textString.isEmpty()
+
+inline fun TextView.isTextNotEmpty() = textString.isNotEmpty()
 
 fun TextView.startCountDown(
   lifecycleOwner: LifecycleOwner,
@@ -30,7 +34,7 @@ fun TextView.startCountDown(
   val countDownTimer = object : CountDownTimer(millisInFuture, countDownInterval) {
     override fun onTick(millisUntilFinished: Long) {
       isEnabled = false
-      this@startCountDown.onTick(millisUntilFinished / 1000 + 1)
+      this@startCountDown.onTick((millisUntilFinished / 1000.0).roundToLong())
     }
 
     override fun onFinish() {
@@ -71,3 +75,7 @@ inline var TextView.isPasswordVisible: Boolean
       PasswordTransformationMethod.getInstance()
     }
   }
+
+inline fun TextView.showUnderline() {
+  paint.flags = Paint.UNDERLINE_TEXT_FLAG
+}
