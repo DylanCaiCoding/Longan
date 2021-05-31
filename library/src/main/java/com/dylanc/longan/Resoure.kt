@@ -12,14 +12,12 @@ import androidx.core.content.ContextCompat
  * @author Dylan Cai
  */
 
-inline fun Context.stringOf(@StringRes id: Int) = context.getString(id)
+inline fun Context.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
-inline fun Context.colorOf(@ColorRes id: Int) = ContextCompat.getColor(context, id)
+inline fun Context.getCompatDrawable(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
 
-inline fun Context.drawableOf(@DrawableRes id: Int) = ContextCompat.getDrawable(context, id)
+inline fun stringOf(@StringRes id: Int) = topActivity.getString(id)
 
-inline fun stringOf(@StringRes id: Int) = application.stringOf(id)
+inline fun colorOf(@ColorRes id: Int) = topActivity.getCompatColor(id)
 
-inline fun colorOf(@ColorRes id: Int) = application.colorOf(id)
-
-inline fun drawableOf(@DrawableRes id: Int) = application.drawableOf(id)
+inline fun drawableOf(@DrawableRes id: Int) = topActivity.getCompatDrawable(id)
