@@ -2,4 +2,5 @@
   <string name="app_name">Longan</string>
   <string name="activity_result">Activity result</string>
   <string name="share">Share</string>
+  <string name="no_read_permission">Please go to settings to authorize read permission</string>
 </resources>

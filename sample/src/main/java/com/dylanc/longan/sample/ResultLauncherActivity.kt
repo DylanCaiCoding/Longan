@@ -1,8 +1,8 @@
 package com.dylanc.longan.sample
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.dylanc.activityresult.launcher.*
 import com.dylanc.longan.*
 import com.dylanc.longan.sample.databinding.ActivityLauncherBinding
 import com.dylanc.viewbinding.binding
@@ -32,8 +32,10 @@ class ResultLauncherActivity : AppCompatActivity(), SharedPreferencesOwner {
       btnTakePicture.setOnClickListener {
         val uri = File(externalPicturesDirPath, "test.jpg").toUri()
         takePictureLauncher.launch(uri) {
-          cropPictureLauncher.launch(uri) {
-            ivPicture.setImageURI(it)
+          if (it) {
+            cropPictureLauncher.launch(uri) { cropUri ->
+              ivPicture.setImageURI(cropUri)
+            }
           }
         }
       }
@@ -43,17 +45,20 @@ class ResultLauncherActivity : AppCompatActivity(), SharedPreferencesOwner {
         }
       }
       btnSelectPicture.setOnClickListener {
-        permissionsLauncher.launch(READ_EXTERNAL_STORAGE,
-          onGranted = {
-            getContentLauncher.launchForImage { uri ->
-              ivPicture.setImageURI(uri)
+        getContentLauncher.launchForImage(
+          { uri ->
+            if (uri != null) {
+              binding.ivPicture.setImageURI(uri)
             }
+          },
+          onPermissionDenied = {
+            toast(R.string.no_read_permission)
           }
         )
       }
       btnTakeVideo.setOnClickListener {
         val uri = File(externalMoviesDirPath, "test.mp4").toUri()
-        takeVideoLauncher.launchForNullableResult(uri) {
+        takeVideoLauncher.launch(uri) {
           ivPicture.setImageURI(uri)
         }
       }
@@ -68,12 +73,12 @@ class ResultLauncherActivity : AppCompatActivity(), SharedPreferencesOwner {
         }
       }
       btnOpenMultipleDocument.setOnClickListener {
-        openMultipleDocumentLauncher.launch(arrayOf()){
+        openMultipleDocumentLauncher.launch(arrayOf()) {
 
         }
       }
       btnOpenDocumentTree.setOnClickListener {
-        openDocumentTreeLauncher.launch(null){
+        openDocumentTreeLauncher.launch(null) {
 
         }
       }
