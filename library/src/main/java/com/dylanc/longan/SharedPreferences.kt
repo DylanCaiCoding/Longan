@@ -53,8 +53,8 @@ class SharedPreferencesValueWithDefault<T : Any>(
 ) : ReadWriteProperty<Any, T> {
 
   override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
-    val key = key ?: property.name
     sharedPreferences.edit {
+      val key = key ?: property.name
       when (value) {
         is Long -> putLong(key, value)
         is String -> putString(key, value)
@@ -72,6 +72,7 @@ class SharedPreferencesValueWithDefault<T : Any>(
   @Suppress("UNCHECKED_CAST")
   override fun getValue(thisRef: Any, property: KProperty<*>): T  =
     sharedPreferences.run {
+      val key = key ?: property.name
       when (default) {
         is Long -> getLong(key, default)
         is String -> getString(key, default)

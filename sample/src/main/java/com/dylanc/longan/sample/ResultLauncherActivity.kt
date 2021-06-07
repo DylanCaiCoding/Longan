@@ -11,17 +11,17 @@ import java.io.File
 
 class ResultLauncherActivity : AppCompatActivity(), SharedPreferencesOwner {
 
-  private val takePictureLauncher = TakePictureLauncher()
-  private val takeVideoLauncher = TakeVideoLauncher()
-  private val pickContactLauncher = PickContactLauncher()
-  private val takePicturePreviewLauncher = TakePicturePreviewLauncher()
-  private val permissionsLauncher = PermissionLauncher()
-  private val getContentLauncher = GetContentLauncher()
-  private val createDocumentLauncher = CreateDocumentLauncher()
-  private val openMultipleDocumentLauncher = OpenMultipleDocumentsLauncher()
-  private val openDocumentTreeLauncher = OpenDocumentTreeLauncher()
-  private val cropPictureLauncher = CropPictureLauncher()
   private val binding: ActivityLauncherBinding by binding()
+  private val takePictureLauncher = TakePictureLauncher(this)
+  private val takeVideoLauncher = TakeVideoLauncher(this)
+  private val pickContactLauncher = PickContactLauncher(this)
+  private val takePicturePreviewLauncher = TakePicturePreviewLauncher(this)
+  private val permissionsLauncher = RequestMultiplePermissionsLauncher(this)
+  private val getContentLauncher = GetContentLauncher(this)
+  private val createDocumentLauncher = CreateDocumentLauncher(this)
+  private val openMultipleDocumentLauncher = OpenMultipleDocumentsLauncher(this)
+  private val openDocumentTreeLauncher = OpenDocumentTreeLauncher(this)
+  private val cropPictureLauncher = CropPictureLauncher(this)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
