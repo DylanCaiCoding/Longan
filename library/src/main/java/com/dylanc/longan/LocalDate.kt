@@ -2,10 +2,7 @@
 
 package com.dylanc.longan
 
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDate
-import org.threeten.bp.ZoneOffset
+import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.TemporalAdjusters
 import java.util.concurrent.TimeUnit
@@ -65,7 +62,7 @@ inline fun LocalDate.previous(dayOfWeek: DayOfWeek): LocalDate =
 inline fun LocalDate.previousOrSame(dayOfWeek: DayOfWeek): LocalDate =
   with(TemporalAdjusters.previousOrSame(dayOfWeek))
 
-inline fun LocalDate.firstDayOfYear(ordinal: Int, dayOfWeek: DayOfWeek): LocalDate =
+inline fun LocalDate.dayOfWeekInMonth(ordinal: Int, dayOfWeek: DayOfWeek): LocalDate =
   with(TemporalAdjusters.dayOfWeekInMonth(ordinal, dayOfWeek))
 
 inline fun LocalDate.lastDayOfMonth(): LocalDate =
@@ -76,3 +73,21 @@ inline fun LocalDate.lastDayOfYear(): LocalDate =
 
 inline fun LocalDate.lastDayOfMonth(dayOfWeek: DayOfWeek): LocalDate =
   with(TemporalAdjusters.lastInMonth(dayOfWeek))
+
+val Int.days: Period
+  get() = Period.ofDays(this)
+
+val Int.weeks: Period
+  get() = Period.ofWeeks(this)
+
+val Int.months: Period
+  get() = Period.ofMonths(this)
+
+val Int.years: Period
+  get() = Period.ofYears(this)
+
+val Period.ago: LocalDate
+  get() = nowLocalDate - this
+
+val Period.fromNow: LocalDate
+  get() = nowLocalDate + this

@@ -50,34 +50,29 @@ inline fun TabLayout.addTab(text: String? = null, block: TabLayout.Tab.() -> Uni
   addTab(newTab().apply { this.text = text }.apply(block))
 
 inline fun TabLayout.doOnTabSelected(crossinline block: (TabLayout.Tab) -> Unit) =
-  addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-    override fun onTabSelected(tab: TabLayout.Tab) {
-      block(tab)
-    }
-
-    override fun onTabUnselected(tab: TabLayout.Tab) {}
-
-    override fun onTabReselected(tab: TabLayout.Tab) {}
-  })
+  addOnTabSelectedListener(onTabSelected = block)
 
 inline fun TabLayout.doOnTabUnselected(crossinline block: (TabLayout.Tab) -> Unit) =
-  addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-    override fun onTabSelected(tab: TabLayout.Tab) {}
-
-    override fun onTabUnselected(tab: TabLayout.Tab) {
-      block(tab)
-    }
-
-    override fun onTabReselected(tab: TabLayout.Tab) {}
-  })
+  addOnTabSelectedListener(onTabUnselected = block)
 
 inline fun TabLayout.doOnTabReselected(crossinline block: (TabLayout.Tab) -> Unit) =
-  addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-    override fun onTabSelected(tab: TabLayout.Tab) {}
+  addOnTabSelectedListener(onTabReselected = block)
 
-    override fun onTabUnselected(tab: TabLayout.Tab) {}
+inline fun TabLayout.addOnTabSelectedListener(
+  crossinline onTabSelected: (TabLayout.Tab) -> Unit = {},
+  crossinline onTabUnselected: (TabLayout.Tab) -> Unit = {},
+  crossinline onTabReselected: (TabLayout.Tab) -> Unit = {},
+) =
+  addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+    override fun onTabSelected(tab: TabLayout.Tab) {
+      onTabSelected(tab)
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab) {
+      onTabUnselected(tab)
+    }
 
     override fun onTabReselected(tab: TabLayout.Tab) {
-      block(tab)
+      onTabReselected(tab)
     }
   })

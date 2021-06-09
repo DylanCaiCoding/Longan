@@ -2,10 +2,7 @@
 
 package com.dylanc.longan
 
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneOffset
+import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.TemporalAdjusters
 import java.util.concurrent.TimeUnit
@@ -28,6 +25,8 @@ inline fun Long.toLocalDateTime(
 
 inline fun String.toLocalDateTime(pattern: String): LocalDateTime =
   LocalDateTime.parse(this, DateTimeFormatter.ofPattern(pattern))
+
+inline fun LocalDateTime.toEpochSecond() = toEpochSecond(ZoneOffset.ofHours(8))
 
 inline fun LocalDateTime.toEpochMilli(zoneOffset: ZoneOffset = ZoneOffset.ofHours(8)) =
   toInstant(zoneOffset).toEpochMilli()
@@ -62,7 +61,7 @@ inline fun LocalDateTime.previous(dayOfWeek: DayOfWeek): LocalDateTime =
 inline fun LocalDateTime.previousOrSame(dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.previousOrSame(dayOfWeek))
 
-inline fun LocalDateTime.firstDayOfYear(ordinal: Int, dayOfWeek: DayOfWeek): LocalDateTime =
+inline fun LocalDateTime.dayOfWeekInMonth(ordinal: Int, dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.dayOfWeekInMonth(ordinal, dayOfWeek))
 
 inline fun LocalDateTime.lastDayOfMonth(): LocalDateTime =
@@ -73,3 +72,27 @@ inline fun LocalDateTime.lastDayOfYear(): LocalDateTime =
 
 inline fun LocalDateTime.lastDayOfMonth(dayOfWeek: DayOfWeek): LocalDateTime =
   with(TemporalAdjusters.lastInMonth(dayOfWeek))
+
+val Int.nanoseconds: Duration
+  get() = Duration.ofNanos(toLong())
+
+val Int.microseconds: Duration
+  get() = Duration.ofNanos(toLong() * 1000L)
+
+val Int.milliseconds: Duration
+  get() = Duration.ofMillis(toLong())
+
+val Int.seconds: Duration
+  get() = Duration.ofSeconds(toLong())
+
+val Int.minutes: Duration
+  get() = Duration.ofMinutes(toLong())
+
+val Int.hours: Duration
+  get() = Duration.ofHours(toLong())
+
+val Duration.ago: LocalDateTime
+  get() = nowLocalDateTime - this
+
+val Duration.fromNow: LocalDateTime
+  get() = nowLocalDateTime + this

@@ -1,10 +1,14 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
 
 import android.app.Activity
+import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import androidx.core.view.WindowInsetsCompat.Type
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
 
 
@@ -57,3 +61,21 @@ inline var Window.isNavigationBarVisible: Boolean
       if (value) show(Type.navigationBars()) else hide(Type.navigationBars())
     }
   }
+
+inline val navigationBarHeight: Int
+  get() =
+    application.resources.getIdentifier("navigation_bar_height", "dimen", "android").let {
+      if (it > 0) application.resources.getDimensionPixelSize(it) else 0
+    }
+
+inline fun View.addNavigationBarHeightToMarginBottom() = post {
+  updateLayoutParams<ViewGroup.MarginLayoutParams> {
+    updateMargins(bottom = bottomMargin + navigationBarHeight)
+  }
+}
+
+inline fun View.subtractNavigationBarHeightToMarginBottom() = post {
+  updateLayoutParams<ViewGroup.MarginLayoutParams> {
+    updateMargins(bottom = bottomMargin - navigationBarHeight)
+  }
+}
