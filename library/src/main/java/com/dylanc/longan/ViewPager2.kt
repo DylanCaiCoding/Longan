@@ -14,16 +14,10 @@ import androidx.viewpager2.widget.ViewPager2
  */
 
 inline fun FragmentActivity.FragmentStateAdapter(fragmentList: List<Fragment>) =
-  object : FragmentStateAdapter(this) {
-    override fun getItemCount() = fragmentList.size
-    override fun createFragment(position: Int) = fragmentList[position]
-  }
+  FragmentStateAdapter(fragmentList.size) { fragmentList[it] }
 
 inline fun Fragment.FragmentStateAdapter(fragmentList: List<Fragment>) =
-  object : FragmentStateAdapter(this) {
-    override fun getItemCount() = fragmentList.size
-    override fun createFragment(position: Int) = fragmentList[position]
-  }
+  FragmentStateAdapter(fragmentList.size) { fragmentList[it] }
 
 inline fun FragmentActivity.FragmentStateAdapter(itemCount: Int, crossinline block: (Int) -> Fragment) =
   object : FragmentStateAdapter(this) {
@@ -38,7 +32,7 @@ inline fun Fragment.FragmentStateAdapter(itemCount: Int, crossinline block: (Int
   }
 
 @Suppress("UNCHECKED_CAST")
-inline fun <T : Fragment> ViewPager2.getFragment(fragmentManager: FragmentManager, position: Int) =
+inline fun <T : Fragment> ViewPager2.findFragment(fragmentManager: FragmentManager, position: Int) =
   fragmentManager.findFragmentByTag("f$position") as T?
 
 //@Suppress("UNCHECKED_CAST", "DEPRECATION")

@@ -94,30 +94,57 @@ inline fun Window.immerseStatusBar(lightMode: Boolean = true) {
   insetControllerCompat?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
   statusBarColor = Color.TRANSPARENT
   isLightStatusBar = lightMode
+  contentView?.addNavigationBarHeightToMarginBottom()
 }
 
-inline fun View.addStatusBarHeightToMarginTop() {
-  updateLayoutParams<ViewGroup.MarginLayoutParams> {
-    updateMargins(top = topMargin + statusBarHeight)
+fun View.addStatusBarHeightToMarginTop() {
+  if (!isAddedMarginTop) {
+    updateLayoutParams<ViewGroup.MarginLayoutParams> {
+      updateMargins(top = topMargin + statusBarHeight)
+      isAddedMarginTop = true
+    }
   }
 }
 
-inline fun View.subtractStatusBarHeightToMarginTop() {
-  updateLayoutParams<ViewGroup.MarginLayoutParams> {
-    updateMargins(top = topMargin - statusBarHeight)
+fun View.subtractStatusBarHeightToMarginTop() {
+  if (isAddedMarginTop) {
+    updateLayoutParams<ViewGroup.MarginLayoutParams> {
+      updateMargins(top = topMargin - statusBarHeight)
+      isAddedMarginTop = false
+    }
   }
 }
 
-inline fun View.addStatusBarHeightToPaddingTop() = post {
-  updatePadding(top = paddingTop + statusBarHeight)
-  updateLayoutParams {
-    height = measuredHeight + statusBarHeight
+fun View.addStatusBarHeightToPaddingTop() = post {
+  if (!isAddedPaddingTop) {
+    updatePadding(top = paddingTop + statusBarHeight)
+    updateLayoutParams {
+      height = measuredHeight + statusBarHeight
+    }
+    isAddedPaddingTop = true
   }
 }
 
-inline fun View.subtractStatusBarHeightToPaddingTop() = post {
-  updatePadding(top = paddingTop - statusBarHeight)
-  updateLayoutParams {
-    height = measuredHeight - statusBarHeight
+fun View.subtractStatusBarHeightToPaddingTop() = post {
+  if (isAddedPaddingTop) {
+    updatePadding(top = paddingTop - statusBarHeight)
+    updateLayoutParams {
+      height = measuredHeight - statusBarHeight
+    }
+    isAddedPaddingTop = false
   }
 }
+
+private const val TAG_ADD_MARGIN_TOP = -111
+private var View.isAddedMarginTop: Boolean
+  get() = getTag(TAG_ADD_MARGIN_TOP) as? Boolean == true
+  set(value) {
+    setTag(TAG_ADD_MARGIN_TOP, value)
+  }
+
+private const val TAG_ADD_PADDING_TOP = -112
+private var View.isAddedPaddingTop: Boolean
+  get() = getTag(TAG_ADD_PADDING_TOP) as? Boolean == true
+  set(value) {
+    setTag(TAG_ADD_PADDING_TOP, value)
+  }

@@ -55,12 +55,15 @@ inline var Fragment.isNavigationBarVisible: Boolean
   }
 
 inline var Window.isNavigationBarVisible: Boolean
-  get() = decorView.rootWindowInsetsCompat?.isVisible(Type.navigationBars()) == true
+  get() = decorView.isNavigationBarVisible
   set(value) {
     insetControllerCompat?.run {
       if (value) show(Type.navigationBars()) else hide(Type.navigationBars())
     }
   }
+
+inline val View.isNavigationBarVisible: Boolean
+  get() = rootWindowInsetsCompat?.isVisible(Type.navigationBars()) == true
 
 inline val navigationBarHeight: Int
   get() =
@@ -68,14 +71,27 @@ inline val navigationBarHeight: Int
       if (it > 0) application.resources.getDimensionPixelSize(it) else 0
     }
 
-inline fun View.addNavigationBarHeightToMarginBottom() = post {
-  updateLayoutParams<ViewGroup.MarginLayoutParams> {
-    updateMargins(bottom = bottomMargin + navigationBarHeight)
+fun View.addNavigationBarHeightToMarginBottom() = post {
+  if (isNavigationBarVisible && !isAddedMarginBottom) {
+    updateLayoutParams<ViewGroup.MarginLayoutParams> {
+      updateMargins(bottom = bottomMargin + navigationBarHeight)
+      isAddedMarginBottom = true
+    }
   }
 }
 
-inline fun View.subtractNavigationBarHeightToMarginBottom() = post {
-  updateLayoutParams<ViewGroup.MarginLayoutParams> {
-    updateMargins(bottom = bottomMargin - navigationBarHeight)
+fun View.subtractNavigationBarHeightToMarginBottom() = post {
+  if (isNavigationBarVisible && isAddedMarginBottom) {
+    updateLayoutParams<ViewGroup.MarginLayoutParams> {
+      updateMargins(bottom = bottomMargin - navigationBarHeight)
+      isAddedMarginBottom = false
+    }
   }
 }
+
+private const val TAG_ADD_MARGIN_BOTTOM = -113
+private var View.isAddedMarginBottom: Boolean
+  get() = getTag(TAG_ADD_MARGIN_BOTTOM) as? Boolean == true
+  set(value) {
+    setTag(TAG_ADD_MARGIN_BOTTOM, value)
+  }

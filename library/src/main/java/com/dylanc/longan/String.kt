@@ -2,6 +2,7 @@
 
 package com.dylanc.longan
 
+import android.util.Patterns
 import java.util.*
 
 /**
@@ -17,3 +18,7 @@ inline fun Float.toIntPercentString() = "${(this * 100).toInt()}%"
 inline fun Double.toPercentString() = "${this * 100}%"
 
 inline fun Double.toIntPercentString() = "${(this * 100).toInt()}%"
+
+inline fun String.isPhone() = Patterns.PHONE.matcher(this).matches()
+
+inline fun String.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()

@@ -38,13 +38,13 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
     implementation "androidx.startup:startup-runtime:1.0.0"
     implementation 'com.orhanobut:logger:2.2.0'
-    implementation 'androidx.fragment:fragment-ktx:1.3.4'
+    implementation 'androidx.fragment:fragment-ktx:1.3.5'
     implementation 'androidx.core:core-ktx:1.6.0-beta02'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.10"
-    api 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    api 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0'
     api 'com.jakewharton.threetenabp:threetenabp:1.3.0'
     api 'me.drakeet.support:toastcompat:1.1.0'
-    api 'com.github.DylanCaiCoding:ActivityResultLauncher:1.0.0-alpha7'
+    api 'com.github.DylanCaiCoding:ActivityResultLauncher:1.0.0-alpha8'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
