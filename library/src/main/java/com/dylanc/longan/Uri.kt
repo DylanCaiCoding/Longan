@@ -20,6 +20,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
+var fileProviderAuthority = "$packageName.provider"
 
 fun Uri.toFile(): File =
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -53,7 +54,7 @@ fun Uri.toFile(): File =
     }
   }
 
-inline fun File.toUri(authority: String = "$packageName.provider"): Uri =
+inline fun File.toUri(authority: String = fileProviderAuthority): Uri =
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
     FileProvider.getUriForFile(application, authority, this)
   } else {

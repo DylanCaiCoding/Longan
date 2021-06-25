@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import java.util.*
+import kotlin.system.exitProcess
 
 
 internal val activityCache = LinkedList<Activity>()
@@ -64,7 +65,7 @@ inline fun ComponentActivity.pressBackTwiceToExit(delayMillis: Long = 2000, cros
         onFirstBackPressed()
         lastBackTime = currentTime
       } else {
-        finishAllActivities()
+        exitProcess(0)
       }
     }
   })
