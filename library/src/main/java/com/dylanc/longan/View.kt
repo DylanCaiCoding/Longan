@@ -13,6 +13,9 @@ import androidx.annotation.StyleableRes
  * @author Dylan Cai
  */
 
+inline fun List<View>.setOnClickListener(noinline onClick: (View) -> Unit) =
+  forEach { it.setOnClickListener(onClick) }
+
 inline fun View.withStyledAttrs(
   set: AttributeSet?,
   @StyleableRes attrs: IntArray,

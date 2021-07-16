@@ -28,7 +28,7 @@ inline var Activity.isLightStatusBar: Boolean
 inline var Fragment.isLightStatusBar: Boolean
   get() = activity?.isLightStatusBar == true
   set(value) {
-    activity?.isLightStatusBar = value
+    view?.post { activity?.isLightStatusBar = value }
   }
 
 inline var Window.isLightStatusBar: Boolean

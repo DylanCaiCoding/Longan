@@ -14,7 +14,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import java.util.*
-import kotlin.system.exitProcess
 
 
 internal val activityCache = LinkedList<Activity>()
@@ -49,6 +48,14 @@ fun finishAllActivities() =
     true
   }
 
+fun finishAllActivitiesExceptNewest()  {
+  val topActivity = topActivity
+  activityCache.removeAll {
+    if (it != topActivity) it.finish()
+    it != topActivity
+  }
+}
+
 inline fun ComponentActivity.pressBackTwiceToExit(toastText: String, delayMillis: Long = 2000) =
   pressBackTwiceToExit(delayMillis) { toast(toastText) }
 
@@ -65,7 +72,7 @@ inline fun ComponentActivity.pressBackTwiceToExit(delayMillis: Long = 2000, cros
         onFirstBackPressed()
         lastBackTime = currentTime
       } else {
-        exitProcess(0)
+        finishAllActivities()
       }
     }
   })
