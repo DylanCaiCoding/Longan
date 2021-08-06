@@ -11,7 +11,7 @@ inline fun saveCrashLogLocally(dirPath: String = cacheDirPath) {
   handleUncaughtException { thread, e ->
     val time = nowLocalDateTime.format("yyyy-MM-dd HH:mm:ss")
     val file = File(dirPath, "crash_${time.replace(" ", "_")}.txt")
-    printTo(file) {
+    file.print {
       println("Time:          $time")
       println("App version:   $appVersionName ($appVersionCode)")
       println("OS version:    Android $sdkVersionName ($sdkVersionCode)")

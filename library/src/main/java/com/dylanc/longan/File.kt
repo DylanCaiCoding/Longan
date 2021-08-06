@@ -3,7 +3,10 @@
 package com.dylanc.longan
 
 import android.text.format.Formatter
+import java.io.BufferedWriter
 import java.io.File
+import java.io.FileWriter
+import java.io.PrintWriter
 import java.net.URLConnection
 
 /**
@@ -17,3 +20,6 @@ inline val fileSeparator: String get() = File.separator
 inline fun Long.toFileSizeString(): String = Formatter.formatFileSize(application, this)
 
 inline fun Long.toShortFileSizeString(): String = Formatter.formatShortFileSize(application, this)
+
+inline fun File.print(block: PrintWriter.() -> Unit) =
+  PrintWriter(BufferedWriter(FileWriter(this))).apply(block).close()

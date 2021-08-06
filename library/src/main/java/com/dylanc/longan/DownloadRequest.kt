@@ -12,104 +12,72 @@ import kotlin.DeprecationLevel.ERROR
 
 
 inline fun downloadRequest(url: String, block: DownloadRequestBuilder.() -> Unit) =
-  DownloadRequest(url).apply(block)
+  DownloadRequestBuilder(url).apply(block)
 
-interface DownloadRequestBuilder {
-  val url: String
-
-  var title: CharSequence
-    @Deprecated(NO_GETTER, level = ERROR) get
-
-  var description: CharSequence
-    @Deprecated(NO_GETTER, level = ERROR) get
-
-  var mimeType: String
-    @Deprecated(NO_GETTER, level = ERROR) get
-
-  var allowedNetworkTypes: Int
-    @Deprecated(NO_GETTER, level = ERROR) get
-
-  var notificationVisibility: Int
-    @Deprecated(NO_GETTER, level = ERROR) get
-
-  var allowedOverRoaming: Boolean
-    @Deprecated(NO_GETTER, level = ERROR) get
-
-  var destinationUri: Uri
-    @Deprecated(NO_GETTER, level = ERROR) get
-
-  fun addHeader(header: String, value: String)
-
-  fun destinationInExternalFilesDir(dirType: String, subPath: String)
-  fun destinationInExternalPublicDir(dirType: String, subPath: String)
-
-  fun download(onComplete: (Uri) -> Unit): DownloadCompleteReceiver
-}
-
-class DownloadRequest(override val url: String) : DownloadRequestBuilder {
+class DownloadRequestBuilder(url: String) {
   private val request = DownloadManager.Request(Uri.parse(url))
 
-  override var title: CharSequence
+   var title: CharSequence
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setTitle(value)
     }
 
-  override var description: CharSequence
+   var description: CharSequence
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setDescription(value)
     }
 
-  override var mimeType: String
+   var mimeType: String
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setMimeType(value)
     }
 
-  override var allowedNetworkTypes: Int
+   var allowedNetworkTypes: Int
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setAllowedNetworkTypes(value)
     }
 
-  override var notificationVisibility: Int
+   var notificationVisibility: Int
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setNotificationVisibility(value)
     }
 
-  override var allowedOverRoaming: Boolean
+   var allowedOverRoaming: Boolean
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setAllowedOverRoaming(value)
     }
-  override var destinationUri: Uri
+   var destinationUri: Uri
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setDestinationUri(value)
     }
 
-  override fun addHeader(header: String, value: String) {
+   fun addHeader(header: String, value: String) {
     request.addRequestHeader(header, value)
   }
 
-  override fun destinationInExternalFilesDir(dirType: String, subPath: String) {
+   fun destinationInExternalFilesDir(dirType: String, subPath: String) {
     request.setDestinationInExternalFilesDir(application, dirType, subPath)
   }
 
-  override fun destinationInExternalPublicDir(dirType: String, subPath: String) {
+   fun destinationInExternalPublicDir(dirType: String, subPath: String) {
     request.setDestinationInExternalPublicDir(dirType, subPath)
   }
 
-  override fun download(onComplete: (Uri) -> Unit): DownloadCompleteReceiver {
+   fun download(onComplete: (Uri) -> Unit): DownloadCompleteReceiver {
     val downloadManager = application.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     val downloadId = downloadManager.enqueue(request)
     //TODO 支持监听下载进度，暂停下载

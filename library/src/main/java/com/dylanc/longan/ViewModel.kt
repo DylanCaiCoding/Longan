@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelStore
  */
 
 val applicationViewModelStore by lazy { ViewModelStore() }
-val applicationViewModelFactory by lazy { ViewModelProvider.AndroidViewModelFactory.getInstance(application) }
 
 @MainThread
 inline fun <reified VM : ViewModel> applicationViewModels(
-  noinline factoryProducer: () -> ViewModelProvider.Factory = { applicationViewModelFactory }
+  noinline factoryProducer: () -> ViewModelProvider.Factory =
+    { ViewModelProvider.AndroidViewModelFactory.getInstance(application) }
 ): Lazy<VM> =
   ViewModelLazy(VM::class, { applicationViewModelStore }, factoryProducer)

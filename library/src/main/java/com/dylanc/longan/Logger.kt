@@ -56,37 +56,37 @@ inline fun Logger.logJson(json: String) = log(JSON, loggerTag, json)
 
 inline fun Logger.logXml(content: String) = log(XML, loggerTag, content)
 
-inline fun Any.logVerbose(message: String) = log(VERBOSE, loggerTag, message)
+inline fun logVerbose(message: String) = logVerbose(null, message)
 
-inline fun Any.logDebug(message: String) = log(DEBUG, loggerTag, message)
+inline fun logDebug(message: String) = logDebug(null, message)
 
-inline fun Any.logInfo(message: String) = log(INFO, loggerTag, message)
+inline fun logInfo(message: String) = logInfo(null, message)
 
-inline fun Any.logWarn(message: String) = log(WARN, loggerTag, message)
+inline fun logWarn(message: String) = logWarn(null, message)
 
-inline fun Any.logError(message: String) = log(ERROR, loggerTag, message)
+inline fun logError(message: String) = logError(null, message)
 
-inline fun Any.logAssert(message: String) = log(ASSERT, loggerTag, message)
+inline fun logAssert(message: String) = logAssert(null, message)
 
-inline fun Any.logJson(json: String) = log(JSON, loggerTag, json)
+inline fun logJson(json: String) = logJson(null, json)
 
-inline fun Any.logXml(content: String) = log(XML, loggerTag, content)
+inline fun logXml(content: String) = logXml(null, content)
 
-inline fun logVerbose(message: String) = log(VERBOSE, null, message)
+inline fun logVerbose(tag: String?, message: String) = log(VERBOSE, tag, message)
 
-inline fun logDebug(message: String) = log(DEBUG, null, message)
+inline fun logDebug(tag: String?, message: String) = log(DEBUG, tag, message)
 
-inline fun logInfo(message: String) = log(INFO, null, message)
+inline fun logInfo(tag: String?, message: String) = log(INFO, tag, message)
 
-inline fun logWarn(message: String) = log(WARN, null, message)
+inline fun logWarn(tag: String?, message: String) = log(WARN, tag, message)
 
-inline fun logError(message: String) = log(ERROR, null, message)
+inline fun logError(tag: String?, message: String) = log(ERROR, tag, message)
 
-inline fun logAssert(message: String) = log(ASSERT, null, message)
+inline fun logAssert(tag: String?, message: String) = log(ASSERT, tag, message)
 
-inline fun logJson(json: String) = log(JSON, null, json)
+inline fun logJson(tag: String?, json: String) = log(JSON, tag, json)
 
-inline fun logXml(content: String) = log(XML, null, content)
+inline fun logXml(tag: String?, content: String) = log(XML, tag, content)
 
 inline fun log(priority: Int, tag: String?, message: String) {
   if (LoggerConfig.isLoggable(priority, tag)) {
@@ -103,14 +103,14 @@ typealias Log = com.orhanobut.logger.Logger
 class GrapeLoggerPrinter : LoggerPrinter {
   override fun log(priority: Int, tag: String?, message: String) {
     when (priority) {
-      XML -> if (tag != null) Log.t(tag).xml(message) else Log.xml(message)
-      JSON -> if (tag != null) Log.t(tag).json(message) else Log.json(message)
-      VERBOSE -> if (tag != null) Log.t(tag).v(message) else Log.v(message)
-      DEBUG -> if (tag != null) Log.t(tag).d(message) else Log.d(message)
-      INFO -> if (tag != null) Log.t(tag).i(message) else Log.i(message)
-      WARN -> if (tag != null) Log.t(tag).w(message) else Log.w(message)
-      ERROR -> if (tag != null) Log.t(tag).e(message) else Log.e(message)
-      ASSERT -> if (tag != null) Log.t(tag).wtf(message) else Log.wtf(message)
+      XML -> Log.t(tag).xml(message)
+      JSON -> Log.t(tag).json(message)
+      VERBOSE -> Log.t(tag).v(message)
+      DEBUG -> Log.t(tag).d(message)
+      INFO -> Log.t(tag).i(message)
+      WARN -> Log.t(tag).w(message)
+      ERROR -> Log.t(tag).e(message)
+      ASSERT -> Log.t(tag).wtf(message)
     }
   }
 }

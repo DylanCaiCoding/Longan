@@ -12,7 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import kotlin.math.roundToLong
+import kotlin.math.roundToInt
 
 /**
  * @author Dylan Cai
@@ -26,15 +26,14 @@ inline fun TextView.isTextNotEmpty() = textString.isNotEmpty()
 
 fun TextView.startCountDown(
   lifecycleOwner: LifecycleOwner,
-  millisInFuture: Long = 60 * 1000,
-  countDownInterval: Long = 1000,
-  onTick: TextView.(millisUntilFinished: Long) -> Unit,
+  secondInFuture: Int = 60,
+  onTick: TextView.(secondUntilFinished: Int) -> Unit,
   onFinish: TextView.() -> Unit,
 ) {
-  val countDownTimer = object : CountDownTimer(millisInFuture, countDownInterval) {
+  val countDownTimer = object : CountDownTimer(secondInFuture * 1000L, 1000) {
     override fun onTick(millisUntilFinished: Long) {
       isEnabled = false
-      this@startCountDown.onTick((millisUntilFinished / 1000.0).roundToLong())
+      onTick((millisUntilFinished / 1000f).roundToInt())
     }
 
     override fun onFinish() {

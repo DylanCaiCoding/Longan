@@ -14,9 +14,6 @@ import androidx.core.view.WindowInsetsControllerCompat
  * @author Dylan Cai
  */
 
-//inline val Window.insetsCompat: WindowInsetsCompat?
-//  get() = WindowCompat.getInsets(this)
-
 inline val Window.insetControllerCompat: WindowInsetsControllerCompat?
   get() = WindowCompat.getInsetsController(this, decorView)
 

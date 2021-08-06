@@ -2,16 +2,12 @@
 
 package com.dylanc.longan
 
-import android.app.Activity
-import android.app.RecoverableSecurityException
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.ContentValues
 import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.provider.MediaStore
 import androidx.annotation.RequiresPermission
 
@@ -19,7 +15,6 @@ import androidx.annotation.RequiresPermission
 /**
  * @author Dylan Cai
  */
-
 
 inline val contentResolver: ContentResolver get() = application.contentResolver
 
@@ -33,12 +28,7 @@ inline fun <R> ContentResolver.query(
 ) =
   query(uri, projection, selection, selectionArgs, sortOrder)?.use(block)
 
-inline fun ContentResolver.update(@RequiresPermission.Write uri: Uri, values: ContentValues? = null, extras: Bundle? = null) =
-  update(uri, values, extras)
-
-inline fun ContentResolver.update(@RequiresPermission.Write uri: Uri, extras: Bundle? = null, block: ContentValues.() -> Unit) =
-  update(uri, contentValues(block), extras)
-
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 inline fun ContentResolver.update(
   @RequiresPermission.Write uri: Uri,
   values: ContentValues? = null,
@@ -55,51 +45,18 @@ inline fun ContentResolver.update(
 ) =
   update(uri, contentValues(block), where, selectionArgs)
 
-inline fun ContentResolver.delete(@RequiresPermission.Write uri: Uri, extras: Bundle? = null) =
-  delete(uri, extras)
-
-inline fun ContentResolver.delete(@RequiresPermission.Write uri: Uri, where: String? = null, selectionArgs: Array<String>? = null) =
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+inline fun ContentResolver.delete(
+  @RequiresPermission.Write uri: Uri,
+  where: String? = null,
+  selectionArgs: Array<String>? = null
+) =
   delete(uri, where, selectionArgs)
 
-inline fun Activity.delete(contentUri: Uri, id: Long = ContentUris.parseId(contentUri)) {
-  val requestCode = 100
-  when {
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-      val pendingIntent = MediaStore.createDeleteRequest(contentResolver, listOf(contentUri))
-      activity.startIntentSenderForResult(
-        pendingIntent.intentSender, requestCode, null,
-        0, 0, 0, null
-      )
-    }
-    Build.VERSION.SDK_INT == Build.VERSION_CODES.Q -> {
-      try {
-        val selection = "${MediaStore.MediaColumns._ID} = ?"
-        val selectionArgs = arrayOf(id.toString())
-        contentResolver.delete(contentUri, selection, selectionArgs)
-      } catch (ex: RecoverableSecurityException) {
-        val intent = ex.userAction.actionIntent.intentSender
-        activity.startIntentSenderForResult(
-          intent, requestCode, null,
-          0, 0, 0, null
-        )
-      }
-    }
-    else -> {
-      val selection = "${MediaStore.MediaColumns._ID} = ?"
-      val selectionArgs = arrayOf(id.toString())
-      contentResolver.delete(contentUri, selection, selectionArgs)
-    }
-  }
-}
-
-inline fun ContentResolver.registerContentObserver(uri: Uri, crossinline observer: (Boolean) -> Unit) =
-  object : ContentObserver(mainHandler.value) {
-    override fun onChange(selfChange: Boolean) {
-      observer(selfChange)
-    }
-  }.also {
-    registerContentObserver(uri, true, it)
-  }
+inline fun ContentResolver.registerContentObserver(uri: Uri, crossinline block: (Boolean) -> Unit) =
+  registerContentObserver(uri, true, object : ContentObserver(mainHandler.value) {
+    override fun onChange(selfChange: Boolean) = block(selfChange)
+  })
 
 inline fun contentValues(block: ContentValues.() -> Unit) = ContentValues().apply(block)
 

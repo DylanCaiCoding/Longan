@@ -2,7 +2,6 @@
 
 package com.dylanc.longan
 
-import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.net.Uri
@@ -20,39 +19,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
-var fileProviderAuthority = "$packageName.provider"
-
-fun Uri.toFile(): File =
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    when (scheme) {
-      ContentResolver.SCHEME_FILE -> {
-        File(requireNotNull(path) { "Uri path is null: $this" })
-      }
-      ContentResolver.SCHEME_CONTENT -> {
-        val fileName = fileName ?: "${System.currentTimeMillis()}.$fileExtension"
-        File("${cacheDirPath}/$fileName").apply {
-          openInputStream()?.use { inputStream ->
-            outputStream().use { inputStream.copyTo(it) }
-          }
-        }
-      }
-      else -> {
-        throw IllegalArgumentException("Uri lacks 'file' scheme or 'content' scheme.")
-      }
-    }
-  } else {
-    contentResolver.query(this) { cursor ->
-      @Suppress("DEPRECATION")
-      val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
-      if (cursor.moveToFirst()) {
-        cursor.getString(columnIndex)
-      } else {
-        null
-      }
-    }.let {
-      File(requireNotNull(it) { "Uri path is null: $this" })
-    }
-  }
+lateinit var fileProviderAuthority: String
 
 inline fun File.toUri(authority: String = fileProviderAuthority): Uri =
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -120,6 +87,6 @@ inline fun Uri.loadThumbnail(width: Int, height: Int, signal: CancellationSignal
 
 @RequiresApi(Build.VERSION_CODES.Q)
 inline fun Uri.loadThumbnail(size: Size, signal: CancellationSignal? = null) =
-    contentResolver.loadThumbnail(this, size, signal)
+  contentResolver.loadThumbnail(this, size, signal)
 
 inline fun Uri.toSafeString() = UriCompat.toSafeString(this)

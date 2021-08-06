@@ -10,9 +10,9 @@ import android.graphics.Paint
  */
 
 inline fun Canvas.drawCenterVerticalText(text: String, centerX: Float, centerY: Float, paint: Paint) =
-  drawCenterText(text, centerX, centerY, Paint.Align.LEFT, paint)
+  drawCenterText(text, centerX, centerY, paint, Paint.Align.LEFT)
 
-inline fun Canvas.drawCenterText(text: String, centerX: Float, centerY: Float, textAlign: Paint.Align = Paint.Align.CENTER, paint: Paint) {
+inline fun Canvas.drawCenterText(text: String, centerX: Float, centerY: Float, paint: Paint, textAlign: Paint.Align = Paint.Align.CENTER) {
   val textAlignTemp = paint.textAlign
   paint.textAlign = textAlign
   val fontMetrics = paint.fontMetrics
