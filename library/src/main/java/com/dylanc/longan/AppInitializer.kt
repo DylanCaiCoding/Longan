@@ -8,9 +8,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.startup.Initializer
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.orhanobut.logger.AndroidLogAdapter
-import com.orhanobut.logger.Logger
-import com.orhanobut.logger.PrettyFormatStrategy
 
 /**
  * @author Dylan Cai
@@ -21,12 +18,6 @@ internal class AppInitializer : Initializer<Unit> {
   override fun create(context: Context) {
     application = context as Application
     application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
-
-    val formatStrategy = PrettyFormatStrategy.newBuilder()
-      .methodCount(0)
-      .tag("Longan")
-      .build()
-    Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
     AndroidThreeTen.init(application)
   }
 

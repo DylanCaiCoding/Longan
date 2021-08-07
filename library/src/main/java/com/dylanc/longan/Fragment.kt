@@ -4,7 +4,6 @@ package com.dylanc.longan
 
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 
 /**
  * @author Dylan Cai
@@ -25,5 +24,3 @@ inline fun <reified T> Fragment.arguments(key: String, defaultValue: T) = lazy {
 inline fun <reified T> Fragment.safeArguments(name: String) = lazy<T> {
   checkNotNull(arguments[name]) { "No intent value for key \"$name\"" }
 }
-
-inline val Fragment.lifecycleOwner: LifecycleOwner get() = this

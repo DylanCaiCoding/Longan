@@ -43,7 +43,7 @@ inline fun ContentResolver.update(
   selectionArgs: Array<String>? = null,
   block: ContentValues.() -> Unit
 ) =
-  update(uri, contentValues(block), where, selectionArgs)
+  update(uri, ContentValues(block), where, selectionArgs)
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 inline fun ContentResolver.delete(
@@ -58,13 +58,11 @@ inline fun ContentResolver.registerContentObserver(uri: Uri, crossinline block: 
     override fun onChange(selfChange: Boolean) = block(selfChange)
   })
 
-inline fun contentValues(block: ContentValues.() -> Unit) = ContentValues().apply(block)
+inline fun ContentValues(block: ContentValues.() -> Unit) = ContentValues().apply(block)
 
 inline var ContentValues.displayName: String?
   get() = get(MediaStore.MediaColumns.DISPLAY_NAME) as String?
-  set(value) {
-    put(MediaStore.MediaColumns.DISPLAY_NAME, value)
-  }
+  set(value) = put(MediaStore.MediaColumns.DISPLAY_NAME, value)
 
 inline var ContentValues.relativePath: String?
   get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -80,18 +78,12 @@ inline var ContentValues.relativePath: String?
 
 inline var ContentValues.mimeType: String?
   get() = get(MediaStore.MediaColumns.MIME_TYPE) as String?
-  set(value) {
-    put(MediaStore.MediaColumns.MIME_TYPE, value)
-  }
+  set(value) = put(MediaStore.MediaColumns.MIME_TYPE, value)
 
 inline var ContentValues.dateAdded: Long?
   get() = get(MediaStore.MediaColumns.DATE_ADDED) as Long?
-  set(value) {
-    put(MediaStore.MediaColumns.DATE_ADDED, value)
-  }
+  set(value) = put(MediaStore.MediaColumns.DATE_ADDED, value)
 
 inline var ContentValues.dateModified: Long?
   get() = get(MediaStore.MediaColumns.DATE_MODIFIED) as Long?
-  set(value) {
-    put(MediaStore.MediaColumns.DATE_MODIFIED, value)
-  }
+  set(value) = put(MediaStore.MediaColumns.DATE_MODIFIED, value)

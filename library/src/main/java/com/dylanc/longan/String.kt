@@ -22,3 +22,5 @@ inline fun Double.toIntPercentString() = "${(this * 100).toInt()}%"
 inline fun String.isPhone() = Patterns.PHONE.matcher(this).matches()
 
 inline fun String.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()
+
+inline fun String.limitLength(length: Int) = if (this.length <= length) this else substring(0, length)
