@@ -16,8 +16,8 @@ import java.util.*
 private const val KEY_LANGUAGE = "longan_language"
 private const val KEY_COUNTRY = "longan_country"
 private var appLanguageCache: Locale? = null
-private val language: String? get() = defaultSharedPreferences.getString(KEY_LANGUAGE, null)
-private val country: String? get() = defaultSharedPreferences.getString(KEY_COUNTRY, null)
+private val language: String? by sharedPreferences(KEY_LANGUAGE)
+private val country: String? by sharedPreferences(KEY_COUNTRY)
 
 val systemLanguage: Locale
   get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
