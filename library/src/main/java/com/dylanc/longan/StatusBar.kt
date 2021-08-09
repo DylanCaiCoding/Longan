@@ -19,6 +19,9 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 
 
+private var View.isAddedMarginTop: Boolean? by viewTags(-1001)
+private var View.isAddedPaddingTop: Boolean? by viewTags(-1002)
+
 inline var Activity.isLightStatusBar: Boolean
   get() = window.isLightStatusBar
   set(value) {
@@ -98,7 +101,7 @@ inline fun Window.immerseStatusBar(lightMode: Boolean = true) {
 }
 
 fun View.addStatusBarHeightToMarginTop() {
-  if (!isAddedMarginTop) {
+  if (isAddedMarginTop != true) {
     updateLayoutParams<ViewGroup.MarginLayoutParams> {
       updateMargins(top = topMargin + statusBarHeight)
       isAddedMarginTop = true
@@ -107,7 +110,7 @@ fun View.addStatusBarHeightToMarginTop() {
 }
 
 fun View.subtractStatusBarHeightToMarginTop() {
-  if (isAddedMarginTop) {
+  if (isAddedMarginTop == true) {
     updateLayoutParams<ViewGroup.MarginLayoutParams> {
       updateMargins(top = topMargin - statusBarHeight)
       isAddedMarginTop = false
@@ -116,7 +119,7 @@ fun View.subtractStatusBarHeightToMarginTop() {
 }
 
 fun View.addStatusBarHeightToPaddingTop() = post {
-  if (!isAddedPaddingTop) {
+  if (isAddedPaddingTop != true) {
     updatePadding(top = paddingTop + statusBarHeight)
     updateLayoutParams {
       height = measuredHeight + statusBarHeight
@@ -126,7 +129,7 @@ fun View.addStatusBarHeightToPaddingTop() = post {
 }
 
 fun View.subtractStatusBarHeightToPaddingTop() = post {
-  if (isAddedPaddingTop) {
+  if (isAddedPaddingTop == true) {
     updatePadding(top = paddingTop - statusBarHeight)
     updateLayoutParams {
       height = measuredHeight - statusBarHeight
@@ -134,17 +137,3 @@ fun View.subtractStatusBarHeightToPaddingTop() = post {
     isAddedPaddingTop = false
   }
 }
-
-private const val TAG_ADD_MARGIN_TOP = -111
-private var View.isAddedMarginTop: Boolean
-  get() = getTag(TAG_ADD_MARGIN_TOP) as? Boolean == true
-  set(value) {
-    setTag(TAG_ADD_MARGIN_TOP, value)
-  }
-
-private const val TAG_ADD_PADDING_TOP = -112
-private var View.isAddedPaddingTop: Boolean
-  get() = getTag(TAG_ADD_PADDING_TOP) as? Boolean == true
-  set(value) {
-    setTag(TAG_ADD_PADDING_TOP, value)
-  }

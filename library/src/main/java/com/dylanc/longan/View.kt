@@ -8,6 +8,8 @@ import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 /**
  * @author Dylan Cai
@@ -28,40 +30,41 @@ inline fun View.withStyledAttrs(
 
 inline fun View?.isTouchedAt(x: Float, y: Float) = isTouchedAt(x.toInt(), y.toInt())
 
-inline fun View?.isTouchedAt(x: Int, y: Int): Boolean {
-  if (this == null) return false
-  var isTouchedAt = false
-  locationOnScreen {
-    isTouchedAt = x in left..right && y in top..bottom
+inline fun View?.isTouchedAt(x: Int, y: Int) =
+  this?.locationOnScreen?.let { location ->
+    x in location[0]..location[2] && y in location[1]..location[3]
+  } ?: false
+
+inline fun View.findTouchedChild(view: View, x: Int, y: Int) =
+  view.touchables.find { it.isTouchedAt(x, y) }
+
+/**
+ * Computes the coordinates of this view on the screen, for example:
+ * ```
+ * val location = locationOnScreen
+ * val left = location[0]
+ * val top = location[1]
+ * val right = location[2]
+ * val bottom = location[3]
+ * ```
+ *
+ * @return an array of four integers in which to hold the coordinates
+ */
+inline val View.locationOnScreen
+  get() = IntArray(4).apply {
+    val outLocation = IntArray(2)
+    getLocationOnScreen(outLocation)
+    this[0] = outLocation[0]          // left
+    this[1] = outLocation[1]          // top
+    this[2] = outLocation[0] + width  // right
+    this[3] = outLocation[1] + height // bottom
   }
-  return isTouchedAt
-}
 
-inline fun View.locationOnScreen(crossinline block: LocationOnScreen.() -> Unit) {
-  val locationOnScreen = IntArray(2)
-    .apply { getLocationOnScreen(this) }
-  val left = locationOnScreen[0]
-  val top = locationOnScreen[1]
-  val right = left + width
-  val bottom = top + height
-  block(LocationOnScreen(left, top, right, bottom))
-}
+fun <T> viewTags(key: Int) = object : ReadWriteProperty<View, T?> {
+  @Suppress("UNCHECKED_CAST")
+  override fun getValue(thisRef: View, property: KProperty<*>) =
+    thisRef.getTag(key) as T?
 
-inline fun View.findTouchedChild(view: View, x: Int, y: Int): View? {
-  var targetView: View? = null
-  val touchableViews = view.touchables
-  for (child in touchableViews) {
-    if (child.isTouchedAt(x, y)) {
-      targetView = child
-      break
-    }
-  }
-  return targetView
+  override fun setValue(thisRef: View, property: KProperty<*>, value: T?) =
+    thisRef.setTag(key, value)
 }
-
-data class LocationOnScreen(
-  val left: Int,
-  val top: Int,
-  val right: Int,
-  val bottom: Int
-)

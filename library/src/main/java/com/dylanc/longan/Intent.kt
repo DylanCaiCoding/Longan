@@ -46,6 +46,12 @@ inline fun Intent.singleTop(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_SI
 
 inline fun Intent.createChooser(title: String? = null): Intent = Intent.createChooser(this, title)
 
+inline fun Intent.grantReadPermission(): Intent = apply {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+  }
+}
+
 inline fun <reified T> Activity.intentExtras(name: String) = lazy<T?> {
   intent.extras[name]
 }
@@ -58,26 +64,46 @@ inline fun <reified T> Activity.safeIntentExtras(name: String) = lazy<T> {
   checkNotNull(intent.extras[name]) { "No intent value for key \"$name\"" }
 }
 
-fun dialIntentOf(phoneNumber: String): Intent =
+fun dial(phoneNumber: String) =
   Intent(Intent.ACTION_DIAL, Uri.parse("tel:${Uri.encode(phoneNumber)}"))
+    .startForActivity()
 
 @RequiresPermission(CALL_PHONE)
-inline fun callIntentOf(phoneNumber: String) =
+inline fun makeCall(phoneNumber: String) =
   Intent(Intent.ACTION_CALL, Uri.parse("tel:${Uri.encode(phoneNumber)}"))
+    .startForActivity()
 
-inline fun sendSmsIntentOf(phoneNumber: String, content: String?) =
+inline fun sendSMS(phoneNumber: String, content: String?) =
   Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:${Uri.encode(phoneNumber)}"))
     .apply { putExtra("sms_body", content) }
+    .startForActivity()
 
-inline fun installAPKIntentOf(uri: Uri) =
-  Intent(Intent.ACTION_VIEW).apply {
-    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+inline fun browse(url: String, newTask: Boolean = false) =
+  Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    .apply { if (newTask) newTask() }
+    .startForActivity()
+
+fun email(email: String, subject: String = "", text: String = "") =
+  Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
+    .apply {
+      putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+      if (subject.isNotEmpty()) putExtra(Intent.EXTRA_SUBJECT, subject)
+      if (text.isNotEmpty()) putExtra(Intent.EXTRA_TEXT, text)
     }
-    setDataAndType(uri, "application/vnd.android.package-archive")
+    .startForActivity()
+
+inline fun installAPK(uri: Uri) =
+  Intent(Intent.ACTION_VIEW)
+    .newTask()
+    .grantReadPermission()
+    .apply { setDataAndType(uri, "application/vnd.android.package-archive") }
+    .startForActivity()
+
+inline fun Intent.startForActivity() =
+  try {
+    topActivity.startActivity(this)
+    true
+  } catch (e: Exception) {
+    e.printStackTrace()
+    false
   }
-
-inline fun urlIntentOf(url: String) = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-
-inline val launchIntent: Intent? get() = application.packageManager.getLaunchIntentForPackage(packageName)

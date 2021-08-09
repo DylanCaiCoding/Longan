@@ -19,16 +19,19 @@ inline fun shareText(content: String, title: String? = null) =
   }
 
 inline fun shareImage(imageUri: Uri, title: String? = null) =
-  shareTextImage(null, imageUri, title)
+  shareTextAndImage(null, imageUri, title)
 
-inline fun shareTextImage(content: String?, imageUri: Uri, title: String? = null) =
+inline fun shareImages(imageUris: List<Uri>, title: String? = null) =
+  shareTextAndImages(null, imageUris, title)
+
+inline fun shareTextAndImage(content: String?, imageUri: Uri, title: String? = null) =
   share("image/*") {
     setText(content)
     setStream(imageUri)
     setChooserTitle(title)
   }
 
-inline fun shareTextImage(content: String?, imageUris: List<Uri>, title: String? = null) =
+inline fun shareTextAndImages(content: String?, imageUris: List<Uri>, title: String? = null) =
   share("image/*") {
     setText(content)
     imageUris.forEach { addStream(it) }

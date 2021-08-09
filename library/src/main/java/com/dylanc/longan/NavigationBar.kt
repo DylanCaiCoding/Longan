@@ -12,6 +12,8 @@ import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
 
 
+private var View.isAddedMarginBottom: Boolean? by viewTags(-1003)
+
 inline var Activity.isLightNavigationBar: Boolean
   get() = window.isLightNavigationBar
   set(value) {
@@ -72,7 +74,8 @@ inline val navigationBarHeight: Int
     }
 
 fun View.addNavigationBarHeightToMarginBottom() = post {
-  if (isNavigationBarVisible && !isAddedMarginBottom) {
+  val navigationBarVisible = isNavigationBarVisible
+  if (navigationBarVisible && isAddedMarginBottom != true) {
     updateLayoutParams<ViewGroup.MarginLayoutParams> {
       updateMargins(bottom = bottomMargin + navigationBarHeight)
       isAddedMarginBottom = true
@@ -81,17 +84,10 @@ fun View.addNavigationBarHeightToMarginBottom() = post {
 }
 
 fun View.subtractNavigationBarHeightToMarginBottom() = post {
-  if (isNavigationBarVisible && isAddedMarginBottom) {
+  if (isNavigationBarVisible && isAddedMarginBottom == true) {
     updateLayoutParams<ViewGroup.MarginLayoutParams> {
       updateMargins(bottom = bottomMargin - navigationBarHeight)
       isAddedMarginBottom = false
     }
   }
 }
-
-private const val TAG_ADD_MARGIN_BOTTOM = -113
-private var View.isAddedMarginBottom: Boolean
-  get() = getTag(TAG_ADD_MARGIN_BOTTOM) as? Boolean == true
-  set(value) {
-    setTag(TAG_ADD_MARGIN_BOTTOM, value)
-  }

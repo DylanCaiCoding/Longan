@@ -17,41 +17,51 @@ var defaultSharedPreferences = sharedPreferencesOf()
 fun sharedPreferencesOf(name: String = packageName, mode: Int = Context.MODE_PRIVATE): SharedPreferences =
   application.getSharedPreferences(name, mode)
 
-fun <T : Any> sharedPreferences(key: String, default: T) =
-  SharedPrefValueWithDefault(default, defaultSharedPreferences) { key }
+fun <V : Any> sharedPreferences(key: String, default: V) =
+  SharedPrefValueWithDefault<Nothing?, V>(default, defaultSharedPreferences) { key }
 
 fun sharedPreferences(key: String) =
-  SharedPrefStringValue(defaultSharedPreferences) { key }
+  SharedPrefStringValue<Nothing?>(defaultSharedPreferences) { key }
 
-fun <T : Any> SharedPreferencesOwner.sharedPreferences(default: T) =
-  SharedPrefValueWithDefault(default, sharedPreferences) { property -> "${javaClass.canonicalName}_${property.name}" }
+fun <V : Any> Any.sharedPreferences(key: String, default: V) =
+  SharedPrefValueWithDefault<Any, V>(default, defaultSharedPreferences) { key }
+
+fun Any.sharedPreferences(key: String) =
+  SharedPrefStringValue<Any>(defaultSharedPreferences) { key }
+
+fun <V : Any> SharedPreferencesOwner.sharedPreferences(default: V) =
+  SharedPrefValueWithDefault<SharedPreferencesOwner, V>(default, sharedPreferences) { property ->
+    "${javaClass.canonicalName}_${property.name}"
+  }
 
 fun SharedPreferencesOwner.sharedPreferences() =
-  SharedPrefStringValue(sharedPreferences) { property -> "${javaClass.canonicalName}_${property.name}" }
+  SharedPrefStringValue<SharedPreferencesOwner>(sharedPreferences) { property ->
+    "${javaClass.canonicalName}_${property.name}"
+  }
 
 interface SharedPreferencesOwner {
   val sharedPreferences: SharedPreferences get() = defaultSharedPreferences
 }
 
-class SharedPrefStringValue(
+class SharedPrefStringValue<T>(
   private val sharedPreferences: SharedPreferences,
   private val getKey: (KProperty<*>) -> String
-) : ReadWriteProperty<Nothing?, String?> {
+) : ReadWriteProperty<T, String?> {
 
-  override fun setValue(thisRef: Nothing?, property: KProperty<*>, value: String?) =
+  override fun setValue(thisRef: T, property: KProperty<*>, value: String?) =
     sharedPreferences.edit { putString(getKey(property), value) }
 
-  override fun getValue(thisRef: Nothing?, property: KProperty<*>) =
+  override fun getValue(thisRef: T, property: KProperty<*>) =
     sharedPreferences.getString(getKey(property), null)
 }
 
-class SharedPrefValueWithDefault<T : Any>(
-  private val default: T,
+class SharedPrefValueWithDefault<T, V : Any>(
+  private val default: V,
   private val sharedPreferences: SharedPreferences,
   private val getKey: (KProperty<*>) -> String
-) : ReadWriteProperty<Nothing?, T> {
+) : ReadWriteProperty<T, V> {
 
-  override fun setValue(thisRef: Nothing?, property: KProperty<*>, value: T) =
+  override fun setValue(thisRef: T, property: KProperty<*>, value: V) =
     sharedPreferences.edit {
       val key = getKey(property)
       when (value) {
@@ -60,15 +70,12 @@ class SharedPrefValueWithDefault<T : Any>(
         is Int -> putInt(key, value)
         is Boolean -> putBoolean(key, value)
         is Float -> putFloat(key, value)
-        else -> {
-          val valueType = value.javaClass.canonicalName
-          throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
-        }
+        else -> illegalValueType(key, value)
       }
     }
 
   @Suppress("UNCHECKED_CAST")
-  override fun getValue(thisRef: Nothing?, property: KProperty<*>): T =
+  override fun getValue(thisRef: T, property: KProperty<*>): V =
     sharedPreferences.run {
       val key = getKey(property)
       when (default) {
@@ -77,10 +84,10 @@ class SharedPrefValueWithDefault<T : Any>(
         is Int -> getInt(key, default)
         is Boolean -> getBoolean(key, default)
         is Float -> getFloat(key, default)
-        else -> {
-          val valueType = default.javaClass.canonicalName
-          throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
-        }
-      } as T
+        else -> illegalValueType(key, default)
+      } as V
     }
+
+  private fun illegalValueType(key: String, value: Any): Nothing =
+    throw IllegalArgumentException("Illegal value type ${value.javaClass.canonicalName} for key \"$key\"")
 }

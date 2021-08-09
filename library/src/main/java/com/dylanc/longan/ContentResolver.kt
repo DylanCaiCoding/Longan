@@ -43,7 +43,7 @@ inline fun ContentResolver.update(
   selectionArgs: Array<String>? = null,
   block: ContentValues.() -> Unit
 ) =
-  update(uri, ContentValues(block), where, selectionArgs)
+  update(uri, contentValues(block), where, selectionArgs)
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 inline fun ContentResolver.delete(
@@ -58,7 +58,7 @@ inline fun ContentResolver.registerContentObserver(uri: Uri, crossinline block: 
     override fun onChange(selfChange: Boolean) = block(selfChange)
   })
 
-inline fun ContentValues(block: ContentValues.() -> Unit) = ContentValues().apply(block)
+inline fun contentValues(block: ContentValues.() -> Unit) = ContentValues().apply(block)
 
 inline var ContentValues.displayName: String?
   get() = get(MediaStore.MediaColumns.DISPLAY_NAME) as String?

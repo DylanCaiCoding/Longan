@@ -23,7 +23,7 @@ val activityList: List<Activity> get() = activityCache.toList()
 inline fun <reified T : Activity> Context.startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
   startActivity(intentOf<T>(*pairs).apply(block))
 
-inline fun startActivity(intent: Intent) = topActivity.run { startActivity(intent) }
+inline fun startActivity(intent: Intent) = topActivity.startActivity(intent)
 
 inline fun <reified T : Activity> startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
   startActivity(topActivity.intentOf<T>(*pairs).apply(block))
