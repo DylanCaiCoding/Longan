@@ -56,8 +56,8 @@ inline fun <reified T> Activity.intentExtras(name: String) = lazy<T?> {
   intent.extras[name]
 }
 
-inline fun <reified T> Activity.intentExtras(name: String, defaultValue: T) = lazy {
-  intent.extras[name] ?: defaultValue
+inline fun <reified T> Activity.intentExtras(name: String, default: T) = lazy {
+  intent.extras[name] ?: default
 }
 
 inline fun <reified T> Activity.safeIntentExtras(name: String) = lazy<T> {

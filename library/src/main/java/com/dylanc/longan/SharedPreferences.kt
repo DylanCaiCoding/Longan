@@ -14,7 +14,7 @@ import kotlin.reflect.KProperty
 
 var defaultSharedPreferences = sharedPreferencesOf()
 
-fun sharedPreferencesOf(name: String = packageName, mode: Int = Context.MODE_PRIVATE): SharedPreferences =
+fun sharedPreferencesOf(name: String = "${packageName}_preferences", mode: Int = Context.MODE_PRIVATE): SharedPreferences =
   application.getSharedPreferences(name, mode)
 
 fun <V : Any> sharedPreferences(key: String, default: V) =

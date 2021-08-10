@@ -17,8 +17,8 @@ inline fun <reified T> Fragment.arguments(key: String) = lazy<T?> {
   arguments[key]
 }
 
-inline fun <reified T> Fragment.arguments(key: String, defaultValue: T) = lazy {
-  arguments[key] ?: defaultValue
+inline fun <reified T> Fragment.arguments(key: String, default: T) = lazy {
+  arguments[key] ?: default
 }
 
 inline fun <reified T> Fragment.safeArguments(name: String) = lazy<T> {
