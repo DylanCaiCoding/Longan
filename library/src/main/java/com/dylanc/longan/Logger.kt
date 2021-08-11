@@ -15,8 +15,8 @@ interface Logger {
     var isLoggable = { _: Int, _: String -> true }
     var printer: LoggerPrinter = SimpleLoggerPrinter()
 
-    fun init(debug: Boolean) {
-      isLoggable = { _, _ -> debug }
+    fun init(loggable: Boolean) {
+      isLoggable = { _, _ -> loggable }
     }
   }
 }

@@ -74,8 +74,7 @@ inline val navigationBarHeight: Int
     }
 
 fun View.addNavigationBarHeightToMarginBottom() = post {
-  val navigationBarVisible = isNavigationBarVisible
-  if (navigationBarVisible && isAddedMarginBottom != true) {
+  if (isNavigationBarVisible && isAddedMarginBottom != true) {
     updateLayoutParams<ViewGroup.MarginLayoutParams> {
       updateMargins(bottom = bottomMargin + navigationBarHeight)
       isAddedMarginBottom = true

@@ -17,67 +17,67 @@ inline fun downloadRequest(url: String, block: DownloadRequestBuilder.() -> Unit
 class DownloadRequestBuilder(url: String) {
   private val request = DownloadManager.Request(Uri.parse(url))
 
-   var title: CharSequence
+  var title: CharSequence
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setTitle(value)
     }
 
-   var description: CharSequence
+  var description: CharSequence
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setDescription(value)
     }
 
-   var mimeType: String
+  var mimeType: String
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setMimeType(value)
     }
 
-   var allowedNetworkTypes: Int
+  var allowedNetworkTypes: Int
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setAllowedNetworkTypes(value)
     }
 
-   var notificationVisibility: Int
+  var notificationVisibility: Int
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setNotificationVisibility(value)
     }
 
-   var allowedOverRoaming: Boolean
+  var allowedOverRoaming: Boolean
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setAllowedOverRoaming(value)
     }
-   var destinationUri: Uri
+  var destinationUri: Uri
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
       request.setDestinationUri(value)
     }
 
-   fun addHeader(header: String, value: String) {
+  fun addHeader(header: String, value: String) {
     request.addRequestHeader(header, value)
   }
 
-   fun destinationInExternalFilesDir(dirType: String, subPath: String) {
+  fun destinationInExternalFilesDir(dirType: String, subPath: String) {
     request.setDestinationInExternalFilesDir(application, dirType, subPath)
   }
 
-   fun destinationInExternalPublicDir(dirType: String, subPath: String) {
+  fun destinationInExternalPublicDir(dirType: String, subPath: String) {
     request.setDestinationInExternalPublicDir(dirType, subPath)
   }
 
-   fun download(onComplete: (Uri) -> Unit): DownloadCompleteReceiver {
+  fun download(onComplete: (Uri) -> Unit): DownloadCompleteReceiver {
     val downloadManager = application.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     val downloadId = downloadManager.enqueue(request)
     //TODO 支持监听下载进度，暂停下载
