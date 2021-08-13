@@ -38,20 +38,16 @@ inline fun shareTextAndImages(content: String?, imageUris: List<Uri>, title: Str
     setChooserTitle(title)
   }
 
-inline fun shareFile(uri: Uri, mimeType: String = uri.mimeType.orEmpty(), title: String? = null) =
+inline fun shareFile(uri: Uri, title: String? = null, mimeType: String = uri.mimeType.orEmpty()) =
   share(mimeType) {
     setStream(uri)
     setChooserTitle(title)
   }
 
-inline fun shareFiles(uris: List<Uri>, title: String? = null) {
-  if (uris.isNotEmpty()) {
-    shareFiles(uris, uris[0].mimeType.orEmpty(), title)
-  }
-}
-
-inline fun shareFiles(uris: List<Uri>, mimeType: String, title: String? = null) =
-  share(mimeType) {
+inline fun shareFiles(uris: List<Uri>, title: String? = null, mimeType: String? = null) {
+  val mime = mimeType ?: if (uris.isNotEmpty()) uris.first().mimeType.orEmpty() else ""
+  share(mime) {
     uris.forEach { addStream(it) }
     setChooserTitle(title)
   }
+}

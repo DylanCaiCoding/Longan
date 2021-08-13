@@ -1,81 +1,318 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
 
 import android.app.Activity
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.SnackbarContentLayout
 
 /**
  * @author Dylan Cai
  */
 
-inline fun Activity.snackbar(text: String, block: Snackbar.() -> Unit = {}) =
-  window.decorView.snackbar(text, block)
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun Activity.snackbar(@StringRes message: Int) =
+  window.decorView.snackbar(message)
 
-inline fun Activity.snackbar(@StringRes resId: Int, block: Snackbar.() -> Unit = {}) =
-  window.decorView.snackbar(resId, block)
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun Fragment.snackbar(@StringRes message: Int) =
+  requireView().snackbar(message)
 
-inline fun Fragment.snackbar(text: String, block: Snackbar.() -> Unit = {}) =
-  requireView().snackbar(text, block)
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun View.snackbar(@StringRes message: Int) =
+  Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+    .apply { show() }
 
-inline fun Fragment.snackbar(@StringRes resId: Int, block: Snackbar.() -> Unit = {}) =
-  requireView().snackbar(resId, block)
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun Activity.longSnackbar(@StringRes message: Int) =
+  window.decorView.longSnackbar(message)
 
-inline fun View.snackbar(text: String, block: Snackbar.() -> Unit = {}) =
-  Snackbar.make(this, text, Snackbar.LENGTH_SHORT).apply(block).apply { show() }
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun Fragment.longSnackbar(@StringRes message: Int) =
+  requireView().longSnackbar(message)
 
-inline fun View.snackbar(@StringRes resId: Int, block: Snackbar.() -> Unit = {}) =
-  Snackbar.make(this, resId, Snackbar.LENGTH_SHORT).apply(block).apply { show() }
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun View.longSnackbar(@StringRes message: Int) =
+  Snackbar.make(this, message, Snackbar.LENGTH_LONG)
+    .apply { show() }
 
-inline fun Activity.longSnackbar(text: String, block: Snackbar.() -> Unit = {}) =
-  window.decorView.longSnackbar(text, block)
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun Activity.indefiniteSnackbar(@StringRes message: Int) =
+  window.decorView.indefiniteSnackbar(message)
 
-inline fun Activity.longSnackbar(@StringRes resId: Int, block: Snackbar.() -> Unit = {}) =
-  window.decorView.longSnackbar(resId, block)
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun Fragment.indefiniteSnackbar(@StringRes message: Int) =
+  requireView().indefiniteSnackbar(message)
 
-inline fun Fragment.longSnackbar(text: String, block: Snackbar.() -> Unit = {}) =
-  requireView().longSnackbar(text, block)
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun View.indefiniteSnackbar(@StringRes message: Int) =
+  Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE)
+    .apply { show() }
 
-inline fun Fragment.longSnackbar(@StringRes resId: Int, block: Snackbar.() -> Unit = {}) =
-  requireView().longSnackbar(resId, block)
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.snackbar(message: CharSequence) =
+  window.decorView.snackbar(message)
 
-inline fun View.longSnackbar(text: String, block: Snackbar.() -> Unit = {}) =
-  Snackbar.make(this, text, Snackbar.LENGTH_LONG).apply(block).apply { show() }
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.snackbar(message: CharSequence) =
+  requireView().snackbar(message)
 
-inline fun View.longSnackbar(@StringRes resId: Int, block: Snackbar.() -> Unit = {}) =
-  Snackbar.make(this, resId, Snackbar.LENGTH_LONG).apply(block).apply { show() }
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text.
+ */
+inline fun View.snackbar(message: CharSequence) =
+  Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+    .apply { show() }
 
-inline fun Snackbar.setCustomView(@LayoutRes layoutId: Int, onBindView: View.() -> Unit = {}) {
-  val parent = view as Snackbar.SnackbarLayout
-  val contentView = parent.getChildAt(0) as SnackbarContentLayout
-  val inflater = LayoutInflater.from(view.context)
-  val decorView = inflater.inflate(R.layout.design_layout_snackbar_include, contentView, false) as SnackbarContentLayout
-  decorView.apply {
-    addView(inflater.inflate(layoutId, contentView, false).apply(onBindView))
-    id = contentView.id
-    findViewById<TextView>(R.id.snackbar_text).apply {
-      id = com.google.android.material.R.id.snackbar_text
-      text = contentView.findViewById<TextView>(id).text.toString()
-    }
-    findViewById<View>(R.id.snackbar_action).apply {
-      id = com.google.android.material.R.id.snackbar_action
-    }
-  }
-  try {
-    val method = decorView::class.java.getDeclaredMethod("onFinishInflate")
-    method.isAccessible = true
-    method.invoke(decorView)
-  } catch (e: Exception) {
-  }
-  parent.apply {
-    removeView(contentView)
-    addView(decorView, indexOfChild(contentView))
-  }
-}
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.longSnackbar(message: CharSequence) =
+  window.decorView.longSnackbar(message)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.longSnackbar(message: CharSequence) =
+  requireView().longSnackbar(message)
+
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text.
+ */
+inline fun View.longSnackbar(message: CharSequence) =
+  Snackbar.make(this, message, Snackbar.LENGTH_LONG)
+    .apply { show() }
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.indefiniteSnackbar(message: CharSequence) =
+  window.decorView.indefiniteSnackbar(message)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.indefiniteSnackbar(message: CharSequence) =
+  requireView().indefiniteSnackbar(message)
+
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun View.indefiniteSnackbar(message: CharSequence) =
+  Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE)
+    .apply { show() }
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.snackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  window.decorView.snackbar(message, actionText, action)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.snackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  requireView().snackbar(message, actionText, action)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun View.snackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+    .setAction(actionText, action)
+    .apply { show() }
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.longSnackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  window.decorView.longSnackbar(message, actionText, action)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.longSnackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  requireView().longSnackbar(message, actionText, action)
+
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun View.longSnackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  Snackbar.make(this, message, Snackbar.LENGTH_LONG)
+    .setAction(actionText, action)
+    .apply { show() }
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.indefiniteSnackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  window.decorView.indefiniteSnackbar(message, actionText, action)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.indefiniteSnackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  requireView().indefiniteSnackbar(message, actionText, action)
+
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun View.indefiniteSnackbar(@StringRes message: Int, @StringRes actionText: Int, noinline action: (View) -> Unit) =
+  Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE)
+    .setAction(actionText, action)
+    .apply { show() }
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.snackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  window.decorView.snackbar(message, actionText, action)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.snackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  requireView().snackbar(message, actionText, action)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
+ *
+ * @param message the message text.
+ */
+inline fun View.snackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+    .setAction(actionText, action)
+    .apply { show() }
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.longSnackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  window.decorView.longSnackbar(message, actionText, action)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.longSnackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  requireView().longSnackbar(message, actionText, action)
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_LONG] duration.
+ *
+ * @param message the message text.
+ */
+inline fun View.longSnackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  Snackbar.make(this, message, Snackbar.LENGTH_LONG)
+    .setAction(actionText, action)
+    .apply { show() }
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Activity.indefiniteSnackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  window.decorView.indefiniteSnackbar(message, actionText, action)
+
+/**
+ * Display the Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun Fragment.indefiniteSnackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  requireView().indefiniteSnackbar(message, actionText, action)
+
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun View.indefiniteSnackbar(message: CharSequence, actionText: CharSequence, noinline action: (View) -> Unit) =
+  Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE)
+    .setAction(actionText, action)
+    .apply { show() }

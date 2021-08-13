@@ -1,5 +1,7 @@
 <resources>
   <string name="app_name">Longan</string>
-  <string name="share">Share</string>
+  <string name="selector">selector</string>
+  <string name="single_choice_selector">single choice selector</string>
+  <string name="multi_choice_selector">multi choice selector</string>
   <string name="no_read_permission">Please go to settings to authorize read permission</string>
 </resources>

@@ -102,7 +102,7 @@ val StackTraceElement.simpleClassName: String?
     if (isNotEmpty()) last().limitLength(23) else null
   }
 
-class SimpleLoggerPrinter : LoggerPrinter {
+open class SimpleLoggerPrinter : LoggerPrinter {
   override fun log(level: LogLevel, tag: String, message: String, thr: Throwable?) {
     when (level) {
       LogLevel.VERBOSE -> if (thr == null) Log.v(tag, message) else Log.v(tag, message, thr)

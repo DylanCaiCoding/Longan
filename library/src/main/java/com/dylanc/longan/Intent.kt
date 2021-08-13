@@ -17,9 +17,6 @@ import androidx.core.os.bundleOf
  * @author Dylan Cai
  */
 
-inline fun Intent(vararg pairs: Pair<String, *>) =
-  Intent().apply { putExtras(bundleOf(*pairs)) }
-
 inline fun <reified T> Context.intentOf(vararg pairs: Pair<String, *>) =
   intentOf<T>(bundleOf(*pairs))
 

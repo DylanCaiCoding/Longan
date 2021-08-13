@@ -15,16 +15,20 @@ import androidx.core.content.res.ResourcesCompat
  * @author Dylan Cai
  */
 
-inline fun Context.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+inline fun Context.stringOf(@StringRes id: Int) = getString(id)
 
-inline fun Context.getCompatDrawable(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
+inline fun Context.colorOf(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+
+inline fun Context.drawableOf(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
+
+inline fun Context.fontOf(@FontRes id: Int) = ResourcesCompat.getFont(this, id)
 
 inline fun stringOf(@StringRes id: Int) = topActivity.getString(id)
 
-inline fun colorOf(@ColorRes id: Int) = topActivity.getCompatColor(id)
+inline fun colorOf(@ColorRes id: Int) = topActivity.colorOf(id)
 
 inline fun colorOf(colorString: String) = Color.parseColor(colorString)
 
-inline fun drawableOf(@DrawableRes id: Int) = topActivity.getCompatDrawable(id)
+inline fun drawableOf(@DrawableRes id: Int) = topActivity.drawableOf(id)
 
 inline fun fontOf(@FontRes id: Int) = ResourcesCompat.getFont(topActivity, id)
