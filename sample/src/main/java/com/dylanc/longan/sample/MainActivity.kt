@@ -54,9 +54,9 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private val checkedItems = mutableListOf(false, false, false, false)
+  private val foods = listOf("Apple", "Banana", "Pear", "Peach")
+  private val checkedItems = BooleanArray(foods.size)
   private fun selectFoods() {
-    val foods = listOf("Apple", "Banana", "Pear", "Peach")
     multiChoiceSelector(foods, checkedItems, "What do you want to eat?") { _, i, isChecked ->
       checkedItems[i] = isChecked
     }.doOnDismiss {
