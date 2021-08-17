@@ -1,7 +1,8 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Handler
@@ -10,39 +11,41 @@ import android.os.Message
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 
 
 /**
  * @author Dylan Cai
  */
 
-inline fun toast(text: CharSequence?, duration: Int = Toast.LENGTH_SHORT, block: Toast.() -> Unit = {}): Toast =
-  topActivity.toast(text, duration, block)
+inline fun Fragment.toast(message: CharSequence?): Toast =
+  requireActivity().toast(message)
 
-inline fun toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_SHORT, block: Toast.() -> Unit = {}): Toast =
-  topActivity.toast(resId, duration, block)
+inline fun Fragment.toast(@StringRes message: Int): Toast =
+  requireActivity().toast(message)
 
-inline fun longToast(text: CharSequence?, block: Toast.() -> Unit = {}): Toast =
-  topActivity.longToast(text, block)
+inline fun Context.toast(message: CharSequence?): Toast =
+  Toast.makeText(this, message, Toast.LENGTH_SHORT).fixBadTokenException().apply { show() }
 
-inline fun longToast(@StringRes resId: Int, block: Toast.() -> Unit = {}): Toast =
-  topActivity.longToast(resId, block)
+inline fun Context.toast(@StringRes message: Int): Toast =
+  Toast.makeText(this, message, Toast.LENGTH_SHORT).fixBadTokenException().apply { show() }
 
-inline fun Context.toast(text: CharSequence?, duration: Int = Toast.LENGTH_SHORT, block: Toast.() -> Unit = {}): Toast =
-  Toast.makeText(context, text, duration).apply(block).apply { showSafely() }
+inline fun Fragment.longToast(message: CharSequence?): Toast =
+  requireActivity().longToast(message)
 
-inline fun Context.toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_SHORT, block: Toast.() -> Unit = {}): Toast =
-  Toast.makeText(context, getString(resId), duration).apply(block).apply { showSafely() }
+inline fun Fragment.longToast(@StringRes message: Int): Toast =
+  requireActivity().longToast(message)
 
-inline fun Context.longToast(text: CharSequence?, block: Toast.() -> Unit = {}): Toast =
-  Toast.makeText(context, text, Toast.LENGTH_LONG).apply(block).apply { showSafely() }
+inline fun Context.longToast(message: CharSequence?): Toast =
+  Toast.makeText(this, message, Toast.LENGTH_LONG).fixBadTokenException().apply { show() }
 
-inline fun Context.longToast(@StringRes resId: Int, block: Toast.() -> Unit = {}): Toast =
-  Toast.makeText(context, getString(resId), Toast.LENGTH_LONG).apply(block).apply { showSafely() }
+inline fun Context.longToast(@StringRes message: Int): Toast =
+  Toast.makeText(this, message, Toast.LENGTH_LONG).fixBadTokenException().apply { show() }
 
-fun Toast.showSafely() {
+fun Toast.fixBadTokenException() = apply {
   if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) {
     try {
+      @SuppressLint("DiscouragedPrivateApi")
       val tnField = Toast::class.java.getDeclaredField("mTN")
       tnField.isAccessible = true
       val tn = tnField.get(this)
@@ -66,5 +69,4 @@ fun Toast.showSafely() {
     } catch (ignored: NoSuchFieldException) {
     }
   }
-  show()
 }
