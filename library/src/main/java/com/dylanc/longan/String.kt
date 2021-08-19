@@ -2,6 +2,7 @@
 
 package com.dylanc.longan
 
+import android.text.format.Formatter
 import android.util.Patterns
 import java.util.*
 
@@ -18,6 +19,10 @@ inline fun Float.toIntPercentString() = "${(this * 100).toInt()}%"
 inline fun Double.toPercentString() = "${this * 100}%"
 
 inline fun Double.toIntPercentString() = "${(this * 100).toInt()}%"
+
+inline fun Long.toFileSizeString(): String = Formatter.formatFileSize(application, this)
+
+inline fun Long.toShortFileSizeString(): String = Formatter.formatShortFileSize(application, this)
 
 inline fun String.isPhone() = Patterns.PHONE.matcher(this).matches()
 

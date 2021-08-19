@@ -21,7 +21,7 @@ internal class AppInitializer : Initializer<Unit> {
     AndroidThreeTen.init(application)
   }
 
-  override fun dependencies() = mutableListOf<Class<Initializer<*>>>()
+  override fun dependencies() = emptyList<Class<Initializer<*>>>()
 
   private val activityLifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
 

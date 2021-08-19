@@ -61,7 +61,7 @@ inline val Uri.fileExtension: String?
 inline val Uri.fileName: String?
   get() = contentResolver.query(this, arrayOf(OpenableColumns.DISPLAY_NAME)) { cursor ->
     if (cursor.moveToFirst())
-      cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+      cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
     else
       null
   }
@@ -72,7 +72,7 @@ inline val Uri.mimeType: String?
 inline val Uri.size: Long
   get() = contentResolver.query(this, arrayOf(OpenableColumns.SIZE)) { cursor ->
     if (cursor.moveToFirst())
-      cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE))
+      cursor.getLong(cursor.getColumnIndexOrThrow(OpenableColumns.SIZE))
     else
       0
   } ?: 0

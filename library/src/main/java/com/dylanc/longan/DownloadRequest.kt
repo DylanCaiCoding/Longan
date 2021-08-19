@@ -58,6 +58,7 @@ class DownloadRequestBuilder(url: String) {
     set(value) {
       request.setAllowedOverRoaming(value)
     }
+
   var destinationUri: Uri
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()

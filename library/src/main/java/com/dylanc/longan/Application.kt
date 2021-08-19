@@ -13,7 +13,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.ConnectivityManager
 import android.os.Process
-import android.view.WindowManager
 import androidx.core.content.pm.PackageInfoCompat
 
 
@@ -31,19 +30,15 @@ inline val activitiesPackageInfo: PackageInfo
 inline val connectivityManager: ConnectivityManager
   get() = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-inline val windowManager: WindowManager
-  get() = application.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+inline val applicationInfo get() = application.packageManager.getApplicationInfo(packageName, 0)
 
 inline val appVersionName: String get() = activitiesPackageInfo.versionName
 
 inline val appVersionCode get() = PackageInfoCompat.getLongVersionCode(activitiesPackageInfo)
 
-inline val isDebug: Boolean
-  get() = application.packageManager.getApplicationInfo(packageName, 0)
-    .let { it.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 }
+inline val isDebug get() = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
-inline val isDarkMode: Boolean
-  get() = (application.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
+inline val isDarkMode get() = (application.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
 
 inline fun relaunchApp(killProcess: Boolean = true) =
   application.packageManager.getLaunchIntentForPackage(packageName)?.let {

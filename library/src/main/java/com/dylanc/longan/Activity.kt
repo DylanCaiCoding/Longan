@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
@@ -96,7 +97,7 @@ inline fun ComponentActivity.pressBackToNotExit() {
 inline fun Context.checkPermission(permission: String) =
   ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
 
-inline val Activity.contentView: View? get() = window.contentView
+inline val Activity.contentView: View get() = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0)
 
 inline val Context.context: Context get() = this
 

@@ -43,9 +43,9 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  private val countries = listOf("China", "Russia", "USA", "Australia")
   private var checkedCountry = "China"
   private fun selectCountry() {
-    val countries = listOf("China", "Russia", "USA", "Australia")
     val checkedIndex = countries.indexOfFirst { it == checkedCountry }
     singleChoiceSelector(countries, checkedIndex, "Where are you from?") { dialog, i ->
       checkedCountry = countries[i]

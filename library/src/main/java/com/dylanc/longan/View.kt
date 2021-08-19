@@ -8,6 +8,8 @@ import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -59,6 +61,9 @@ inline val View.locationOnScreen
     this[2] = outLocation[0] + width  // right
     this[3] = outLocation[1] + height // bottom
   }
+
+inline fun View.doOnApplyWindowInsets(noinline action: (View, WindowInsetsCompat) -> WindowInsetsCompat) =
+  ViewCompat.setOnApplyWindowInsetsListener(this, action)
 
 fun <T> viewTags(key: Int) = object : ReadWriteProperty<View, T?> {
   @Suppress("UNCHECKED_CAST")
