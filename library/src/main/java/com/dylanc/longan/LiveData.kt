@@ -15,6 +15,10 @@ import androidx.lifecycle.Observer
 
 inline fun <T> MutableLiveData<T>.toLiveData(): LiveData<T> = UnmodifiableLiveData(this)
 
+inline fun EventLiveData() = EventLiveData<Unit>()
+
+inline fun EventLiveData<Unit>.post() = postValue(Unit)
+
 class UnmodifiableLiveData<T>(private val liveData: MutableLiveData<T>) : LiveData<T>() {
 
   override fun observe(owner: LifecycleOwner, observer: Observer<in T>) =

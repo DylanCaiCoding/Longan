@@ -21,13 +21,19 @@ import kotlin.reflect.KClass
 
 internal val activityCache = LinkedList<Activity>()
 
-inline fun <reified T : Activity> Context.startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
-  startActivity(intentOf<T>(*pairs).apply(block))
-
 inline fun startActivity(intent: Intent) = topActivity.startActivity(intent)
 
-inline fun <reified T : Activity> startActivity(vararg pairs: Pair<String, *>, block: Intent.() -> Unit = {}) =
+inline fun <reified T : Activity> startActivity(
+  vararg pairs: Pair<String, Any?>,
+  crossinline block: Intent.() -> Unit = {}
+) =
   startActivity(topActivity.intentOf<T>(*pairs).apply(block))
+
+inline fun <reified T : Activity> Context.startActivity(
+  vararg pairs: Pair<String, Any?>,
+  crossinline block: Intent.() -> Unit = {}
+) =
+  startActivity(intentOf<T>(*pairs).apply(block))
 
 inline fun Activity.finishWithResult(vararg pairs: Pair<String, *>) {
   setResult(Activity.RESULT_OK, Intent().apply { putExtras(bundleOf(*pairs)) })
@@ -97,7 +103,8 @@ inline fun ComponentActivity.pressBackToNotExit() {
 inline fun Context.checkPermission(permission: String) =
   ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
 
-inline val Activity.contentView: View get() = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0)
+inline val Activity.contentView: View
+  get() = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0)
 
 inline val Context.context: Context get() = this
 

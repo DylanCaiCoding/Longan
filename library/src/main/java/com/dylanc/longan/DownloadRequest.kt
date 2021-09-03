@@ -96,7 +96,7 @@ class DownloadCompleteReceiver(val downloadId: Long, private val onComplete: (Ur
       val downloadManager = application.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
       downloadManager.query(DownloadManager.Query().setFilterById(downloadId))?.use { cursor ->
         if (cursor.moveToFirst()) {
-          val uriString = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+          val uriString = cursor.getString(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI))
           onComplete(Uri.parse(uriString))
         }
       }

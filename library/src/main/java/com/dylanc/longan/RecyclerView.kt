@@ -5,6 +5,7 @@ package com.dylanc.longan
 import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_END
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_START
@@ -33,8 +34,16 @@ inline fun LinearSmoothScroller(context: Context, snapPreference: Int) =
     override fun getHorizontalSnapPreference() = snapPreference
   }
 
-inline fun RecyclerView.Adapter<*>.observeDataEmpty(emptyView: View) {
-  registerAdapterDataObserver(AdapterDataEmptyObserver(this, emptyView))
+inline fun RecyclerView.Adapter<*>.observeDataEmpty(owner: LifecycleOwner, emptyView: View) {
+  val observer = AdapterDataEmptyObserver(this, emptyView)
+  owner.doOnLifecycle(
+    onCreate = {
+      registerAdapterDataObserver(observer)
+    },
+    onDestroy = {
+      unregisterAdapterDataObserver(observer)
+    }
+  )
 }
 
 class AdapterDataEmptyObserver(
