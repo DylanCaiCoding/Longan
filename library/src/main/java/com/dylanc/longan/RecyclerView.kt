@@ -37,12 +37,8 @@ inline fun LinearSmoothScroller(context: Context, snapPreference: Int) =
 inline fun RecyclerView.Adapter<*>.observeDataEmpty(owner: LifecycleOwner, emptyView: View) {
   val observer = AdapterDataEmptyObserver(this, emptyView)
   owner.doOnLifecycle(
-    onCreate = {
-      registerAdapterDataObserver(observer)
-    },
-    onDestroy = {
-      unregisterAdapterDataObserver(observer)
-    }
+    onCreate = { registerAdapterDataObserver(observer) },
+    onDestroy = { unregisterAdapterDataObserver(observer) }
   )
 }
 

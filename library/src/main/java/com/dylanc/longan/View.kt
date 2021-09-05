@@ -3,8 +3,10 @@
 package com.dylanc.longan
 
 import android.content.res.TypedArray
+import android.location.Location
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
@@ -17,8 +19,37 @@ import kotlin.reflect.KProperty
  * @author Dylan Cai
  */
 
-inline fun List<View>.setOnClickListener(noinline onClick: (View) -> Unit) =
-  forEach { it.setOnClickListener(onClick) }
+inline fun List<View>.doOnClick(crossinline block: () -> Unit) =
+  forEach { it.doOnClick(block) }
+
+inline fun View.doOnClick(crossinline block: () -> Unit) =
+  setOnClickListener { block() }
+
+inline fun List<View>.doOnLongClick(crossinline block: () -> Unit) =
+  forEach { it.doOnLongClick(block) }
+
+inline fun View.doOnLongClick(crossinline block: () -> Unit) =
+  setOnLongClickListener {
+    block()
+    true
+  }
+
+inline fun View?.isTouchedAt(x: Float, y: Float) = isTouchedAt(x.toInt(), y.toInt())
+
+inline fun View?.isTouchedAt(x: Int, y: Int) =
+  this?.locationOnScreen?.run { x in left..right && y in top..bottom } ?: false
+
+inline fun ViewGroup.findTouchedChild(view: View, x: Int, y: Int) =
+  view.touchables.find { it.isTouchedAt(x, y) }
+
+/**
+ * Computes the coordinates of this view on the screen.
+ */
+inline val View.locationOnScreen: LocationOnScreen
+  get() = IntArray(2).let {
+    getLocationOnScreen(it)
+    LocationOnScreen(it[0], it[1], it[0] + width, it[1] + height)
+  }
 
 inline fun View.withStyledAttrs(
   set: AttributeSet?,
@@ -29,38 +60,6 @@ inline fun View.withStyledAttrs(
 ) {
   context.obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes).apply(block).recycle()
 }
-
-inline fun View?.isTouchedAt(x: Float, y: Float) = isTouchedAt(x.toInt(), y.toInt())
-
-inline fun View?.isTouchedAt(x: Int, y: Int) =
-  this?.locationOnScreen?.let { location ->
-    x in location[0]..location[2] && y in location[1]..location[3]
-  } ?: false
-
-inline fun View.findTouchedChild(view: View, x: Int, y: Int) =
-  view.touchables.find { it.isTouchedAt(x, y) }
-
-/**
- * Computes the coordinates of this view on the screen, for example:
- * ```
- * val location = locationOnScreen
- * val left = location[0]
- * val top = location[1]
- * val right = location[2]
- * val bottom = location[3]
- * ```
- *
- * @return an array of four integers in which to hold the coordinates
- */
-inline val View.locationOnScreen
-  get() = IntArray(4).apply {
-    val outLocation = IntArray(2)
-    getLocationOnScreen(outLocation)
-    this[0] = outLocation[0]          // left
-    this[1] = outLocation[1]          // top
-    this[2] = outLocation[0] + width  // right
-    this[3] = outLocation[1] + height // bottom
-  }
 
 inline fun View.doOnApplyWindowInsets(noinline action: (View, WindowInsetsCompat) -> WindowInsetsCompat) =
   ViewCompat.setOnApplyWindowInsetsListener(this, action)
@@ -73,3 +72,10 @@ fun <T> viewTags(key: Int) = object : ReadWriteProperty<View, T?> {
   override fun setValue(thisRef: View, property: KProperty<*>, value: T?) =
     thisRef.setTag(key, value)
 }
+
+data class LocationOnScreen(
+  val left: Int,
+  val top: Int,
+  val right: Int,
+  val bottom: Int,
+)

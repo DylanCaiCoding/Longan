@@ -3,32 +3,45 @@
 package com.dylanc.longan
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.FontRes
-import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
+import androidx.annotation.*
 import androidx.core.content.res.ResourcesCompat
 
 /**
  * @author Dylan Cai
  */
 
-inline fun Context.stringOf(@StringRes id: Int) = getString(id)
+inline fun stringRes(@StringRes id: Int) = topActivity.stringRes(id)
 
-inline fun Context.colorOf(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+inline fun colorRes(@ColorRes id: Int, theme: Resources.Theme? = null) =
+  topActivity.colorRes(id, theme)
 
-inline fun Context.drawableOf(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
+inline fun drawableRes(@DrawableRes id: Int, theme: Resources.Theme? = null) =
+  topActivity.drawableRes(id, theme)
 
-inline fun Context.fontOf(@FontRes id: Int) = ResourcesCompat.getFont(this, id)
+inline fun dimenRes(@DimenRes id: Int) = topActivity.dimenRes(id)
 
-inline fun stringOf(@StringRes id: Int) = topActivity.getString(id)
+inline fun fontRes(@FontRes id: Int) = topActivity.fontRes(id)
 
-inline fun colorOf(@ColorRes id: Int) = topActivity.colorOf(id)
+inline fun Context.stringRes(@StringRes id: Int) = lazy {
+  getString(id)
+}
+
+inline fun Context.colorRes(@ColorRes id: Int, theme: Resources.Theme? = null) = lazy {
+  ResourcesCompat.getColor(application.resources, id, theme)
+}
+
+inline fun Context.drawableRes(@DrawableRes id: Int, theme: Resources.Theme? = null) = lazy {
+  ResourcesCompat.getDrawable(application.resources, id, theme)
+}
+
+inline fun Context.dimenRes(@DimenRes id: Int) = lazy {
+  ResourcesCompat.getFloat(application.resources, id)
+}
+
+inline fun Context.fontRes(@FontRes id: Int) = lazy {
+  ResourcesCompat.getFont(this, id)
+}
 
 inline fun colorOf(colorString: String) = Color.parseColor(colorString)
-
-inline fun drawableOf(@DrawableRes id: Int) = topActivity.drawableOf(id)
-
-inline fun fontOf(@FontRes id: Int) = ResourcesCompat.getFont(topActivity, id)

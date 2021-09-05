@@ -11,6 +11,8 @@ import android.os.Looper
 
 val mainHandler = lazy { Handler(Looper.getMainLooper()) }
 
-inline fun mainThread(noinline block: () -> Unit) = mainHandler.value.post(block)
+inline fun mainThread(noinline block: () -> Unit) =
+  mainHandler.value.post(block)
 
-inline fun mainThread(delayMillis: Long, noinline block: () -> Unit) = mainHandler.value.postDelayed(block, delayMillis)
+inline fun mainThread(delayMillis: Long, noinline block: () -> Unit) =
+  mainHandler.value.postDelayed(block, delayMillis)

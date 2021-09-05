@@ -3,6 +3,7 @@
 package com.dylanc.longan
 
 import android.Manifest.permission.ACCESS_NETWORK_STATE
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -20,15 +21,20 @@ import androidx.lifecycle.LiveData
 @Suppress("DEPRECATION")
 @get:RequiresPermission(ACCESS_NETWORK_STATE)
 inline val isNetworkAvailable: Boolean
-  get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-    connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
-      hasCapability(NET_CAPABILITY_INTERNET) && hasCapability(NET_CAPABILITY_VALIDATED)
-    }
-  } else {
-    connectivityManager.activeNetworkInfo?.isConnectedOrConnecting
-  } ?: false
+  get() {
+    val connectivityManager  = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
+        hasCapability(NET_CAPABILITY_INTERNET) && hasCapability(NET_CAPABILITY_VALIDATED)
+      }
+    } else {
+      connectivityManager.activeNetworkInfo?.isConnectedOrConnecting
+    } ?: false
+  }
 
 class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constructor() : LiveData<Boolean>() {
+
+  private val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
   @RequiresPermission(ACCESS_NETWORK_STATE)
   override fun onActive() {
@@ -36,7 +42,7 @@ class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
     when {
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ->
         connectivityManager.registerDefaultNetworkCallback(networkCallback)
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ->
+      else ->
         connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
     }
   }
@@ -57,7 +63,7 @@ class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
   private val networkCallback by lazy {
     object : ConnectivityManager.NetworkCallback() {
       override fun onAvailable(network: Network) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
           postValue(true)
         }
       }

@@ -9,9 +9,6 @@ import androidx.core.app.ShareCompat
  * @author Dylan Cai
  */
 
-inline fun share(mimeType: String, block: ShareCompat.IntentBuilder.() -> Unit) =
-  ShareCompat.IntentBuilder(topActivity).apply { setType(mimeType) }.apply(block).startChooser()
-
 inline fun shareText(content: String, title: String? = null) =
   share("text/plain") {
     setText(content)
@@ -51,3 +48,6 @@ inline fun shareFiles(uris: List<Uri>, title: String? = null, mimeType: String? 
     setChooserTitle(title)
   }
 }
+
+inline fun share(mimeType: String, block: ShareCompat.IntentBuilder.() -> Unit) =
+  ShareCompat.IntentBuilder(topActivity).apply { setType(mimeType) }.apply(block).startChooser()

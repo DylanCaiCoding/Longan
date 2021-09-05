@@ -34,11 +34,3 @@ inline fun Fragment.FragmentStateAdapter(itemCount: Int, crossinline block: (Int
 @Suppress("UNCHECKED_CAST")
 inline fun <T : Fragment> ViewPager2.findFragment(fragmentManager: FragmentManager, position: Int) =
   fragmentManager.findFragmentByTag("f$position") as T?
-
-//@Suppress("UNCHECKED_CAST", "DEPRECATION")
-//inline fun <T : Fragment> ViewPager.getFragment(fragmentManager: FragmentManager, position: Int): T? =
-//  when (adapter) {
-//    is FragmentPagerAdapter -> fragmentManager.findFragmentByTag("android:switcher:$id:$position") as T?
-//    is FragmentStatePagerAdapter -> adapter?.instantiateItem(this, position) as T?
-//    else -> null
-//  }

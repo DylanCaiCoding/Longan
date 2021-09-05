@@ -8,16 +8,17 @@ import android.util.Log
  * @author Dylan Cai
  */
 
+fun initLogger(loggable: Boolean, printer: LoggerPrinter? = null) {
+  Logger.isLoggable = { _, _ -> loggable }
+  printer?.let { Logger.printer = it }
+}
+
 interface Logger {
   val loggerTag: String get() = TAG
 
   companion object {
     var isLoggable = { _: Int, _: String -> true }
     var printer: LoggerPrinter = SimpleLoggerPrinter()
-
-    fun init(loggable: Boolean) {
-      isLoggable = { _, _ -> loggable }
-    }
   }
 }
 

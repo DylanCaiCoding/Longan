@@ -24,6 +24,20 @@ inline fun TextView.isTextEmpty() = textString.isEmpty()
 
 inline fun TextView.isTextNotEmpty() = textString.isNotEmpty()
 
+inline var TextView.isPasswordVisible: Boolean
+  get() = transformationMethod != PasswordTransformationMethod.getInstance()
+  set(value) {
+    transformationMethod = if (value) {
+      HideReturnsTransformationMethod.getInstance()
+    } else {
+      PasswordTransformationMethod.getInstance()
+    }
+  }
+
+inline fun TextView.addUnderline() {
+  paint.flags = Paint.UNDERLINE_TEXT_FLAG
+}
+
 fun TextView.startCountDown(
   lifecycleOwner: LifecycleOwner,
   secondInFuture: Int = 60,
@@ -63,18 +77,4 @@ inline fun TextView.enableWhenTextNotEmpty(vararg textViews: TextView) {
       isEnabled = isAllNotEmpty
     }
   }
-}
-
-inline var TextView.isPasswordVisible: Boolean
-  get() = transformationMethod != PasswordTransformationMethod.getInstance()
-  set(value) {
-    transformationMethod = if (value) {
-      HideReturnsTransformationMethod.getInstance()
-    } else {
-      PasswordTransformationMethod.getInstance()
-    }
-  }
-
-inline fun TextView.showUnderline() {
-  paint.flags = Paint.UNDERLINE_TEXT_FLAG
 }

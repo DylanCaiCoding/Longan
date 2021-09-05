@@ -9,7 +9,10 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.provider.OpenableColumns
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import androidx.lifecycle.LifecycleOwner
 
 
 /**
@@ -28,20 +31,14 @@ inline fun <R> ContentResolver.query(
 ) =
   query(uri, projection, selection, selectionArgs, sortOrder)?.use(block)
 
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-inline fun ContentResolver.update(
-  @RequiresPermission.Write uri: Uri,
-  values: ContentValues? = null,
-  where: String? = null,
-  selectionArgs: Array<String>? = null
-) =
-  update(uri, values, where, selectionArgs)
+inline fun ContentResolver.insert(uri: Uri, crossinline block: ContentValues.() -> Unit = {}) =
+  contentResolver.insert(uri, contentValues(block))
 
 inline fun ContentResolver.update(
   @RequiresPermission.Write uri: Uri,
   where: String? = null,
   selectionArgs: Array<String>? = null,
-  block: ContentValues.() -> Unit
+  crossinline block: ContentValues.() -> Unit
 ) =
   update(uri, contentValues(block), where, selectionArgs)
 
@@ -53,12 +50,13 @@ inline fun ContentResolver.delete(
 ) =
   delete(uri, where, selectionArgs)
 
-inline fun ContentResolver.registerContentObserver(uri: Uri, crossinline block: (Boolean) -> Unit) =
-  registerContentObserver(uri, true, object : ContentObserver(mainHandler.value) {
-    override fun onChange(selfChange: Boolean) = block(selfChange)
-  })
-
 inline fun contentValues(block: ContentValues.() -> Unit) = ContentValues().apply(block)
+
+inline val Cursor.displayNameIndex: Int
+  get() = getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
+
+inline val Cursor.sizeIndex: Int
+  get() = getColumnIndexOrThrow(OpenableColumns.SIZE)
 
 inline var ContentValues.displayName: String?
   get() = get(MediaStore.MediaColumns.DISPLAY_NAME) as String?

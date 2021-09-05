@@ -57,8 +57,10 @@ fun Context.wrap(locale: Locale): ContextWrapper {
 private object LanguageManager : SharedPreferencesOwner {
   private const val KEY_LANGUAGE = "longan_language"
   private const val KEY_COUNTRY = "longan_country"
-  private val language: String? by sharedPreferences()
-  private val country: String? by sharedPreferences()
+  private val language: String?
+    get() = sharedPreferences.getString(KEY_LANGUAGE, null)
+  private val country: String?
+    get() = sharedPreferences.getString(KEY_COUNTRY, null)
 
   var appLanguage: Locale
     get() = language?.let { Locale(it, country.orEmpty()) } ?: systemLanguage

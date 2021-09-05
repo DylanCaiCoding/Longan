@@ -16,14 +16,14 @@ import java.io.FileOutputStream
 
 inline fun Bitmap.toA4PdfDoc() = listOf(this).toA4PdfDoc()
 
-inline fun Bitmap.toPdfDoc(pageWidth: Int, pageHeight: Int) =
-  listOf(this).toPdfDoc(pageWidth, pageHeight)
-
 inline fun List<Bitmap>.toA4PdfDoc(): PdfDocument {
   val pageWidth: Int = PrintAttributes.MediaSize.ISO_A4.widthMils * 72 / 1000
   val pageHeight: Int = if (isNotEmpty()) first().height * pageWidth / first().width else 0
   return toPdfDoc(pageWidth, pageHeight)
 }
+
+inline fun Bitmap.toPdfDoc(pageWidth: Int, pageHeight: Int) =
+  listOf(this).toPdfDoc(pageWidth, pageHeight)
 
 fun List<Bitmap>.toPdfDoc(pageWidth: Int, pageHeight: Int): PdfDocument =
   PdfDocument().also { doc ->

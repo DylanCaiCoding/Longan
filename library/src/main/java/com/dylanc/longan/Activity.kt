@@ -27,7 +27,7 @@ inline fun <reified T : Activity> startActivity(
   vararg pairs: Pair<String, Any?>,
   crossinline block: Intent.() -> Unit = {}
 ) =
-  startActivity(topActivity.intentOf<T>(*pairs).apply(block))
+  topActivity.startActivity<T>(pairs = pairs, block = block)
 
 inline fun <reified T : Activity> Context.startActivity(
   vararg pairs: Pair<String, Any?>,
