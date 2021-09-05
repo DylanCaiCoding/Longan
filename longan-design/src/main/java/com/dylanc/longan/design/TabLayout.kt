@@ -1,6 +1,6 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package com.dylanc.longan
+package com.dylanc.longan.design
 
 import android.view.View
 import androidx.annotation.LayoutRes

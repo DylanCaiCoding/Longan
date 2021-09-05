@@ -1,11 +1,14 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package com.dylanc.longan
+package com.dylanc.longan.design
 
 import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_END
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_START
@@ -36,10 +39,17 @@ inline fun LinearSmoothScroller(context: Context, snapPreference: Int) =
 
 inline fun RecyclerView.Adapter<*>.observeDataEmpty(owner: LifecycleOwner, emptyView: View) {
   val observer = AdapterDataEmptyObserver(this, emptyView)
-  owner.doOnLifecycle(
-    onCreate = { registerAdapterDataObserver(observer) },
-    onDestroy = { unregisterAdapterDataObserver(observer) }
-  )
+  owner.lifecycle.addObserver(object : LifecycleObserver {
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate() {
+      registerAdapterDataObserver(observer)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+      unregisterAdapterDataObserver(observer)
+    }
+  })
 }
 
 class AdapterDataEmptyObserver(
