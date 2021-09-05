@@ -2,9 +2,16 @@ package com.dylanc.longan.sample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.dylanc.longan.*
+import com.dylanc.longan.addStatusBarHeightToMarginTop
+import com.dylanc.longan.design.doOnDismiss
+import com.dylanc.longan.design.multiChoiceSelector
+import com.dylanc.longan.design.selector
+import com.dylanc.longan.design.singleChoiceSelector
+import com.dylanc.longan.immerseStatusBar
+import com.dylanc.longan.pressBackTwiceToExit
 import com.dylanc.longan.sample.adapter.TextAdapter
 import com.dylanc.longan.sample.databinding.ActivityMainBinding
+import com.dylanc.longan.toast
 import com.dylanc.viewbinding.binding
 
 class MainActivity : AppCompatActivity() {

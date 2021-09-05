@@ -2,7 +2,6 @@
 
 package com.dylanc.longan
 
-import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.database.ContentObserver
@@ -12,12 +11,10 @@ import android.os.Build
 import android.os.CancellationSignal
 import android.provider.BaseColumns
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.util.Size
 import android.webkit.MimeTypeMap
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
-import androidx.core.net.UriCompat
 import androidx.lifecycle.LifecycleOwner
 import java.io.File
 import java.io.InputStream
@@ -73,7 +70,7 @@ inline fun queryMediaAudios(
   contentResolver.query(EXTERNAL_AUDIO_URI, projection, selection, selectionArgs, sortOrder, block)
 
 @RequiresApi(Build.VERSION_CODES.Q)
-inline fun queryMediaDownload(
+inline fun queryMediaDownloads(
   projection: Array<String>? = null,
   selection: String? = null,
   selectionArgs: Array<String>? = null,
