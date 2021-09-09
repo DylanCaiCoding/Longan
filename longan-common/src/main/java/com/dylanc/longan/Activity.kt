@@ -4,6 +4,7 @@ package com.dylanc.longan
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.view.View
@@ -113,3 +114,15 @@ inline val Activity.activity: Activity get() = this
 inline val FragmentActivity.fragmentActivity: FragmentActivity get() = this
 
 inline val ComponentActivity.lifecycleOwner: LifecycleOwner get() = this
+
+val Context.activity: Activity?
+  get() {
+    var context: Context = this
+    while (context is ContextWrapper) {
+      if (context is Activity) {
+        return context
+      }
+      context = context.baseContext
+    }
+    return null
+  }

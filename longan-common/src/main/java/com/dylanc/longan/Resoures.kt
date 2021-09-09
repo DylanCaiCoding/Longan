@@ -3,7 +3,6 @@
 package com.dylanc.longan
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import androidx.annotation.*
 import androidx.core.content.res.ResourcesCompat
@@ -14,11 +13,9 @@ import androidx.core.content.res.ResourcesCompat
 
 inline fun stringRes(@StringRes id: Int) = topActivity.stringRes(id)
 
-inline fun colorRes(@ColorRes id: Int, theme: Resources.Theme? = null) =
-  topActivity.colorRes(id, theme)
+inline fun colorRes(@ColorRes id: Int) = topActivity.colorRes(id)
 
-inline fun drawableRes(@DrawableRes id: Int, theme: Resources.Theme? = null) =
-  topActivity.drawableRes(id, theme)
+inline fun drawableRes(@DrawableRes id: Int) = topActivity.drawableRes(id)
 
 inline fun dimenRes(@DimenRes id: Int) = topActivity.dimenRes(id)
 
@@ -28,12 +25,12 @@ inline fun Context.stringRes(@StringRes id: Int) = lazy {
   getString(id)
 }
 
-inline fun Context.colorRes(@ColorRes id: Int, theme: Resources.Theme? = null) = lazy {
-  ResourcesCompat.getColor(application.resources, id, theme)
+inline fun Context.colorRes(@ColorRes id: Int) = lazy {
+  ResourcesCompat.getColor(application.resources, id, null)
 }
 
-inline fun Context.drawableRes(@DrawableRes id: Int, theme: Resources.Theme? = null) = lazy {
-  ResourcesCompat.getDrawable(application.resources, id, theme)
+inline fun Context.drawableRes(@DrawableRes id: Int) = lazy {
+  ResourcesCompat.getDrawable(application.resources, id, null)
 }
 
 inline fun Context.dimenRes(@DimenRes id: Int) = lazy {

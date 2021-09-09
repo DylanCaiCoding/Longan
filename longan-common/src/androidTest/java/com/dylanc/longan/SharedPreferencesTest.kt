@@ -70,13 +70,13 @@ class SharedPreferencesTest {
 }
 
 object DataRepository : SharedPreferencesOwner {
-  var i: Int by sharedPreferences(default = -1)
-  var b: Boolean by sharedPreferences(default = false)
-  var s1: String by sharedPreferences(default = "")
+  var i: Int by sharedPreferences(-1)
+  var b: Boolean by sharedPreferences(false)
+  var s1: String by sharedPreferences("")
   var s2: String? by sharedPreferences()
-  var l: Long by sharedPreferences(default = -1L)
-  var f: Float by sharedPreferences(default = -1f)
-  var set: Set<String> by sharedPreferences(default = emptySet())
+  var l: Long by sharedPreferences(-1L)
+  var f: Float by sharedPreferences(-1f)
+  var set: Set<String> by sharedPreferences(emptySet())
 
   fun clearAll() {
     sharedPreferences.clear()

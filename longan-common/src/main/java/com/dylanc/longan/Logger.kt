@@ -8,8 +8,8 @@ import android.util.Log
  * @author Dylan Cai
  */
 
-fun initLogger(loggable: Boolean, printer: LoggerPrinter? = null) {
-  Logger.isLoggable = { _, _ -> loggable }
+fun initLogger(isLoggable: Boolean = true, printer: LoggerPrinter? = null) {
+  Logger.isLoggable = { _, _ -> isLoggable }
   printer?.let { Logger.printer = it }
 }
 

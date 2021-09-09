@@ -17,10 +17,6 @@ import androidx.core.view.WindowInsetsCompat.Type
 import androidx.fragment.app.Fragment
 
 
-private var View.isAddedMarginTop: Boolean? by viewTags(-1001)
-private var View.isAddedPaddingTop: Boolean? by viewTags(-1002)
-private var View.isAddedMarginBottom: Boolean? by viewTags(-1003)
-
 inline var Fragment.areSystemBarsVisible: Boolean
   get() = activity?.areSystemBarsVisible == true
   set(value) {
