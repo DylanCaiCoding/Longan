@@ -22,23 +22,29 @@ val Material: AlertBuilderFactory<DialogInterface> = { context ->
   }
 }
 
-val Appcompat: AlertBuilderFactory<DialogInterface> = { context ->
+val AppCompat: AlertBuilderFactory<DialogInterface> = { context ->
   object : AlertDialogBuilder() {
     override val builder: AlertDialog.Builder = AlertDialog.Builder(context)
   }
 }
 
-var defaultAlertBuilderFactory: AlertBuilderFactory<*> = Material
-  private set
+private var defaultAlertBuilderFactory: AlertBuilderFactory<*> = Material
 
 fun initAlertBuilderFactory(factory: AlertBuilderFactory<*>) {
   defaultAlertBuilderFactory = factory
 }
 
-inline fun Fragment.alert(
+fun Fragment.alert(
   message: CharSequence,
   title: CharSequence? = null,
-  noinline block: (AlertBuilder<*>.() -> Unit)? = null
+  block: (AlertBuilder<*>.() -> Unit)? = null
+) =
+  alert(defaultAlertBuilderFactory, message, title, block)
+
+fun Context.alert(
+  message: CharSequence,
+  title: CharSequence? = null,
+  block: (AlertBuilder<*>.() -> Unit)? = null
 ) =
   alert(defaultAlertBuilderFactory, message, title, block)
 
@@ -49,13 +55,6 @@ inline fun <D : DialogInterface> Fragment.alert(
   noinline block: (AlertBuilder<D>.() -> Unit)? = null
 ) =
   requireContext().alert(factory, message, title, block)
-
-inline fun Context.alert(
-  message: CharSequence,
-  title: CharSequence? = null,
-  noinline block: (AlertBuilder<*>.() -> Unit)? = null
-) =
-  alert(defaultAlertBuilderFactory, message, title, block)
 
 inline fun <D : DialogInterface> Context.alert(
   factory: AlertBuilderFactory<D>,
@@ -69,10 +68,17 @@ inline fun <D : DialogInterface> Context.alert(
     block?.invoke(this)
   }.show()
 
-inline fun Fragment.selector(
+fun Fragment.selector(
   items: List<CharSequence>,
   title: CharSequence? = null,
-  noinline onItemSelected: (DialogInterface, Int) -> Unit
+  onItemSelected: (DialogInterface, Int) -> Unit
+) =
+  selector(defaultAlertBuilderFactory, items, title, onItemSelected)
+
+fun Context.selector(
+  items: List<CharSequence>,
+  title: CharSequence? = null,
+  onItemSelected: (DialogInterface, Int) -> Unit
 ) =
   selector(defaultAlertBuilderFactory, items, title, onItemSelected)
 
@@ -83,13 +89,6 @@ inline fun <D : DialogInterface> Fragment.selector(
   noinline onItemSelected: (DialogInterface, Int) -> Unit
 ) =
   requireContext().selector(factory, items, title, onItemSelected)
-
-inline fun Context.selector(
-  items: List<CharSequence>,
-  title: CharSequence? = null,
-  noinline onItemSelected: (DialogInterface, Int) -> Unit
-) =
-  selector(defaultAlertBuilderFactory, items, title, onItemSelected)
 
 inline fun <D : DialogInterface> Context.selector(
   factory: AlertBuilderFactory<D>,
@@ -102,11 +101,19 @@ inline fun <D : DialogInterface> Context.selector(
     items(items, onItemSelected)
   }.show()
 
-inline fun Fragment.singleChoiceSelector(
+fun Fragment.singleChoiceSelector(
   items: List<CharSequence>,
   checkIndex: Int,
   title: CharSequence? = null,
-  noinline onItemSelected: (DialogInterface, Int) -> Unit
+  onItemSelected: (DialogInterface, Int) -> Unit
+) =
+  singleChoiceSelector(defaultAlertBuilderFactory, items, checkIndex, title, onItemSelected)
+
+fun Context.singleChoiceSelector(
+  items: List<CharSequence>,
+  checkIndex: Int,
+  title: CharSequence? = null,
+  onItemSelected: (DialogInterface, Int) -> Unit
 ) =
   singleChoiceSelector(defaultAlertBuilderFactory, items, checkIndex, title, onItemSelected)
 
@@ -118,14 +125,6 @@ inline fun <D : DialogInterface> Fragment.singleChoiceSelector(
   noinline onItemSelected: (DialogInterface, Int) -> Unit
 ) =
   requireContext().singleChoiceSelector(factory, items, checkIndex, title, onItemSelected)
-
-inline fun Context.singleChoiceSelector(
-  items: List<CharSequence>,
-  checkIndex: Int,
-  title: CharSequence? = null,
-  noinline onItemSelected: (DialogInterface, Int) -> Unit
-) =
-  singleChoiceSelector(defaultAlertBuilderFactory, items, checkIndex, title, onItemSelected)
 
 inline fun <D : DialogInterface> Context.singleChoiceSelector(
   factory: AlertBuilderFactory<D>,
@@ -139,11 +138,19 @@ inline fun <D : DialogInterface> Context.singleChoiceSelector(
     singleChoiceItems(items, checkIndex, onItemSelected)
   }.show()
 
-inline fun Fragment.multiChoiceSelector(
+fun Fragment.multiChoiceSelector(
   items: List<CharSequence>,
   checkItems: BooleanArray,
   title: CharSequence? = null,
-  noinline onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
+  onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
+) =
+  multiChoiceSelector(defaultAlertBuilderFactory, items, checkItems, title, onItemSelected)
+
+fun Context.multiChoiceSelector(
+  items: List<CharSequence>,
+  checkItems: BooleanArray,
+  title: CharSequence? = null,
+  onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
 ) =
   multiChoiceSelector(defaultAlertBuilderFactory, items, checkItems, title, onItemSelected)
 
@@ -155,14 +162,6 @@ inline fun <D : DialogInterface> Fragment.multiChoiceSelector(
   noinline onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
 ) =
   requireContext().multiChoiceSelector(factory, items, checkItems, title, onItemSelected)
-
-inline fun Context.multiChoiceSelector(
-  items: List<CharSequence>,
-  checkItems: BooleanArray,
-  title: CharSequence? = null,
-  noinline onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
-) =
-  multiChoiceSelector(defaultAlertBuilderFactory, items, checkItems, title, onItemSelected)
 
 inline fun <D : DialogInterface> Context.multiChoiceSelector(
   factory: AlertBuilderFactory<D>,
