@@ -64,17 +64,17 @@ fun TextView.startCountDown(
   })
 }
 
-inline fun TextView.enableWhenTextNotEmpty(vararg textViews: TextView) {
+inline fun TextView.enableWhenOtherTextNotEmpty(vararg textViews: TextView) =
+  enableWhenOtherTextChanged(*textViews) { textViews.all { it.isTextNotEmpty() } }
+
+inline fun TextView.enableWhenOtherTextChanged(
+  vararg textViews: TextView,
+  crossinline block: (Array<out TextView>) -> Boolean
+) {
+  isEnabled = block(textViews)
   textViews.forEach {
     it.doAfterTextChanged {
-      var isAllNotEmpty = true
-      for (textView in textViews) {
-        if (textView.isTextEmpty()) {
-          isAllNotEmpty = false
-          break
-        }
-      }
-      isEnabled = isAllNotEmpty
+      isEnabled = block(textViews)
     }
   }
 }
