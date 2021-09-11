@@ -13,11 +13,11 @@ import androidx.viewpager2.widget.ViewPager2
  * @author Dylan Cai
  */
 
-inline fun FragmentActivity.FragmentStateAdapter(fragmentList: List<Fragment>) =
-  FragmentStateAdapter(fragmentList.size) { fragmentList[it] }
+inline fun FragmentActivity.FragmentStateAdapter(vararg fragments: Fragment) =
+  FragmentStateAdapter(fragments.size) { fragments[it] }
 
-inline fun Fragment.FragmentStateAdapter(fragmentList: List<Fragment>) =
-  FragmentStateAdapter(fragmentList.size) { fragmentList[it] }
+inline fun Fragment.FragmentStateAdapter(vararg fragments: Fragment) =
+  FragmentStateAdapter(fragments.size) { fragments[it] }
 
 inline fun FragmentActivity.FragmentStateAdapter(itemCount: Int, crossinline block: (Int) -> Fragment) =
   object : FragmentStateAdapter(this) {
