@@ -85,16 +85,16 @@ val statusBarHeight: Int
       }
     }
 
-inline fun Fragment.immerseStatusBar(lightMode: Boolean = true) =
-  activity?.immerseStatusBar(lightMode)
+inline fun Fragment.immerseStatusBar(lightMode: Boolean = true, addPaddingBottom: Boolean = true) =
+  activity?.immerseStatusBar(lightMode, addPaddingBottom)
 
-inline fun Activity.immerseStatusBar(lightMode: Boolean = true) {
+inline fun Activity.immerseStatusBar(lightMode: Boolean = true, addPaddingBottom: Boolean = true) {
   WindowCompat.setDecorFitsSystemWindows(window, false)
   WindowCompat.getInsetsController(window, window.decorView)?.systemBarsBehavior =
     WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
   transparentStatusBar()
   isLightStatusBar = lightMode
-  contentView.addNavigationBarHeightToMarginBottom()
+  if (addPaddingBottom) contentView.addNavigationBarHeightToMarginBottom()
 }
 
 inline fun Fragment.transparentStatusBar() =

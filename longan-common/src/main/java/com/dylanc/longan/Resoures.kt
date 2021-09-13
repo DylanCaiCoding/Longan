@@ -4,6 +4,7 @@ package com.dylanc.longan
 
 import android.content.Context
 import android.graphics.Color
+import android.view.View
 import androidx.annotation.*
 import androidx.core.content.res.ResourcesCompat
 
@@ -11,34 +12,48 @@ import androidx.core.content.res.ResourcesCompat
  * @author Dylan Cai
  */
 
-inline fun stringRes(@StringRes id: Int) = topActivity.stringRes(id)
+inline fun View.stringRes(@StringRes id: Int) = context.stringRes(id)
 
-inline fun colorRes(@ColorRes id: Int) = topActivity.colorRes(id)
+inline fun Context.stringRes(@StringRes id: Int) = lazy { getString(id) }
 
-inline fun drawableRes(@DrawableRes id: Int) = topActivity.drawableRes(id)
+inline fun View.colorRes(@ColorRes id: Int) = context.colorRes(id)
 
-inline fun dimenRes(@DimenRes id: Int) = topActivity.dimenRes(id)
+inline fun Context.colorRes(@ColorRes id: Int) = lazy { getCompatColor(id) }
 
-inline fun fontRes(@FontRes id: Int) = topActivity.fontRes(id)
+inline fun View.drawableRes(@DrawableRes id: Int) = context.drawableRes(id)
 
-inline fun Context.stringRes(@StringRes id: Int) = lazy {
-  getString(id)
-}
+inline fun Context.drawableRes(@DrawableRes id: Int) = lazy { getCompatDrawable(id) }
 
-inline fun Context.colorRes(@ColorRes id: Int) = lazy {
-  ResourcesCompat.getColor(application.resources, id, null)
-}
+inline fun View.dimenRes(@DimenRes id: Int) = context.dimenRes(id)
 
-inline fun Context.drawableRes(@DrawableRes id: Int) = lazy {
-  ResourcesCompat.getDrawable(application.resources, id, null)
-}
+inline fun Context.dimenRes(@DimenRes id: Int) = lazy { getCompatDimen(id) }
 
-inline fun Context.dimenRes(@DimenRes id: Int) = lazy {
-  ResourcesCompat.getFloat(application.resources, id)
-}
+inline fun View.fontRes(@FontRes id: Int) = context.fontRes(id)
 
-inline fun Context.fontRes(@FontRes id: Int) = lazy {
+inline fun Context.fontRes(@FontRes id: Int) = lazy { getCompatFont(id) }
+
+inline fun View.getCompatColor(@ColorRes id: Int) =
+  context.getCompatColor(id)
+
+inline fun Context.getCompatColor(@ColorRes id: Int) =
+  ResourcesCompat.getColor(resources, id, null)
+
+inline fun View.getCompatDrawable(@DrawableRes id: Int) =
+  context.getCompatDrawable(id)
+
+inline fun Context.getCompatDrawable(@DrawableRes id: Int) =
+  ResourcesCompat.getDrawable(resources, id, null)
+
+inline fun View.getCompatDimen(@DimenRes id: Int) =
+  context.getCompatDimen(id)
+
+inline fun Context.getCompatDimen(@DimenRes id: Int) =
+  ResourcesCompat.getFloat(resources, id)
+
+inline fun View.getCompatFont(@FontRes id: Int) =
+  context.getCompatFont(id)
+
+inline fun Context.getCompatFont(@FontRes id: Int) =
   ResourcesCompat.getFont(this, id)
-}
 
-inline fun colorOf(colorString: String) = Color.parseColor(colorString)
+inline fun parseColor(colorString: String) = Color.parseColor(colorString)
