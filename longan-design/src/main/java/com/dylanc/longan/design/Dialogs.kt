@@ -101,6 +101,39 @@ inline fun <D : DialogInterface> Context.selector(
     items(items, onItemSelected)
   }.show()
 
+fun <T> Fragment.selector(
+  items: List<T>,
+  title: CharSequence? = null,
+  onItemSelected: (DialogInterface, T, Int) -> Unit
+) =
+  selector(defaultAlertBuilderFactory, items, title, onItemSelected)
+
+fun <T> Context.selector(
+  items: List<T>,
+  title: CharSequence? = null,
+  onItemSelected: (DialogInterface, T, Int) -> Unit
+) =
+  selector(defaultAlertBuilderFactory, items, title, onItemSelected)
+
+inline fun <D : DialogInterface, T> Fragment.selector(
+  factory: AlertBuilderFactory<D>,
+  items: List<T>,
+  title: CharSequence? = null,
+  noinline onItemSelected: (DialogInterface, T, Int) -> Unit
+) =
+  requireContext().selector(factory, items, title, onItemSelected)
+
+inline fun <D : DialogInterface, T> Context.selector(
+  factory: AlertBuilderFactory<D>,
+  items: List<T>,
+  title: CharSequence? = null,
+  noinline onItemSelected: (DialogInterface, T, Int) -> Unit
+) =
+  alertDialog(factory) {
+    title?.let { this.title = it }
+    items(items, onItemSelected)
+  }.show()
+
 fun Fragment.singleChoiceSelector(
   items: List<CharSequence>,
   checkIndex: Int,
@@ -138,11 +171,48 @@ inline fun <D : DialogInterface> Context.singleChoiceSelector(
     singleChoiceItems(items, checkIndex, onItemSelected)
   }.show()
 
+fun <T> Fragment.singleChoiceSelector(
+  items: List<T>,
+  checkIndex: Int,
+  title: CharSequence? = null,
+  onItemSelected: (DialogInterface, T, Int) -> Unit
+) =
+  singleChoiceSelector(defaultAlertBuilderFactory, items, checkIndex, title, onItemSelected)
+
+fun <T> Context.singleChoiceSelector(
+  items: List<T>,
+  checkIndex: Int,
+  title: CharSequence? = null,
+  onItemSelected: (DialogInterface, T, Int) -> Unit
+) =
+  singleChoiceSelector(defaultAlertBuilderFactory, items, checkIndex, title, onItemSelected)
+
+inline fun <D : DialogInterface, T> Fragment.singleChoiceSelector(
+  factory: AlertBuilderFactory<D>,
+  items: List<T>,
+  checkIndex: Int,
+  title: CharSequence? = null,
+  noinline onItemSelected: (DialogInterface, T, Int) -> Unit
+) =
+  requireContext().singleChoiceSelector(factory, items, checkIndex, title, onItemSelected)
+
+inline fun <D : DialogInterface, T> Context.singleChoiceSelector(
+  factory: AlertBuilderFactory<D>,
+  items: List<T>,
+  checkIndex: Int,
+  title: CharSequence? = null,
+  noinline onItemSelected: (DialogInterface, T, Int) -> Unit
+) =
+  alertDialog(factory) {
+    title?.let { this.title = it }
+    singleChoiceItems(items, checkIndex, onItemSelected)
+  }.show()
+
 fun Fragment.multiChoiceSelector(
   items: List<CharSequence>,
   checkItems: BooleanArray,
   title: CharSequence? = null,
-  onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
+  onItemSelected: (DialogInterface, Int, Boolean) -> Unit
 ) =
   multiChoiceSelector(defaultAlertBuilderFactory, items, checkItems, title, onItemSelected)
 
@@ -150,7 +220,7 @@ fun Context.multiChoiceSelector(
   items: List<CharSequence>,
   checkItems: BooleanArray,
   title: CharSequence? = null,
-  onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
+  onItemSelected: (DialogInterface, Int, Boolean) -> Unit
 ) =
   multiChoiceSelector(defaultAlertBuilderFactory, items, checkItems, title, onItemSelected)
 
@@ -159,7 +229,7 @@ inline fun <D : DialogInterface> Fragment.multiChoiceSelector(
   items: List<CharSequence>,
   checkItems: BooleanArray,
   title: CharSequence? = null,
-  noinline onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
+  noinline onItemSelected: (DialogInterface, Int, Boolean) -> Unit
 ) =
   requireContext().multiChoiceSelector(factory, items, checkItems, title, onItemSelected)
 
@@ -168,12 +238,52 @@ inline fun <D : DialogInterface> Context.multiChoiceSelector(
   items: List<CharSequence>,
   checkItems: BooleanArray,
   title: CharSequence? = null,
-  noinline onItemSelected: (dialog: DialogInterface, index: Int, Boolean) -> Unit
+  noinline onItemSelected: (DialogInterface, Int, Boolean) -> Unit
 ) =
   alertDialog(factory) {
     title?.let { this.title = it }
     multiChoiceItems(items, checkItems, onItemSelected)
   }.show()
+
+fun <T> Fragment.multiChoiceSelector(
+  items: List<T>,
+  checkItems: BooleanArray,
+  title: CharSequence? = null,
+  onItemSelected: (DialogInterface, T, Int, Boolean) -> Unit
+) =
+  multiChoiceSelector(defaultAlertBuilderFactory, items, checkItems, title, onItemSelected)
+
+fun <T> Context.multiChoiceSelector(
+  items: List<T>,
+  checkItems: BooleanArray,
+  title: CharSequence? = null,
+  onItemSelected: (DialogInterface, T, Int, Boolean) -> Unit
+) =
+  multiChoiceSelector(defaultAlertBuilderFactory, items, checkItems, title, onItemSelected)
+
+inline fun <D : DialogInterface, T> Fragment.multiChoiceSelector(
+  factory: AlertBuilderFactory<D>,
+  items: List<T>,
+  checkItems: BooleanArray,
+  title: CharSequence? = null,
+  noinline onItemSelected: (DialogInterface, T, Int, Boolean) -> Unit
+) =
+  requireContext().multiChoiceSelector(factory, items, checkItems, title, onItemSelected)
+
+inline fun <D : DialogInterface, T> Context.multiChoiceSelector(
+  factory: AlertBuilderFactory<D>,
+  items: List<T>,
+  checkItems: BooleanArray,
+  title: CharSequence? = null,
+  noinline onItemSelected: (DialogInterface, T, Int, Boolean) -> Unit
+) =
+  alertDialog(factory) {
+    title?.let { this.title = it }
+    multiChoiceItems(items, checkItems, onItemSelected)
+  }.show()
+
+fun <D : DialogInterface> Context.alertDialog(block: AlertBuilder<*>.() -> Unit) =
+  alertDialog(defaultAlertBuilderFactory, block)
 
 inline fun <D : DialogInterface> Context.alertDialog(
   factory: AlertBuilderFactory<D>,
