@@ -14,6 +14,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import java.util.*
@@ -103,6 +105,14 @@ inline fun ComponentActivity.pressBackToNotExit() {
 
 inline fun Context.checkPermission(permission: String) =
   ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
+
+inline val Activity.windowInsetsControllerCompat: WindowInsetsControllerCompat?
+  get() = WindowCompat.getInsetsController(window, window.decorView)
+
+var Activity.decorFitsSystemWindows: Boolean
+  @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+  get() = noGetter()
+  set(value) = WindowCompat.setDecorFitsSystemWindows(window, value)
 
 inline val Activity.contentView: View
   get() = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0)

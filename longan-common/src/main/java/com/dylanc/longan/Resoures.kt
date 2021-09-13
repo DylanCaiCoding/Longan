@@ -12,26 +12,6 @@ import androidx.core.content.res.ResourcesCompat
  * @author Dylan Cai
  */
 
-inline fun View.stringRes(@StringRes id: Int) = context.stringRes(id)
-
-inline fun Context.stringRes(@StringRes id: Int) = lazy { getString(id) }
-
-inline fun View.colorRes(@ColorRes id: Int) = context.colorRes(id)
-
-inline fun Context.colorRes(@ColorRes id: Int) = lazy { getCompatColor(id) }
-
-inline fun View.drawableRes(@DrawableRes id: Int) = context.drawableRes(id)
-
-inline fun Context.drawableRes(@DrawableRes id: Int) = lazy { getCompatDrawable(id) }
-
-inline fun View.dimenRes(@DimenRes id: Int) = context.dimenRes(id)
-
-inline fun Context.dimenRes(@DimenRes id: Int) = lazy { getCompatDimen(id) }
-
-inline fun View.fontRes(@FontRes id: Int) = context.fontRes(id)
-
-inline fun Context.fontRes(@FontRes id: Int) = lazy { getCompatFont(id) }
-
 inline fun View.getCompatColor(@ColorRes id: Int) =
   context.getCompatColor(id)
 
@@ -55,5 +35,8 @@ inline fun View.getCompatFont(@FontRes id: Int) =
 
 inline fun Context.getCompatFont(@FontRes id: Int) =
   ResourcesCompat.getFont(this, id)
+
+inline fun View.getString(@StringRes id: Int) =
+  context.getString(id)
 
 inline fun parseColor(colorString: String) = Color.parseColor(colorString)

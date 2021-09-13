@@ -17,20 +17,6 @@ import androidx.core.view.WindowInsetsCompat.Type
 import androidx.fragment.app.Fragment
 
 
-inline var Fragment.areSystemBarsVisible: Boolean
-  get() = activity?.areSystemBarsVisible == true
-  set(value) {
-    activity?.areSystemBarsVisible = value
-  }
-
-inline var Activity.areSystemBarsVisible: Boolean
-  get() = ViewCompat.getRootWindowInsets(window.decorView)?.isVisible(Type.systemBars()) == true
-  set(value) {
-    WindowCompat.getInsetsController(window, window.decorView)?.run {
-      if (value) show(Type.systemBars()) else hide(Type.systemBars())
-    }
-  }
-
 inline var Fragment.isLightStatusBar: Boolean
   get() = activity?.isLightStatusBar == true
   set(value) {
@@ -38,9 +24,9 @@ inline var Fragment.isLightStatusBar: Boolean
   }
 
 inline var Activity.isLightStatusBar: Boolean
-  get() = WindowCompat.getInsetsController(window, window.decorView)?.isAppearanceLightStatusBars == true
+  get() = windowInsetsControllerCompat?.isAppearanceLightStatusBars == true
   set(value) {
-    WindowCompat.getInsetsController(window, window.decorView)?.isAppearanceLightStatusBars = value
+    windowInsetsControllerCompat?.isAppearanceLightStatusBars = value
   }
 
 inline var Fragment.statusBarColor: Int
@@ -63,9 +49,9 @@ inline var Fragment.isStatusBarVisible: Boolean
   }
 
 inline var Activity.isStatusBarVisible: Boolean
-  get() = ViewCompat.getRootWindowInsets(window.decorView)?.isVisible(Type.statusBars()) == true
+  get() = window.decorView.rootWindowInsetsCompat?.isVisible(Type.statusBars()) == true
   set(value) {
-    WindowCompat.getInsetsController(window, window.decorView)?.run {
+    windowInsetsControllerCompat?.run {
       if (value) show(Type.statusBars()) else hide(Type.statusBars())
     }
   }
@@ -85,16 +71,15 @@ val statusBarHeight: Int
       }
     }
 
-inline fun Fragment.immerseStatusBar(lightMode: Boolean = true, addPaddingBottom: Boolean = true) =
-  activity?.immerseStatusBar(lightMode, addPaddingBottom)
+inline fun Fragment.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) =
+  activity?.immerseStatusBar(lightMode, addBottomMargin)
 
-inline fun Activity.immerseStatusBar(lightMode: Boolean = true, addPaddingBottom: Boolean = true) {
-  WindowCompat.setDecorFitsSystemWindows(window, false)
-  WindowCompat.getInsetsController(window, window.decorView)?.systemBarsBehavior =
-    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+inline fun Activity.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) {
+  decorFitsSystemWindows = false
+  windowInsetsControllerCompat?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
   transparentStatusBar()
   isLightStatusBar = lightMode
-  if (addPaddingBottom) contentView.addNavigationBarHeightToMarginBottom()
+  if (addBottomMargin) contentView.addNavigationBarHeightToMarginBottom()
 }
 
 inline fun Fragment.transparentStatusBar() =
@@ -149,9 +134,9 @@ inline var Fragment.isLightNavigationBar: Boolean
   }
 
 inline var Activity.isLightNavigationBar: Boolean
-  get() = WindowCompat.getInsetsController(window, window.decorView)?.isAppearanceLightNavigationBars == true
+  get() = windowInsetsControllerCompat?.isAppearanceLightNavigationBars == true
   set(value) {
-    WindowCompat.getInsetsController(window, window.decorView)?.isAppearanceLightNavigationBars = value
+    windowInsetsControllerCompat?.isAppearanceLightNavigationBars = value
   }
 
 inline var Fragment.navigationBarColor: Int
@@ -175,19 +160,18 @@ inline var Fragment.isNavigationBarVisible: Boolean
 inline var Activity.isNavigationBarVisible: Boolean
   get() = window.decorView.isNavigationBarVisible
   set(value) {
-    WindowCompat.getInsetsController(window, window.decorView)?.run {
+    windowInsetsControllerCompat?.run {
       if (value) show(Type.navigationBars()) else hide(Type.navigationBars())
     }
   }
 
 inline val View.isNavigationBarVisible: Boolean
-  get() = ViewCompat.getRootWindowInsets(this)?.isVisible(Type.navigationBars()) == true
+  get() = rootWindowInsetsCompat?.isVisible(Type.navigationBars()) == true
 
 inline val navigationBarHeight: Int
   get() =
-    application.resources.getIdentifier("navigation_bar_height", "dimen", "android").let {
-      if (it > 0) application.resources.getDimensionPixelSize(it) else 0
-    }
+    application.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+      .let { if (it > 0) application.resources.getDimensionPixelSize(it) else 0 }
 
 fun View.addNavigationBarHeightToMarginBottom() = post {
   if (isNavigationBarVisible && isAddedMarginBottom != true) {

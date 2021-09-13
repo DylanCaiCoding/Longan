@@ -5,7 +5,6 @@ package com.dylanc.longan
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
@@ -43,9 +42,9 @@ inline fun List<View>.doOnSingleClick(
 
 fun View.doOnSingleClick(intervals: Int = 500, isSharingIntervals: Boolean = false, block: () -> Unit) =
   setOnClickListener {
-    val view: View = if (isSharingIntervals) context.activity?.window?.decorView ?: this else this
+    val view = if (isSharingIntervals) context.activity?.window?.decorView ?: this else this
     val currentTime = System.currentTimeMillis()
-    val lastTime: Long = view.lastClickTime ?: 0L
+    val lastTime = view.lastClickTime ?: 0L
     if (currentTime - lastTime > intervals) {
       view.lastClickTime = currentTime
       block()
@@ -57,8 +56,8 @@ inline fun View?.isTouchedAt(x: Float, y: Float) = isTouchedAt(x.toInt(), y.toIn
 inline fun View?.isTouchedAt(x: Int, y: Int) =
   this?.locationOnScreen?.run { x in left..right && y in top..bottom } ?: false
 
-inline fun ViewGroup.findTouchedChild(view: View, x: Int, y: Int) =
-  view.touchables.find { it.isTouchedAt(x, y) }
+inline fun View.findTouchedChild(x: Int, y: Int) =
+  touchables.find { it.isTouchedAt(x, y) }
 
 /**
  * Computes the coordinates of this view on the screen.
@@ -78,6 +77,10 @@ inline fun View.withStyledAttrs(
 ) {
   context.obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes).apply(block).recycle()
 }
+
+inline val View.rootWindowInsetsCompat get() = ViewCompat.getRootWindowInsets(this)
+
+inline val View.windowInsetsControllerCompat get() = ViewCompat.getWindowInsetsController(this)
 
 inline fun View.doOnApplyWindowInsets(noinline action: (View, WindowInsetsCompat) -> WindowInsetsCompat) =
   ViewCompat.setOnApplyWindowInsetsListener(this, action)

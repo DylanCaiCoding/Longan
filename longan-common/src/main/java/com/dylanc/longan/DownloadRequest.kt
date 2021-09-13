@@ -8,14 +8,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import kotlin.DeprecationLevel.ERROR
 
 
-inline fun downloadRequest(url: String, block: DownloadRequestBuilder.() -> Unit) =
-  DownloadRequestBuilder(url).apply(block)
+fun download(url: String, block: DownloadRequestBuilder.() -> Unit): BroadcastReceiver? =
+  DownloadRequestBuilder(url).apply(block).build()
 
 class DownloadRequestBuilder(url: String) {
   private val request = DownloadManager.Request(Uri.parse(url))
+  private var onComplete: ((Uri) -> Unit)? = null
 
   var title: CharSequence
     @Deprecated(NO_GETTER, level = ERROR)
@@ -45,11 +47,11 @@ class DownloadRequestBuilder(url: String) {
       request.setAllowedNetworkTypes(value)
     }
 
-  var notificationVisibility: Int
+  var allowedOverOverMetered: Boolean
     @Deprecated(NO_GETTER, level = ERROR)
     get() = noGetter()
     set(value) {
-      request.setNotificationVisibility(value)
+      request.setAllowedOverMetered(value)
     }
 
   var allowedOverRoaming: Boolean
@@ -57,6 +59,31 @@ class DownloadRequestBuilder(url: String) {
     get() = noGetter()
     set(value) {
       request.setAllowedOverRoaming(value)
+    }
+
+  var notificationVisibility: Int
+    @Deprecated(NO_GETTER, level = ERROR)
+    get() = noGetter()
+    set(value) {
+      request.setNotificationVisibility(value)
+    }
+
+  var requiresCharging: Boolean
+    @Deprecated(NO_GETTER, level = ERROR)
+    get() = noGetter()
+    set(value) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        request.setRequiresCharging(value)
+      }
+    }
+
+  var requiresDeviceIdle: Boolean
+    @Deprecated(NO_GETTER, level = ERROR)
+    get() = noGetter()
+    set(value) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        request.setRequiresDeviceIdle(value)
+      }
     }
 
   var destinationUri: Uri
@@ -78,11 +105,15 @@ class DownloadRequestBuilder(url: String) {
     request.setDestinationInExternalPublicDir(dirType, subPath)
   }
 
-  fun download(onComplete: (Uri) -> Unit): DownloadCompleteReceiver {
+  fun onComplete(block: (Uri) -> Unit) {
+    onComplete = block
+  }
+
+  internal fun build(): BroadcastReceiver? {
     val downloadManager = application.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     val downloadId = downloadManager.enqueue(request)
     //TODO 支持监听下载进度，暂停下载
-    return DownloadCompleteReceiver(downloadId, onComplete).also {
+    return onComplete?.let { DownloadCompleteReceiver(downloadId, it) }?.also {
       application.registerReceiver(it, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
     }
   }
