@@ -3,7 +3,6 @@
 package com.dylanc.longan
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -12,7 +11,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Process
 import android.provider.Settings

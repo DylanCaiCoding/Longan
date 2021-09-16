@@ -31,7 +31,7 @@ class DownloadRequestBuilder internal constructor(url: String) {
   private val request = DownloadManager.Request(Uri.parse(url))
   private val downloadManager = application.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
   private var onComplete: ((Uri) -> Unit)? = null
-  private var onProgress: ((downloadedSize: Int, totalSize: Int, status: Int) -> Unit)? = null
+  private var onChange: ((downloadedSize: Int, totalSize: Int, status: Int) -> Unit)? = null
   private var scheduleExecutor: ScheduledExecutorService? = null
   private var progressObserver: ContentObserver? = null
   private var downloadId: Long = -1
@@ -126,13 +126,13 @@ class DownloadRequestBuilder internal constructor(url: String) {
     onComplete = block
   }
 
-  fun onProgress(block: (downloadedSize: Int, totalSize: Int, status: Int) -> Unit) {
-    onProgress = block
+  fun onChange(block: (downloadedSize: Int, totalSize: Int, status: Int) -> Unit) {
+    onChange = block
   }
 
   internal fun build() {
     downloadId = downloadManager.enqueue(request)
-    progressObserver = onProgress?.let { DownloadProgressObserver() }?.also {
+    progressObserver = onChange?.let { DownloadProgressObserver() }?.also {
       contentResolver.registerContentObserver(Uri.parse("content://downloads/my_downloads"), true, it)
     }
     application.registerReceiver(DownloadCompleteReceiver(), IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
@@ -150,7 +150,7 @@ class DownloadRequestBuilder internal constructor(url: String) {
             val downloadedSize = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
             val totalSize = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
             val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-            onProgress?.invoke(downloadedSize, totalSize, status)
+            onChange?.invoke(downloadedSize, totalSize, status)
           }
         }
       }, 0, 2, TimeUnit.SECONDS)

@@ -1,4 +1,4 @@
 rootProject.name = "Longan"
-include ':longan-common'
+include ':longan'
 include ':longan-design'
 include ':sample'

@@ -4,15 +4,12 @@ package com.dylanc.longan
 
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-import androidx.lifecycle.LifecycleOwner
 
 
 /**
