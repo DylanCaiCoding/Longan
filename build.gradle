@@ -11,10 +11,6 @@ buildscript {
     }
 }
 
-plugins {
-    id("io.gitlab.arturbosch.detekt").version("1.13.1")
-}
-
 allprojects {
     repositories {
         google()
@@ -25,28 +21,4 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-detekt {
-    toolVersion = "1.18.0"
-    config = files("config/detekt/detekt.yml")
-    // failFast = true // fail build on any finding
-    buildUponDefaultConfig = true // preconfigure defaults
-
-    reports {
-        reports {
-            xml {
-                enabled = true
-                destination = file("path/to/destination.xml")
-            }
-            html {
-                enabled = true
-                destination = file("path/to/destination.html")
-            }
-            txt {
-                enabled = true
-                destination = file("path/to/destination.txt")
-            }
-        }
-    }
 }
