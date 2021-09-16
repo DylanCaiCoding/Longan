@@ -1,4 +1,4 @@
-package com.dylanc.longan.sample
+package com.dylanc.longan.sample.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +9,12 @@ import com.dylanc.longan.design.selector
 import com.dylanc.longan.design.singleChoiceSelector
 import com.dylanc.longan.immerseStatusBar
 import com.dylanc.longan.pressBackTwiceToExit
+import com.dylanc.longan.sample.R
 import com.dylanc.longan.sample.adapter.TextAdapter
 import com.dylanc.longan.sample.databinding.ActivityMainBinding
 import com.dylanc.longan.toast
 import com.dylanc.viewbinding.binding
+import org.jetbrains.anko.alert
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity() {
       adapter.submitList(items)
     }
     pressBackTwiceToExit("再次点击退出应用")
+    alert {  }
   }
 
   private fun onItemClick(id: Int) {

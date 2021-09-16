@@ -282,7 +282,7 @@ inline fun <D : DialogInterface, T> Context.multiChoiceSelector(
     multiChoiceItems(items, checkItems, onItemSelected)
   }.show()
 
-fun <D : DialogInterface> Context.alertDialog(block: AlertBuilder<*>.() -> Unit) =
+fun Context.alertDialog(block: AlertBuilder<*>.() -> Unit) =
   alertDialog(defaultAlertBuilderFactory, block)
 
 inline fun <D : DialogInterface> Context.alertDialog(

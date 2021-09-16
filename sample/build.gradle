@@ -51,6 +51,8 @@ dependencies {
     implementation 'com.github.DylanCaiCoding.ViewBindingKTX:viewbinding-ktx:1.2.4'
     implementation "org.jetbrains.anko:anko:0.10.8"
     implementation "org.jetbrains.anko:anko-design:0.10.8"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.2.1"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
