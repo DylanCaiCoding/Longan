@@ -12,10 +12,24 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.annotation.ColorInt
-import androidx.core.view.*
 import androidx.core.view.WindowInsetsCompat.Type
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 
+
+inline fun Fragment.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) =
+  activity?.immerseStatusBar(lightMode, addBottomMargin)
+
+inline fun Activity.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) {
+  decorFitsSystemWindows = false
+  windowInsetsControllerCompat?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+  transparentStatusBar()
+  isLightStatusBar = lightMode
+  if (addBottomMargin) contentView.addNavigationBarHeightToMarginBottom()
+}
 
 inline var Fragment.isLightStatusBar: Boolean
   get() = activity?.isLightStatusBar == true
@@ -70,17 +84,6 @@ val statusBarHeight: Int
         }
       }
     }
-
-inline fun Fragment.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) =
-  activity?.immerseStatusBar(lightMode, addBottomMargin)
-
-inline fun Activity.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) {
-  decorFitsSystemWindows = false
-  windowInsetsControllerCompat?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-  transparentStatusBar()
-  isLightStatusBar = lightMode
-  if (addBottomMargin) contentView.addNavigationBarHeightToMarginBottom()
-}
 
 inline fun Fragment.transparentStatusBar() =
   activity?.immerseStatusBar()

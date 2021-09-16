@@ -117,14 +117,6 @@ var Activity.decorFitsSystemWindows: Boolean
 inline val Activity.contentView: View
   get() = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0)
 
-inline val Context.context: Context get() = this
-
-inline val Activity.activity: Activity get() = this
-
-inline val FragmentActivity.fragmentActivity: FragmentActivity get() = this
-
-inline val ComponentActivity.lifecycleOwner: LifecycleOwner get() = this
-
 val Context.activity: Activity?
   get() {
     var context: Context = this
@@ -136,3 +128,11 @@ val Context.activity: Activity?
     }
     return null
   }
+
+inline val Context.context: Context get() = this
+
+inline val Activity.activity: Activity get() = this
+
+inline val FragmentActivity.fragmentActivity: FragmentActivity get() = this
+
+inline val ComponentActivity.lifecycleOwner: LifecycleOwner get() = this

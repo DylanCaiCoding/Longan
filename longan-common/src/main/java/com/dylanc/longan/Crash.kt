@@ -3,16 +3,18 @@
 package com.dylanc.longan
 
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author Dylan Cai
  */
 inline fun saveCrashLogLocally(dirPath: String = cacheDirPath) {
   handleUncaughtException { thread, e ->
-    val time = nowLocalDateTime.format("yyyy-MM-dd HH:mm:ss")
-    val file = File(dirPath, "crash_${time.replace(" ", "_")}.txt")
+    val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+    val file = File(dirPath, "crash_${dateTime.replace(" ", "_")}.txt")
     file.print {
-      println("Time:          $time")
+      println("Time:          $dateTime")
       println("App version:   $appVersionName ($appVersionCode)")
       println("OS version:    Android $sdkVersionName ($sdkVersionCode)")
       println("Manufacturer:  $deviceManufacturer")

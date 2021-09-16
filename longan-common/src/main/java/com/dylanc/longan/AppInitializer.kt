@@ -1,4 +1,4 @@
-@file:Suppress("unused", "ObjectPropertyName")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -7,7 +7,6 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.startup.Initializer
-import com.jakewharton.threetenabp.AndroidThreeTen
 
 /**
  * @author Dylan Cai
@@ -18,7 +17,6 @@ internal class AppInitializer : Initializer<Unit> {
   override fun create(context: Context) {
     application = context as Application
     application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
-    AndroidThreeTen.init(application)
   }
 
   override fun dependencies() = emptyList<Class<Initializer<*>>>()
