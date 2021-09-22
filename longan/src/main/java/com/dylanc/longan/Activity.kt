@@ -119,7 +119,7 @@ inline val Activity.contentView: View
 
 val Context.activity: Activity?
   get() {
-    var context: Context = this
+    var context: Context? = this
     while (context is ContextWrapper) {
       if (context is Activity) {
         return context

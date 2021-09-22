@@ -14,7 +14,6 @@ import com.dylanc.longan.sample.adapter.TextAdapter
 import com.dylanc.longan.sample.databinding.ActivityMainBinding
 import com.dylanc.longan.toast
 import com.dylanc.viewbinding.binding
-import org.jetbrains.anko.alert
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,7 +34,6 @@ class MainActivity : AppCompatActivity() {
       adapter.submitList(items)
     }
     pressBackTwiceToExit("再次点击退出应用")
-    alert {  }
   }
 
   private fun onItemClick(id: Int) {
