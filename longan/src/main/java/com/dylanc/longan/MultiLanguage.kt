@@ -4,6 +4,7 @@ package com.dylanc.longan
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.core.content.edit
 import java.util.*
@@ -54,9 +55,11 @@ fun Context.wrap(locale: Locale): ContextWrapper {
   return ContextWrapper(createConfigurationContext(resources.configuration))
 }
 
-private object LanguageManager : SharedPreferencesOwner {
+private object LanguageManager {
   private const val KEY_LANGUAGE = "longan_language"
   private const val KEY_COUNTRY = "longan_country"
+  private val sharedPreferences: SharedPreferences =
+    application.getSharedPreferences("${packageName}_preferences", Context.MODE_PRIVATE)
   private val language: String?
     get() = sharedPreferences.getString(KEY_LANGUAGE, null)
   private val country: String?
