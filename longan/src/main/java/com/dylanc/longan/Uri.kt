@@ -2,17 +2,20 @@
 
 package com.dylanc.longan
 
+import android.app.RecoverableSecurityException
 import android.content.ContentUris
 import android.content.ContentValues
 import android.database.ContentObserver
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.CancellationSignal
+import android.os.ParcelFileDescriptor
 import android.provider.BaseColumns
 import android.provider.MediaStore
 import android.util.Size
 import android.webkit.MimeTypeMap
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
@@ -22,17 +25,17 @@ import java.io.OutputStream
 
 lateinit var fileProviderAuthority: String
 
-val EXTERNAL_IMAGES_URI: Uri
+val EXTERNAL_MEDIA_IMAGES_URI: Uri
   get() = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
-val EXTERNAL_VIDEO_URI: Uri
+val EXTERNAL_MEDIA_VIDEO_URI: Uri
   get() = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 
-val EXTERNAL_AUDIO_URI: Uri
+val EXTERNAL_MEDIA_AUDIO_URI: Uri
   get() = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
 @get:RequiresApi(Build.VERSION_CODES.Q)
-val EXTERNAL_DOWNLOADS_URI: Uri
+val EXTERNAL_MEDIA_DOWNLOADS_URI: Uri
   get() = MediaStore.Downloads.EXTERNAL_CONTENT_URI
 
 inline fun File.toUri(authority: String = fileProviderAuthority): Uri =
@@ -42,64 +45,37 @@ inline fun File.toUri(authority: String = fileProviderAuthority): Uri =
     Uri.fromFile(this)
   }
 
-inline fun queryMediaImages(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-) =
-  contentResolver.query(EXTERNAL_IMAGES_URI, projection, selection, selectionArgs, sortOrder, block)
+inline fun Uri.update(crossinline block: ContentValues.() -> Unit) =
+  contentResolver.update(
+    this, "${BaseColumns._ID} = ?",
+    arrayOf(ContentUris.parseId(this).toString()), block
+  )
 
-inline fun queryMediaVideos(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-) =
-  contentResolver.query(EXTERNAL_VIDEO_URI, projection, selection, selectionArgs, sortOrder, block)
+@ExperimentalApi
+fun Uri.delete(launcher: ActivityResultLauncher<IntentSenderRequest>): Boolean =
+  @Suppress("DEPRECATION")
+  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+    val projection = arrayOf(MediaStore.MediaColumns.DATA)
+    contentResolver.queryFirst(this, projection) { cursor ->
+      val file = File(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)))
+      file.delete()
+    } ?: false
+  } else {
+    try {
+      val id: Long = ContentUris.parseId(this)
+      contentResolver.delete(this, "${BaseColumns._ID} = ?", arrayOf(id.toString())) > 0
+    } catch (securityException: SecurityException) {
+      val recoverableSecurityException = securityException as? RecoverableSecurityException
+        ?: throw RuntimeException(securityException.message, securityException)
+      val intentSender =
+        recoverableSecurityException.userAction.actionIntent.intentSender
+      launcher.launch(IntentSenderRequest.Builder(intentSender).build())
+      false
+    }
+  }
 
-inline fun queryMediaAudios(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-) =
-  contentResolver.query(EXTERNAL_AUDIO_URI, projection, selection, selectionArgs, sortOrder, block)
-
-@RequiresApi(Build.VERSION_CODES.Q)
-inline fun queryMediaDownloads(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-) =
-  contentResolver.query(EXTERNAL_DOWNLOADS_URI, projection, selection, selectionArgs, sortOrder, block)
-
-inline fun insertMediaImageUri(crossinline block: ContentValues.() -> Unit = {}) =
-  contentResolver.insert(EXTERNAL_IMAGES_URI, block)
-
-inline fun insertMediaVideoUri(crossinline block: ContentValues.() -> Unit = {}) =
-  contentResolver.insert(EXTERNAL_VIDEO_URI, block)
-
-inline fun insertMediaAudioUri(crossinline block: ContentValues.() -> Unit = {}) =
-  contentResolver.insert(EXTERNAL_AUDIO_URI, block)
-
-@RequiresApi(Build.VERSION_CODES.Q)
-inline fun insertMediaDownloadUri(crossinline block: ContentValues.() -> Unit = {}) =
-  contentResolver.insert(EXTERNAL_DOWNLOADS_URI, block)
-
-inline fun Uri.update(
-  id: Long = ContentUris.parseId(this),
-  crossinline block: ContentValues.() -> Unit
-): Int =
-  contentResolver.update(this, "${BaseColumns._ID} = ?", arrayOf(id.toString()), block)
-
-inline fun Uri.delete(id: Long = ContentUris.parseId(this)): Int =
-  contentResolver.delete(this, "${BaseColumns._ID} = ?", arrayOf(id.toString()))
+inline fun Uri.openFileDescriptor(mode: String = "r", block: (ParcelFileDescriptor) -> Unit) =
+  contentResolver.openFileDescriptor(this, mode)?.use(block)
 
 inline fun Uri.openInputStream(block: (InputStream) -> Unit) =
   contentResolver.openInputStream(this)?.use(block)
@@ -109,13 +85,9 @@ inline fun Uri.openOutputStream(block: (OutputStream) -> Unit) =
 
 @RequiresApi(Build.VERSION_CODES.Q)
 inline fun Uri.loadThumbnail(width: Int, height: Int, signal: CancellationSignal? = null) =
-  loadThumbnail(Size(width, height), signal)
+  contentResolver.loadThumbnail(this, Size(width, height), signal)
 
-@RequiresApi(Build.VERSION_CODES.Q)
-inline fun Uri.loadThumbnail(size: Size, signal: CancellationSignal? = null) =
-  contentResolver.loadThumbnail(this, size, signal)
-
-inline fun Uri.observeContentChange(
+inline fun Uri.observeContentChanged(
   owner: LifecycleOwner,
   crossinline block: (Boolean) -> Unit
 ) {
