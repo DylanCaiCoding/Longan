@@ -17,12 +17,47 @@ import kotlin.reflect.KProperty
  * @author Dylan Cai
  */
 
+inline fun List<View>.doOnClick(
+  clickIntervals: Int,
+  isSharingIntervals: Boolean = false,
+  noinline block: () -> Unit
+) =
+  forEach { it.doOnClick(clickIntervals, isSharingIntervals, block) }
+
+fun View.doOnClick(clickIntervals: Int, isSharingIntervals: Boolean = false, block: () -> Unit) =
+  setOnClickListener {
+    val view = if (isSharingIntervals) context.activity?.window?.decorView ?: this else this
+    val currentTime = System.currentTimeMillis()
+    val lastTime = view.lastClickTime ?: 0L
+    if (currentTime - lastTime > clickIntervals) {
+      view.lastClickTime = currentTime
+      block()
+    }
+  }
 
 inline fun List<View>.doOnClick(crossinline block: () -> Unit) =
   forEach { it.doOnClick(block) }
 
 inline fun View.doOnClick(crossinline block: () -> Unit) =
   setOnClickListener { block() }
+
+inline fun List<View>.doOnLongClick(
+  clickIntervals: Int,
+  isSharingIntervals: Boolean = false,
+  noinline block: () -> Unit
+) =
+  forEach { it.doOnLongClick(clickIntervals, isSharingIntervals, block) }
+
+fun View.doOnLongClick(clickIntervals: Int, isSharingIntervals: Boolean = false, block: () -> Unit) =
+  doOnLongClick {
+    val view = if (isSharingIntervals) context.activity?.window?.decorView ?: this else this
+    val currentTime = System.currentTimeMillis()
+    val lastTime = view.lastClickTime ?: 0L
+    if (currentTime - lastTime > clickIntervals) {
+      view.lastClickTime = currentTime
+      block()
+    }
+  }
 
 inline fun List<View>.doOnLongClick(crossinline block: () -> Unit) =
   forEach { it.doOnLongClick(block) }
@@ -31,24 +66,6 @@ inline fun View.doOnLongClick(crossinline block: () -> Unit) =
   setOnLongClickListener {
     block()
     true
-  }
-
-inline fun List<View>.doOnSingleClick(
-  intervals: Int = 500,
-  isSharingIntervals: Boolean = false,
-  noinline block: () -> Unit
-) =
-  forEach { it.doOnSingleClick(intervals, isSharingIntervals, block) }
-
-fun View.doOnSingleClick(intervals: Int = 500, isSharingIntervals: Boolean = false, block: () -> Unit) =
-  setOnClickListener {
-    val view = if (isSharingIntervals) context.activity?.window?.decorView ?: this else this
-    val currentTime = System.currentTimeMillis()
-    val lastTime = view.lastClickTime ?: 0L
-    if (currentTime - lastTime > intervals) {
-      view.lastClickTime = currentTime
-      block()
-    }
   }
 
 inline fun View?.isTouchedAt(x: Float, y: Float) = isTouchedAt(x.toInt(), y.toInt())
