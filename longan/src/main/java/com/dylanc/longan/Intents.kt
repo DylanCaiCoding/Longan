@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2021. Dylan Cai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
@@ -17,10 +33,10 @@ import androidx.core.os.bundleOf
  * @author Dylan Cai
  */
 
-inline fun <reified T> Context.intentOf(vararg pairs: Pair<String, *>) =
+inline fun <reified T> Context.intentOf(vararg pairs: Pair<String, *>): Intent =
   intentOf<T>(bundleOf(*pairs))
 
-inline fun <reified T> Context.intentOf(bundle: Bundle) =
+inline fun <reified T> Context.intentOf(bundle: Bundle): Intent =
   Intent(this, T::class.java).apply { putExtras(bundle) }
 
 inline fun <reified T> Activity.intentExtras(name: String) = lazy<T?> {
@@ -35,26 +51,26 @@ inline fun <reified T> Activity.safeIntentExtras(name: String) = lazy<T> {
   checkNotNull(intent.extras[name]) { "No intent value for key \"$name\"" }
 }
 
-inline fun dial(phoneNumber: String) =
+inline fun dial(phoneNumber: String): Boolean =
   Intent(Intent.ACTION_DIAL, Uri.parse("tel:${Uri.encode(phoneNumber)}"))
     .startForActivity()
 
 @RequiresPermission(CALL_PHONE)
-inline fun makeCall(phoneNumber: String) =
+inline fun makeCall(phoneNumber: String): Boolean =
   Intent(Intent.ACTION_CALL, Uri.parse("tel:${Uri.encode(phoneNumber)}"))
     .startForActivity()
 
-inline fun sendSMS(phoneNumber: String, content: String) =
+inline fun sendSMS(phoneNumber: String, content: String): Boolean =
   Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:${Uri.encode(phoneNumber)}"))
     .apply { putExtra("sms_body", content) }
     .startForActivity()
 
-inline fun browse(url: String, newTask: Boolean = false) =
+inline fun browse(url: String, newTask: Boolean = false): Boolean =
   Intent(Intent.ACTION_VIEW, Uri.parse(url))
     .apply { if (newTask) newTask() }
     .startForActivity()
 
-fun email(email: String, subject: String = "", text: String = "") =
+fun email(email: String, subject: String = "", text: String = ""): Boolean =
   Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
     .apply {
       putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
@@ -63,14 +79,14 @@ fun email(email: String, subject: String = "", text: String = "") =
     }
     .startForActivity()
 
-inline fun installAPK(uri: Uri) =
+inline fun installAPK(uri: Uri): Boolean =
   Intent(Intent.ACTION_VIEW)
     .newTask()
     .grantReadPermission()
     .apply { setDataAndType(uri, "application/vnd.android.package-archive") }
     .startForActivity()
 
-inline fun Intent.startForActivity() =
+inline fun Intent.startForActivity(): Boolean =
   try {
     topActivity.startActivity(this)
     true

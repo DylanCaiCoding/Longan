@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2021. Dylan Cai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
@@ -47,25 +63,27 @@ val activityList: List<Activity> get() = activityCache.toList()
 
 val topActivity: Activity get() = activityCache.last()
 
-inline fun <reified T : Activity> isActivityExistsInStack() = isActivityExistsInStack(T::class)
+inline fun <reified T : Activity> isActivityExistsInStack(): Boolean =
+  isActivityExistsInStack(T::class)
 
-fun <T : Activity> isActivityExistsInStack(clazz: KClass<T>) = activityCache.any { it.javaClass == clazz }
+fun <T : Activity> isActivityExistsInStack(clazz: KClass<T>): Boolean =
+  activityCache.any { it.javaClass == clazz }
 
-inline fun <reified T : Activity> finishActivity() = finishActivity(T::class)
+inline fun <reified T : Activity> finishActivity(): Boolean = finishActivity(T::class)
 
-fun <T : Activity> finishActivity(clazz: KClass<T>) =
+fun <T : Activity> finishActivity(clazz: KClass<T>): Boolean =
   activityCache.removeAll {
     if (it.javaClass == clazz) it.finish()
     it.javaClass == clazz
   }
 
-fun finishAllActivities() =
+fun finishAllActivities(): Boolean =
   activityCache.removeAll {
     it.finish()
     true
   }
 
-fun finishAllActivitiesExceptNewest() =
+fun finishAllActivitiesExceptNewest(): Boolean =
   topActivity.let { topActivity ->
     activityCache.removeAll {
       if (it != topActivity) it.finish()
@@ -103,7 +121,7 @@ inline fun ComponentActivity.pressBackToNotExit() {
   })
 }
 
-inline fun Context.checkPermission(permission: String) =
+inline fun Context.checkPermission(permission: String): Boolean =
   ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
 
 inline val Activity.windowInsetsControllerCompat: WindowInsetsControllerCompat?

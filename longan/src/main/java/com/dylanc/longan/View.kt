@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2021. Dylan Cai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
@@ -10,6 +26,7 @@ import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -68,12 +85,13 @@ inline fun View.doOnLongClick(crossinline block: () -> Unit) =
     true
   }
 
-inline fun View?.isTouchedAt(x: Float, y: Float) = isTouchedAt(x.toInt(), y.toInt())
+inline fun View?.isTouchedAt(x: Float, y: Float): Boolean =
+  isTouchedAt(x.toInt(), y.toInt())
 
-inline fun View?.isTouchedAt(x: Int, y: Int) =
+inline fun View?.isTouchedAt(x: Int, y: Int): Boolean =
   this?.locationOnScreen?.run { x in left..right && y in top..bottom } ?: false
 
-inline fun View.findTouchedChild(x: Int, y: Int) =
+inline fun View.findTouchedChild(x: Int, y: Int): View? =
   touchables.find { it.isTouchedAt(x, y) }
 
 /**
@@ -95,9 +113,11 @@ inline fun View.withStyledAttrs(
   context.obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes).apply(block).recycle()
 }
 
-inline val View.rootWindowInsetsCompat get() = ViewCompat.getRootWindowInsets(this)
+inline val View.rootWindowInsetsCompat: WindowInsetsCompat?
+  get() = ViewCompat.getRootWindowInsets(this)
 
-inline val View.windowInsetsControllerCompat get() = ViewCompat.getWindowInsetsController(this)
+inline val View.windowInsetsControllerCompat: WindowInsetsControllerCompat?
+  get() = ViewCompat.getWindowInsetsController(this)
 
 inline fun View.doOnApplyWindowInsets(noinline action: (View, WindowInsetsCompat) -> WindowInsetsCompat) =
   ViewCompat.setOnApplyWindowInsetsListener(this, action)

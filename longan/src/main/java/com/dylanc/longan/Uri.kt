@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2021. Dylan Cai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
 package com.dylanc.longan
@@ -5,7 +21,7 @@ package com.dylanc.longan
 import android.app.RecoverableSecurityException
 import android.content.ContentUris
 import android.content.ContentValues
-import android.database.ContentObserver
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.CancellationSignal
@@ -18,7 +34,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
-import androidx.lifecycle.LifecycleOwner
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -45,11 +60,11 @@ inline fun File.toUri(authority: String = fileProviderAuthority): Uri =
     Uri.fromFile(this)
   }
 
-inline fun Uri.update(crossinline block: ContentValues.() -> Unit) =
+inline fun Uri.update(crossinline block: ContentValues.() -> Unit): Boolean =
   contentResolver.update(
     this, "${BaseColumns._ID} = ?",
     arrayOf(ContentUris.parseId(this).toString()), block
-  )
+  ) > 0
 
 @ExperimentalApi
 fun Uri.delete(launcher: ActivityResultLauncher<IntentSenderRequest>): Boolean =
@@ -74,31 +89,18 @@ fun Uri.delete(launcher: ActivityResultLauncher<IntentSenderRequest>): Boolean =
     }
   }
 
-inline fun Uri.openFileDescriptor(mode: String = "r", block: (ParcelFileDescriptor) -> Unit) =
+inline fun <R> Uri.openFileDescriptor(mode: String = "r", block: (ParcelFileDescriptor) -> R): R? =
   contentResolver.openFileDescriptor(this, mode)?.use(block)
 
-inline fun Uri.openInputStream(block: (InputStream) -> Unit) =
+inline fun <R> Uri.openInputStream(block: (InputStream) -> R): R? =
   contentResolver.openInputStream(this)?.use(block)
 
-inline fun Uri.openOutputStream(block: (OutputStream) -> Unit) =
+inline fun <R> Uri.openOutputStream(block: (OutputStream) -> R): R? =
   contentResolver.openOutputStream(this)?.use(block)
 
 @RequiresApi(Build.VERSION_CODES.Q)
-inline fun Uri.loadThumbnail(width: Int, height: Int, signal: CancellationSignal? = null) =
+inline fun Uri.loadThumbnail(width: Int, height: Int, signal: CancellationSignal? = null): Bitmap =
   contentResolver.loadThumbnail(this, Size(width, height), signal)
-
-inline fun Uri.observeContentChanged(
-  owner: LifecycleOwner,
-  crossinline block: (Boolean) -> Unit
-) {
-  val observer = object : ContentObserver(mainHandler.value) {
-    override fun onChange(selfChange: Boolean) = block(selfChange)
-  }
-  owner.doOnLifecycle(
-    onCreate = { contentResolver.registerContentObserver(this, true, observer) },
-    onDestroy = { contentResolver.unregisterContentObserver(observer) }
-  )
-}
 
 inline val Uri.fileExtension: String?
   get() = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)

@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2021. Dylan Cai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
@@ -20,9 +36,9 @@ import kotlin.math.roundToInt
 
 inline val TextView.textString: String get() = text.toString()
 
-inline fun TextView.isTextEmpty() = textString.isEmpty()
+inline fun TextView.isTextEmpty(): Boolean = textString.isEmpty()
 
-inline fun TextView.isTextNotEmpty() = textString.isNotEmpty()
+inline fun TextView.isTextNotEmpty(): Boolean = textString.isNotEmpty()
 
 inline var TextView.isPasswordVisible: Boolean
   get() = transformationMethod != PasswordTransformationMethod.getInstance()
