@@ -24,7 +24,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -43,9 +42,3 @@ inline fun <T> Flow<T>.launchAndCollectIn(
     }
   }
 }
-
-inline fun MutableSharedFlow() = MutableSharedFlow<Unit>()
-
-suspend inline fun MutableSharedFlow<Unit>.emit() = emit(Unit)
-
-inline fun MutableSharedFlow<Unit>.tryEmit() = tryEmit(Unit)
