@@ -77,24 +77,6 @@ inline fun <R> ContentResolver.queryMediaImages(
 ): R? =
   query(EXTERNAL_MEDIA_IMAGES_URI, projection, selection, selectionArgs, sortOrder, block)
 
-inline fun <R> ContentResolver.queryFirstMediaImage(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-): R? =
-  queryFirst(EXTERNAL_MEDIA_IMAGES_URI, projection, selection, selectionArgs, sortOrder, block)
-
-inline fun <R> ContentResolver.queryLastMediaImage(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-): R? =
-  queryLast(EXTERNAL_MEDIA_IMAGES_URI, projection, selection, selectionArgs, sortOrder, block)
-
 inline fun <R> ContentResolver.queryMediaVideos(
   projection: Array<String>? = null,
   selection: String? = null,
@@ -103,24 +85,6 @@ inline fun <R> ContentResolver.queryMediaVideos(
   block: (Cursor) -> R
 ): R? =
   query(EXTERNAL_MEDIA_VIDEO_URI, projection, selection, selectionArgs, sortOrder, block)
-
-inline fun <R> ContentResolver.queryFirstMediaVideo(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-): R? =
-  queryFirst(EXTERNAL_MEDIA_VIDEO_URI, projection, selection, selectionArgs, sortOrder, block)
-
-inline fun <R> ContentResolver.queryLastMediaVideo(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-): R? =
-  queryLast(EXTERNAL_MEDIA_VIDEO_URI, projection, selection, selectionArgs, sortOrder, block)
 
 inline fun <R> ContentResolver.queryMediaAudios(
   projection: Array<String>? = null,
@@ -131,24 +95,6 @@ inline fun <R> ContentResolver.queryMediaAudios(
 ): R? =
   query(EXTERNAL_MEDIA_AUDIO_URI, projection, selection, selectionArgs, sortOrder, block)
 
-inline fun <R> ContentResolver.queryFirstMediaAudio(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-): R? =
-  queryFirst(EXTERNAL_MEDIA_AUDIO_URI, projection, selection, selectionArgs, sortOrder, block)
-
-inline fun <R> ContentResolver.queryLastMediaAudio(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-): R? =
-  queryLast(EXTERNAL_MEDIA_AUDIO_URI, projection, selection, selectionArgs, sortOrder, block)
-
 @RequiresApi(Build.VERSION_CODES.Q)
 inline fun <R> ContentResolver.queryMediaDownloads(
   projection: Array<String>? = null,
@@ -158,26 +104,6 @@ inline fun <R> ContentResolver.queryMediaDownloads(
   block: (Cursor) -> R
 ): R? =
   query(EXTERNAL_MEDIA_DOWNLOADS_URI, projection, selection, selectionArgs, sortOrder, block)
-
-@RequiresApi(Build.VERSION_CODES.Q)
-inline fun <R> ContentResolver.queryFirstMediaDownload(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-): R? =
-  queryFirst(EXTERNAL_MEDIA_DOWNLOADS_URI, projection, selection, selectionArgs, sortOrder, block)
-
-@RequiresApi(Build.VERSION_CODES.Q)
-inline fun <R> ContentResolver.queryLastMediaDownload(
-  projection: Array<String>? = null,
-  selection: String? = null,
-  selectionArgs: Array<String>? = null,
-  sortOrder: String? = null,
-  block: (Cursor) -> R
-): R? =
-  queryLast(EXTERNAL_MEDIA_DOWNLOADS_URI, projection, selection, selectionArgs, sortOrder, block)
 
 inline fun ContentResolver.insert(uri: Uri, crossinline block: ContentValues.() -> Unit = {}): Uri? =
   contentResolver.insert(uri, contentValues(block))
