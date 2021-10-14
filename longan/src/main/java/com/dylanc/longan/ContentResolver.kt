@@ -23,7 +23,6 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 

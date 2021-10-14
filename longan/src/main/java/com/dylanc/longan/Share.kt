@@ -65,5 +65,5 @@ inline fun shareFiles(uris: List<Uri>, title: String? = null, mimeType: String? 
   }
 }
 
-inline fun share(mimeType: String, block: ShareCompat.IntentBuilder.() -> Unit) =
+inline fun share(mimeType: String,crossinline block: ShareCompat.IntentBuilder.() -> Unit) =
   ShareCompat.IntentBuilder(topActivity).apply { setType(mimeType) }.apply(block).startChooser()

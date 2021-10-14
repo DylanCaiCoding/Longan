@@ -57,7 +57,7 @@ fun List<Bitmap>.toPdfDoc(pageWidth: Int, pageHeight: Int): PdfDocument =
     }
   }
 
-fun PdfDocument.writeTo(file: File) {
+inline fun PdfDocument.writeTo(file: File) {
   FileOutputStream(file).use {
     writeTo(it)
   }

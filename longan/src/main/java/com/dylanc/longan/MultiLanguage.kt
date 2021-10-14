@@ -76,10 +76,6 @@ private object LanguageManager {
   private const val KEY_COUNTRY = "longan_country"
   private val sharedPreferences: SharedPreferences =
     application.getSharedPreferences("${packageName}_preferences", Context.MODE_PRIVATE)
-  private val language: String?
-    get() = sharedPreferences.getString(KEY_LANGUAGE, null)
-  private val country: String?
-    get() = sharedPreferences.getString(KEY_COUNTRY, null)
 
   var appLanguage: Locale
     get() = language?.let { Locale(it, country.orEmpty()) } ?: systemLanguage
@@ -96,4 +92,10 @@ private object LanguageManager {
       remove(KEY_COUNTRY)
     }
   }
+
+  private val language: String?
+    get() = sharedPreferences.getString(KEY_LANGUAGE, null)
+
+  private val country: String?
+    get() = sharedPreferences.getString(KEY_COUNTRY, null)
 }

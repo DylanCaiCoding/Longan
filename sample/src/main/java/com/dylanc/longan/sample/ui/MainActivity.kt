@@ -8,7 +8,7 @@ import com.dylanc.longan.design.multiChoiceSelector
 import com.dylanc.longan.design.selector
 import com.dylanc.longan.design.singleChoiceSelector
 import com.dylanc.longan.immerseStatusBar
-import com.dylanc.longan.pressBackTwiceToExit
+import com.dylanc.longan.pressBackTwiceToExitApp
 import com.dylanc.longan.sample.R
 import com.dylanc.longan.sample.adapter.TextAdapter
 import com.dylanc.longan.sample.databinding.ActivityMainBinding
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
       recyclerView.adapter = adapter
       adapter.submitList(items)
     }
-    pressBackTwiceToExit("再次点击退出应用")
+    pressBackTwiceToExitApp("再次点击退出应用")
   }
 
   private fun onItemClick(id: Int) {

@@ -37,8 +37,7 @@ inline fun TabLayout.setupWithViewPager(
 ) {
   setupWithViewPager(viewPager, autoRefresh)
   for (i in 0 until tabCount) {
-    val tab = getTabAt(i)
-    if (tab != null) {
+    getTabAt(i)?.let { tab ->
       tabConfigurationStrategy(tab, i)
     }
   }
@@ -59,10 +58,10 @@ inline fun TabLayout.Tab.setCustomView(@LayoutRes layoutId: Int, block: View.() 
   block(customView!!)
 }
 
-inline fun TabLayout.addTab(@StringRes resId: Int, block: TabLayout.Tab.() -> Unit = {}) =
+inline fun TabLayout.addTab(@StringRes resId: Int, crossinline block: TabLayout.Tab.() -> Unit = {}) =
   addTab(context.getString(resId), block)
 
-inline fun TabLayout.addTab(text: String? = null, block: TabLayout.Tab.() -> Unit = {}) =
+inline fun TabLayout.addTab(text: String? = null, crossinline block: TabLayout.Tab.() -> Unit = {}) =
   addTab(newTab().apply { this.text = text }.apply(block))
 
 inline fun TabLayout.doOnTabSelected(crossinline block: (TabLayout.Tab) -> Unit) =

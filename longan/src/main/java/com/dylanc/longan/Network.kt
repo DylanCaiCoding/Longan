@@ -34,16 +34,16 @@ import androidx.lifecycle.LiveData
  * @author Dylan Cai
  */
 
-@Suppress("DEPRECATION")
 @get:RequiresPermission(ACCESS_NETWORK_STATE)
 inline val isNetworkAvailable: Boolean
   get() {
-    val connectivityManager  = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
         hasCapability(NET_CAPABILITY_INTERNET) && hasCapability(NET_CAPABILITY_VALIDATED)
       }
     } else {
+      @Suppress("DEPRECATION")
       connectivityManager.activeNetworkInfo?.isConnectedOrConnecting
     } ?: false
   }
@@ -76,25 +76,24 @@ class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
       .build()
   }
 
-  private val networkCallback by lazy {
-    object : ConnectivityManager.NetworkCallback() {
-      override fun onAvailable(network: Network) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-          postValue(true)
-        }
-      }
-
-      override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-          networkCapabilities.run {
-            postValue(hasCapability(NET_CAPABILITY_INTERNET) && hasCapability(NET_CAPABILITY_VALIDATED))
-          }
-        }
-      }
-
-      override fun onLost(network: Network) {
-        postValue(false)
+  private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+    override fun onAvailable(network: Network) {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        postValue(true)
       }
     }
+
+    override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        networkCapabilities.run {
+          postValue(hasCapability(NET_CAPABILITY_INTERNET) && hasCapability(NET_CAPABILITY_VALIDATED))
+        }
+      }
+    }
+
+    override fun onLost(network: Network) {
+      postValue(false)
+    }
   }
+
 }

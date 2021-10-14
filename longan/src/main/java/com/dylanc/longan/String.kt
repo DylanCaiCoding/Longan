@@ -21,6 +21,7 @@ package com.dylanc.longan
 import android.text.format.Formatter
 import android.util.Patterns
 import androidx.core.util.PatternsCompat
+import org.json.JSONObject
 import java.util.*
 
 /**
@@ -68,3 +69,11 @@ inline fun String.isIDCard15(): Boolean =
 
 inline fun String.isIDCard18(): Boolean =
   REGEX_ID_CARD_18.toRegex().matches(this)
+
+inline fun String.isJson(): Boolean =
+  try {
+    JSONObject(this)
+    true
+  } catch (e: Exception) {
+    false
+  }

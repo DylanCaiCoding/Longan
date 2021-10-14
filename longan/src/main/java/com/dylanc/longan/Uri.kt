@@ -40,17 +40,17 @@ import java.io.OutputStream
 
 lateinit var fileProviderAuthority: String
 
-val EXTERNAL_MEDIA_IMAGES_URI: Uri
+inline val EXTERNAL_MEDIA_IMAGES_URI: Uri
   get() = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
-val EXTERNAL_MEDIA_VIDEO_URI: Uri
+inline val EXTERNAL_MEDIA_VIDEO_URI: Uri
   get() = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 
-val EXTERNAL_MEDIA_AUDIO_URI: Uri
+inline val EXTERNAL_MEDIA_AUDIO_URI: Uri
   get() = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
 @get:RequiresApi(Build.VERSION_CODES.Q)
-val EXTERNAL_MEDIA_DOWNLOADS_URI: Uri
+inline val EXTERNAL_MEDIA_DOWNLOADS_URI: Uri
   get() = MediaStore.Downloads.EXTERNAL_CONTENT_URI
 
 inline fun File.toUri(authority: String = fileProviderAuthority): Uri =
@@ -72,8 +72,7 @@ fun Uri.delete(launcher: ActivityResultLauncher<IntentSenderRequest>): Boolean =
   if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
     val projection = arrayOf(MediaStore.MediaColumns.DATA)
     contentResolver.queryFirst(this, projection) { cursor ->
-      val file = File(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)))
-      file.delete()
+      File(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))).delete()
     } ?: false
   } else {
     try {

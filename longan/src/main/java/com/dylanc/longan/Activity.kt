@@ -91,13 +91,13 @@ fun finishAllActivitiesExceptNewest(): Boolean =
     }
   }
 
-inline fun ComponentActivity.pressBackTwiceToExit(toastText: String, delayMillis: Long = 2000) =
-  pressBackTwiceToExit(delayMillis) { toast(toastText) }
+inline fun ComponentActivity.pressBackTwiceToExitApp(toastText: String, delayMillis: Long = 2000) =
+  pressBackTwiceToExitApp(delayMillis) { toast(toastText) }
 
-inline fun ComponentActivity.pressBackTwiceToExit(@StringRes toastText: Int, delayMillis: Long = 2000) =
-  pressBackTwiceToExit(delayMillis) { toast(toastText) }
+inline fun ComponentActivity.pressBackTwiceToExitApp(@StringRes toastText: Int, delayMillis: Long = 2000) =
+  pressBackTwiceToExitApp(delayMillis) { toast(toastText) }
 
-inline fun ComponentActivity.pressBackTwiceToExit(delayMillis: Long = 2000, crossinline onFirstBackPressed: () -> Unit) {
+inline fun ComponentActivity.pressBackTwiceToExitApp(delayMillis: Long = 2000, crossinline onFirstBackPressed: () -> Unit) {
   onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
     private var lastBackTime: Long = 0
 
@@ -113,7 +113,7 @@ inline fun ComponentActivity.pressBackTwiceToExit(delayMillis: Long = 2000, cros
   })
 }
 
-inline fun ComponentActivity.pressBackToNotExit() {
+inline fun ComponentActivity.pressBackToNotExitApp() {
   onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
     override fun handleOnBackPressed() {
       moveTaskToBack(false)
