@@ -53,10 +53,12 @@ dependencies {
 
 ## Author's other libraries
 
-- [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX), the most comprehensive utils of ViewBinding.
-
-- [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView), a highly expandable Android library for decoupling the code of toolbar or loading status view.
-- [ActivityResultLauncher](https://github.com/DylanCaiCoding/ActivityResultLauncher), perfect replacement for `startActivityForResult()`
+| Library                                                      | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | A highly expandable Android library for decoupling the code of toolbar or loading status view. |
+| [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX) | The most comprehensive utils of ViewBinding.                 |
+| [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)       | Easier to use the MMKV.                                      |
+| [ActivityResultLauncher](https://github.com/DylanCaiCoding/ActivityResultLauncher) | Perfect replacement for `startActivityForResult()`           |
 
 ## License
 
