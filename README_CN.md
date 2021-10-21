@@ -50,12 +50,18 @@ dependencies {
 
 [Releases](https://github.com/DylanCaiCoding/Longan/releases)
 
+## 反馈
+
+为了更好地完善本库，我希望能听到更多的声音。有任何使用上的问题或者想要的功能都可以加我微信直接反馈，微信号同 GitHub 名： `DylanCaiCoding` ，我会拉个群。加好友时备注个 GitHub，个人不乱加陌生人。
+
 ## 作者其它的库
 
-- [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) —— 深度解耦标题栏或加载中、加载失败、无数据等视图
-- [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX) —— 最全面的 ViewBinding 工具
-- [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX) —— 让 MMKV 更加易用
-- [ActivityResultLauncher](https://github.com/DylanCaiCoding/ActivityResultLauncher) —— 优雅地替代 `startActivityForResult()`
+| 库                                                           | 简介                                           |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | 深度解耦标题栏或加载中、加载失败、无数据等视图 |
+| [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX) | 最全面的 ViewBinding 工具                      |
+| [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)       | 让 MMKV 更加易用                               |
+| [ActivityResultLauncher](https://github.com/DylanCaiCoding/ActivityResultLauncher) | 优雅地替代 `startActivityForResult()`          |
 
 ## License
 
