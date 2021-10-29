@@ -8,7 +8,7 @@ Longan 是一个简化 Android 开发的 Kotlin 工具类集合，可以使代�
 
 本库会长期维护，有任何使用上的问题都可以反馈，个人会及时处理。有什么想要的功能都可以提，个人的想法比较多，应该会比大多数人封装的工具更易用，用法更全面，代码更简洁。
 
-个人有些完美主义，每个库都会在实现了功能之后对代码进行优化，基本都会改两版以上，尽量用简洁轻量的代码实现功能。有兴趣的可以阅读一下源码，应该会对 Kotlin 的学习有所帮助。
+个人有些完美主义，每个库都会在实现了功能之后对代码进行优化，基本都会修改两版以上，尽量用简洁轻量的代码实现功能。有兴趣的可以阅读一下源码，应该能增加一些对 Kotlin 的理解。
 
 ## Gradle
 
@@ -49,6 +49,10 @@ dependencies {
 - [Logger](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Logger)
 - [SystemBars](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-SystemBars)
 - [Uri](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Uri)
+
+### 其它
+
+- [Q&A](https://github.com/DylanCaiCoding/Longan/wiki/Q&A)
 
 ## 更新日志
 
