@@ -47,6 +47,10 @@ dependencies {
 - [SystemBars](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-SystemBars)
 - [Uri](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Uri)
 
+### Others
+
+- [Q&A](https://github.com/DylanCaiCoding/Longan/wiki/Q&A)
+
 ## Change log
 
 [Releases](https://github.com/DylanCaiCoding/Longan/releases)
@@ -55,10 +59,10 @@ dependencies {
 
 | Library                                                      | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | A highly expandable Android library for decoupling the code of toolbar or loading status view. |
+| [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | Decoupling the code of toolbar or loading status view. |
 | [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX) | The most comprehensive utils of ViewBinding.                 |
 | [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)       | Easier to use the MMKV.                                      |
-| [ActivityResultLauncher](https://github.com/DylanCaiCoding/ActivityResultLauncher) | Perfect replacement for `startActivityForResult()`           |
+| [ActivityResultLauncher](https://github.com/DylanCaiCoding/ActivityResultLauncher) | Replace startActivityForResult() method gracefully.           |
 
 ## License
 
