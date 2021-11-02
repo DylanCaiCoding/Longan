@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -30,15 +30,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import kotlin.math.roundToInt
 
-/**
- * @author Dylan Cai
- */
 
 inline val TextView.textString: String get() = text.toString()
 
-inline fun TextView.isTextEmpty(): Boolean = textString.isEmpty()
+fun TextView.isTextEmpty(): Boolean = textString.isEmpty()
 
-inline fun TextView.isTextNotEmpty(): Boolean = textString.isNotEmpty()
+fun TextView.isTextNotEmpty(): Boolean = textString.isNotEmpty()
 
 inline var TextView.isPasswordVisible: Boolean
   get() = transformationMethod != PasswordTransformationMethod.getInstance()
@@ -50,7 +47,7 @@ inline var TextView.isPasswordVisible: Boolean
     }
   }
 
-inline fun TextView.addUnderline() {
+fun TextView.addUnderline() {
   paint.flags = Paint.UNDERLINE_TEXT_FLAG
 }
 
@@ -80,7 +77,7 @@ fun TextView.startCountDown(
   })
 }
 
-inline fun TextView.enableWhenOtherTextNotEmpty(vararg textViews: TextView) =
+fun TextView.enableWhenOtherTextNotEmpty(vararg textViews: TextView) =
   enableWhenOtherTextChanged(*textViews) { textViews.all { it.isTextNotEmpty() } }
 
 inline fun TextView.enableWhenOtherTextChanged(

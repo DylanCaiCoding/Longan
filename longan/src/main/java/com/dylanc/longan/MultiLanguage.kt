@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -26,11 +26,8 @@ import androidx.core.content.edit
 import java.util.*
 
 
-/**
- * @author Dylan Cai
- */
-
 private var appLanguageCache: Locale? = null
+
 val systemLanguage: Locale
   get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
     application.resources.configuration.locales[0]

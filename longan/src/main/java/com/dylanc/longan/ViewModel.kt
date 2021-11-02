@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "FunctionName")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -26,9 +26,6 @@ import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 
-/**
- * @author Dylan Cai
- */
 
 val applicationViewModelStore by lazy { ViewModelStore() }
 

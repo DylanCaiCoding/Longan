@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -27,9 +27,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-/**
- * @author Dylan Cai
- */
 
 inline fun <T> Flow<T>.launchAndCollectIn(
   owner: LifecycleOwner,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan.design
 
@@ -26,9 +26,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-/**
- * @author Dylan Cai
- */
 
 inline fun TabLayout.setupWithViewPager(
   viewPager: ViewPager,
@@ -43,11 +40,11 @@ inline fun TabLayout.setupWithViewPager(
   }
 }
 
-inline fun TabLayout.setupWithViewPager2(
+fun TabLayout.setupWithViewPager2(
   viewPager: ViewPager2,
   autoRefresh: Boolean = true,
   enableScroll: Boolean = true,
-  noinline tabConfigurationStrategy: (TabLayout.Tab, Int) -> Unit
+  tabConfigurationStrategy: (TabLayout.Tab, Int) -> Unit
 ) {
   viewPager.isUserInputEnabled = enableScroll
   TabLayoutMediator(this, viewPager, autoRefresh, enableScroll, tabConfigurationStrategy).attach()

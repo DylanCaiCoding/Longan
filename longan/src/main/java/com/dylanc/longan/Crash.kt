@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -22,10 +22,8 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * @author Dylan Cai
- */
-inline fun saveCrashLogLocally(dirPath: String = cacheDirPath) =
+
+fun saveCrashLogLocally(dirPath: String = cacheDirPath) =
   handleUncaughtException { thread, e ->
     val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
     val file = File(dirPath, "crash_${dateTime.replace(" ", "_")}.txt")

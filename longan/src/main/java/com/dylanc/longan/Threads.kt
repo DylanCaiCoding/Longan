@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
 import android.os.Handler
 import android.os.Looper
 
-/**
- * @author Dylan Cai
- */
 
 val mainHandler = lazy { Handler(Looper.getMainLooper()) }
 
-inline fun mainThread(noinline block: () -> Unit) =
+fun mainThread(block: () -> Unit) =
   mainHandler.value.post(block)
 
-inline fun mainThread(delayMillis: Long, noinline block: () -> Unit) =
+fun mainThread(delayMillis: Long, block: () -> Unit) =
   mainHandler.value.postDelayed(block, delayMillis)

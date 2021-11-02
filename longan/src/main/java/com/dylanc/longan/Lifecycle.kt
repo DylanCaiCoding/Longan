@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -23,9 +23,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 
-/**
- * @author Dylan Cai
- */
 
 inline fun Fragment.doOnViewLifecycle(
   crossinline onCreateView: () -> Unit = {},

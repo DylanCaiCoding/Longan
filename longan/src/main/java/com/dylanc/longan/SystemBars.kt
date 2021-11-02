@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -36,10 +36,10 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 
 
-inline fun Fragment.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) =
+fun Fragment.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) =
   activity?.immerseStatusBar(lightMode, addBottomMargin)
 
-inline fun Activity.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) {
+fun Activity.immerseStatusBar(lightMode: Boolean = true, addBottomMargin: Boolean = true) {
   decorFitsSystemWindows = false
   windowInsetsControllerCompat?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
   transparentStatusBar()
@@ -101,10 +101,9 @@ val statusBarHeight: Int
       }
     }
 
-inline fun Fragment.transparentStatusBar() =
-  activity?.immerseStatusBar()
+fun Fragment.transparentStatusBar() = activity?.immerseStatusBar()
 
-inline fun Activity.transparentStatusBar() {
+fun Activity.transparentStatusBar() {
   statusBarColor = Color.TRANSPARENT
 }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -24,9 +24,6 @@ import java.io.FileWriter
 import java.io.PrintWriter
 import java.net.URLConnection
 
-/**
- * @author Dylan Cai
- */
 
 inline val File.mimeType: String? get() = URLConnection.guessContentTypeFromName(name)
 

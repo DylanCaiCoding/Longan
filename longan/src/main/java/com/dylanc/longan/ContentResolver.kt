@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -26,10 +26,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 
-
-/**
- * @author Dylan Cai
- */
 
 inline val contentResolver: ContentResolver get() = application.contentResolver
 
@@ -129,7 +125,7 @@ inline fun ContentResolver.update(
   update(uri, contentValues(block), where, selectionArgs)
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-inline fun ContentResolver.delete(
+fun ContentResolver.delete(
   @RequiresPermission.Write uri: Uri,
   where: String? = null,
   selectionArgs: Array<String>? = null

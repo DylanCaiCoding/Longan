@@ -29,10 +29,6 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.LiveData
 
 
-/**
- * @author Dylan Cai
- */
-
 @get:RequiresPermission(BLUETOOTH)
 inline val isBluetoothEnabled: Boolean
   get() = BluetoothAdapter.getDefaultAdapter()?.isEnabled == true

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -30,32 +30,28 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 
 
-/**
- * @author Dylan Cai
- */
-
-inline fun Fragment.toast(message: CharSequence?): Toast =
+fun Fragment.toast(message: CharSequence?): Toast =
   requireActivity().toast(message)
 
-inline fun Fragment.toast(@StringRes message: Int): Toast =
+fun Fragment.toast(@StringRes message: Int): Toast =
   requireActivity().toast(message)
 
-inline fun Context.toast(message: CharSequence?): Toast =
+fun Context.toast(message: CharSequence?): Toast =
   Toast.makeText(this, message, Toast.LENGTH_SHORT).fixBadTokenException().apply { show() }
 
-inline fun Context.toast(@StringRes message: Int): Toast =
+fun Context.toast(@StringRes message: Int): Toast =
   Toast.makeText(this, message, Toast.LENGTH_SHORT).fixBadTokenException().apply { show() }
 
-inline fun Fragment.longToast(message: CharSequence?): Toast =
+fun Fragment.longToast(message: CharSequence?): Toast =
   requireActivity().longToast(message)
 
-inline fun Fragment.longToast(@StringRes message: Int): Toast =
+fun Fragment.longToast(@StringRes message: Int): Toast =
   requireActivity().longToast(message)
 
-inline fun Context.longToast(message: CharSequence?): Toast =
+fun Context.longToast(message: CharSequence?): Toast =
   Toast.makeText(this, message, Toast.LENGTH_LONG).fixBadTokenException().apply { show() }
 
-inline fun Context.longToast(@StringRes message: Int): Toast =
+fun Context.longToast(@StringRes message: Int): Toast =
   Toast.makeText(this, message, Toast.LENGTH_LONG).fixBadTokenException().apply { show() }
 
 fun Toast.fixBadTokenException(): Toast = apply {

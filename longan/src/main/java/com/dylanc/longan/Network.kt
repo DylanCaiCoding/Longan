@@ -30,10 +30,6 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.LiveData
 
 
-/**
- * @author Dylan Cai
- */
-
 @get:RequiresPermission(ACCESS_NETWORK_STATE)
 inline val isNetworkAvailable: Boolean
   get() {

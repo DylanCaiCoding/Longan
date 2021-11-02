@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan.design
 
@@ -30,14 +30,11 @@ import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_END
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_START
 import androidx.recyclerview.widget.RecyclerView
 
-/**
- * @author Dylan Cai
- */
 
-inline fun RecyclerView.setEmptyView(owner: LifecycleOwner, emptyView: View) =
+fun RecyclerView.setEmptyView(owner: LifecycleOwner, emptyView: View) =
   observeDataEmpty(owner) { emptyView.isVisible = it }
 
-inline fun RecyclerView.observeDataEmpty(owner: LifecycleOwner, noinline block: (Boolean) -> Unit) {
+fun RecyclerView.observeDataEmpty(owner: LifecycleOwner, block: (Boolean) -> Unit) {
   owner.lifecycle.addObserver(object : LifecycleObserver {
     private var observer: RecyclerView.AdapterDataObserver? = null
 
@@ -62,20 +59,20 @@ inline fun RecyclerView.observeDataEmpty(owner: LifecycleOwner, noinline block: 
   })
 }
 
-inline fun RecyclerView.smoothScrollToStartPosition(position: Int) =
+fun RecyclerView.smoothScrollToStartPosition(position: Int) =
   smoothScrollToPosition(position, SNAP_TO_START)
 
-inline fun RecyclerView.smoothScrollToEndPosition(position: Int) =
+fun RecyclerView.smoothScrollToEndPosition(position: Int) =
   smoothScrollToPosition(position, SNAP_TO_END)
 
-inline fun RecyclerView.smoothScrollToPosition(position: Int, snapPreference: Int) =
+fun RecyclerView.smoothScrollToPosition(position: Int, snapPreference: Int) =
   layoutManager?.let {
     val smoothScroller = LinearSmoothScroller(context, snapPreference)
     smoothScroller.targetPosition = position
     it.startSmoothScroll(smoothScroller)
   }
 
-inline fun LinearSmoothScroller(context: Context, snapPreference: Int) =
+fun LinearSmoothScroller(context: Context, snapPreference: Int) =
   object : LinearSmoothScroller(context) {
     override fun getVerticalSnapPreference() = snapPreference
     override fun getHorizontalSnapPreference() = snapPreference

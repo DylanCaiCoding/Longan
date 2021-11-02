@@ -21,10 +21,6 @@ package com.dylanc.longan
 import android.os.Environment
 
 
-/**
- * @author Dylan Cai
- */
-
 inline val cacheDirPath: String
   get() = if (isExternalStorageWritable || !isExternalStorageRemovable)
     externalCacheDirPath.orEmpty()

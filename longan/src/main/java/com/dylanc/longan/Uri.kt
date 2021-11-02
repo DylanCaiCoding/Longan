@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE", "unused")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -38,6 +38,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
+
 lateinit var fileProviderAuthority: String
 
 inline val EXTERNAL_MEDIA_IMAGES_URI: Uri
@@ -53,7 +54,7 @@ inline val EXTERNAL_MEDIA_AUDIO_URI: Uri
 inline val EXTERNAL_MEDIA_DOWNLOADS_URI: Uri
   get() = MediaStore.Downloads.EXTERNAL_CONTENT_URI
 
-inline fun File.toUri(authority: String = fileProviderAuthority): Uri =
+fun File.toUri(authority: String = fileProviderAuthority): Uri =
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
     FileProvider.getUriForFile(application, authority, this)
   } else {
@@ -88,17 +89,17 @@ fun Uri.delete(launcher: ActivityResultLauncher<IntentSenderRequest>): Boolean =
     }
   }
 
-inline fun <R> Uri.openFileDescriptor(mode: String = "r", block: (ParcelFileDescriptor) -> R): R? =
+inline fun <R> Uri.openFileDescriptor(mode: String = "r", crossinline block: (ParcelFileDescriptor) -> R): R? =
   contentResolver.openFileDescriptor(this, mode)?.use(block)
 
-inline fun <R> Uri.openInputStream(block: (InputStream) -> R): R? =
+inline fun <R> Uri.openInputStream(crossinline block: (InputStream) -> R): R? =
   contentResolver.openInputStream(this)?.use(block)
 
-inline fun <R> Uri.openOutputStream(block: (OutputStream) -> R): R? =
+inline fun <R> Uri.openOutputStream(crossinline block: (OutputStream) -> R): R? =
   contentResolver.openOutputStream(this)?.use(block)
 
 @RequiresApi(Build.VERSION_CODES.Q)
-inline fun Uri.loadThumbnail(width: Int, height: Int, signal: CancellationSignal? = null): Bitmap =
+fun Uri.loadThumbnail(width: Int, height: Int, signal: CancellationSignal? = null): Bitmap =
   contentResolver.loadThumbnail(this, Size(width, height), signal)
 
 inline val Uri.fileExtension: String?

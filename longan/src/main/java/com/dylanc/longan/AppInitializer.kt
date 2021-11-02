@@ -24,9 +24,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.startup.Initializer
 
-/**
- * @author Dylan Cai
- */
 
 internal class AppInitializer : Initializer<Unit> {
 

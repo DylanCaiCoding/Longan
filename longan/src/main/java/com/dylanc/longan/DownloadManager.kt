@@ -33,6 +33,7 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import kotlin.DeprecationLevel.ERROR
 
+
 @RequiresPermission("android.permission.ACCESS_DOWNLOAD_MANAGER")
 fun download(url: String, block: DownloadRequestBuilder.() -> Unit) =
   DownloadRequestBuilder(url).apply(block).build()

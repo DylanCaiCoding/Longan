@@ -22,9 +22,6 @@ import android.content.ContentValues
 import android.os.Build
 import android.provider.MediaStore
 
-/**
- * @author Dylan Cai
- */
 
 inline fun contentValues(block: ContentValues.() -> Unit) = ContentValues().apply(block)
 

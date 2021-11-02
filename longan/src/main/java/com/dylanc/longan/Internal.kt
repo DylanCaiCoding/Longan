@@ -20,9 +20,6 @@ package com.dylanc.longan
 
 import android.view.View
 
-/**
- * @author Dylan Cai
- */
 
 internal const val NO_GETTER: String = "Property does not have a getter"
 

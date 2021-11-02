@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan.design
 
@@ -25,14 +25,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 
 
-/**
- * @author Dylan Cai
- */
-
-inline fun FragmentActivity.FragmentStateAdapter(vararg fragments: Fragment) =
+fun FragmentActivity.FragmentStateAdapter(vararg fragments: Fragment) =
   FragmentStateAdapter(fragments.size) { fragments[it] }
 
-inline fun Fragment.FragmentStateAdapter(vararg fragments: Fragment) =
+fun Fragment.FragmentStateAdapter(vararg fragments: Fragment) =
   FragmentStateAdapter(fragments.size) { fragments[it] }
 
 inline fun FragmentActivity.FragmentStateAdapter(itemCount: Int, crossinline block: (Int) -> Fragment) =
@@ -48,5 +44,5 @@ inline fun Fragment.FragmentStateAdapter(itemCount: Int, crossinline block: (Int
   }
 
 @Suppress("UNCHECKED_CAST")
-inline fun <T : Fragment> ViewPager2.findFragment(fragmentManager: FragmentManager, position: Int) =
+fun <T : Fragment> ViewPager2.findFragment(fragmentManager: FragmentManager, position: Int) =
   fragmentManager.findFragmentByTag("f$position") as T?
