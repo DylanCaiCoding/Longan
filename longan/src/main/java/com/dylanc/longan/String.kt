@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -24,9 +24,7 @@ import androidx.core.util.PatternsCompat
 import org.json.JSONObject
 import java.util.*
 
-/**
- * @author Dylan Cai
- */
+
 const val REGEX_ID_CARD_15: String =
   "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$"
 
@@ -36,41 +34,41 @@ const val REGEX_ID_CARD_18: String =
 inline val randomUUIDString: String
   get() = UUID.randomUUID().toString()
 
-inline fun Long.toFileSizeString(): String =
+fun Long.toFileSizeString(): String =
   Formatter.formatFileSize(application, this)
 
-inline fun Long.toShortFileSizeString(): String =
+fun Long.toShortFileSizeString(): String =
   Formatter.formatShortFileSize(application, this)
 
-inline fun String.limitLength(length: Int): String =
+fun String.limitLength(length: Int): String =
   if (this.length <= length) this else substring(0, length)
 
-inline fun String.isPhone(): Boolean =
+fun String.isPhone(): Boolean =
   Patterns.PHONE.matcher(this).matches()
 
-inline fun String.isDomainName(): Boolean =
+fun String.isDomainName(): Boolean =
   PatternsCompat.DOMAIN_NAME.matcher(this).matches()
 
-inline fun String.isEmail(): Boolean =
+fun String.isEmail(): Boolean =
   PatternsCompat.EMAIL_ADDRESS.matcher(this).matches()
 
-inline fun String.isIP(): Boolean =
+fun String.isIP(): Boolean =
   PatternsCompat.IP_ADDRESS.matcher(this).matches()
 
 /**
  *  Regular expression pattern to match most part of RFC 3987
  *  Internationalized URLs, aka IRIs.
  */
-inline fun String.isWebUrl(): Boolean =
+fun String.isWebUrl(): Boolean =
   PatternsCompat.WEB_URL.matcher(this).matches()
 
-inline fun String.isIDCard15(): Boolean =
+fun String.isIDCard15(): Boolean =
   REGEX_ID_CARD_15.toRegex().matches(this)
 
-inline fun String.isIDCard18(): Boolean =
+fun String.isIDCard18(): Boolean =
   REGEX_ID_CARD_18.toRegex().matches(this)
 
-inline fun String.isJson(): Boolean =
+fun String.isJson(): Boolean =
   try {
     JSONObject(this)
     true

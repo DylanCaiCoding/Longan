@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
 import android.content.res.Resources
 import android.util.TypedValue
 
-/**
- * @author Dylan Cai
- */
 
 inline val Int.dp: Float get() = toFloat().dp
 
@@ -43,21 +40,21 @@ inline val Double.sp: Float get() = toFloat().sp
 inline val Float.sp: Float
   get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)
 
-inline fun Int.pxToDp(): Int = toFloat().pxToDp()
+fun Int.pxToDp(): Int = toFloat().pxToDp()
 
-inline fun Long.pxToDp(): Int = toFloat().pxToDp()
+fun Long.pxToDp(): Int = toFloat().pxToDp()
 
-inline fun Double.pxToDp(): Int = toFloat().pxToDp()
+fun Double.pxToDp(): Int = toFloat().pxToDp()
 
-inline fun Float.pxToDp(): Int =
+fun Float.pxToDp(): Int =
   (this / Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-inline fun Int.pxToSp(): Int = toFloat().pxToSp()
+fun Int.pxToSp(): Int = toFloat().pxToSp()
 
-inline fun Long.pxToSp(): Int = toFloat().pxToSp()
+fun Long.pxToSp(): Int = toFloat().pxToSp()
 
-inline fun Double.pxToSp(): Int = toFloat().pxToSp()
+fun Double.pxToSp(): Int = toFloat().pxToSp()
 
-inline fun Float.pxToSp(): Int =
+fun Float.pxToSp(): Int =
   (this / Resources.getSystem().displayMetrics.scaledDensity + 0.5f).toInt()
 

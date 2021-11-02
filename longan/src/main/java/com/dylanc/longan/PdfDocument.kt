@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -26,20 +26,17 @@ import android.print.PrintAttributes
 import java.io.File
 import java.io.FileOutputStream
 
-/**
- * @author Dylan Cai
- */
 
-inline fun Bitmap.toA4PdfDoc(): PdfDocument =
+fun Bitmap.toA4PdfDoc(): PdfDocument =
   listOf(this).toA4PdfDoc()
 
-inline fun List<Bitmap>.toA4PdfDoc(): PdfDocument {
+fun List<Bitmap>.toA4PdfDoc(): PdfDocument {
   val pageWidth: Int = PrintAttributes.MediaSize.ISO_A4.widthMils * 72 / 1000
   val pageHeight: Int = if (isNotEmpty()) first().height * pageWidth / first().width else 0
   return toPdfDoc(pageWidth, pageHeight)
 }
 
-inline fun Bitmap.toPdfDoc(pageWidth: Int, pageHeight: Int): PdfDocument =
+fun Bitmap.toPdfDoc(pageWidth: Int, pageHeight: Int): PdfDocument =
   listOf(this).toPdfDoc(pageWidth, pageHeight)
 
 fun List<Bitmap>.toPdfDoc(pageWidth: Int, pageHeight: Int): PdfDocument =
@@ -57,7 +54,7 @@ fun List<Bitmap>.toPdfDoc(pageWidth: Int, pageHeight: Int): PdfDocument =
     }
   }
 
-inline fun PdfDocument.writeTo(file: File) {
+fun PdfDocument.writeTo(file: File) {
   FileOutputStream(file).use {
     writeTo(it)
   }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -28,10 +28,6 @@ import android.os.Bundle
 import androidx.annotation.RequiresPermission
 import androidx.core.os.bundleOf
 
-
-/**
- * @author Dylan Cai
- */
 
 inline fun <reified T> Context.intentOf(vararg pairs: Pair<String, *>): Intent =
   intentOf<T>(bundleOf(*pairs))
@@ -51,21 +47,21 @@ inline fun <reified T> Activity.safeIntentExtras(name: String) = lazy<T> {
   checkNotNull(intent.extras[name]) { "No intent value for key \"$name\"" }
 }
 
-inline fun dial(phoneNumber: String): Boolean =
+fun dial(phoneNumber: String): Boolean =
   Intent(Intent.ACTION_DIAL, Uri.parse("tel:${Uri.encode(phoneNumber)}"))
     .startForActivity()
 
 @RequiresPermission(CALL_PHONE)
-inline fun makeCall(phoneNumber: String): Boolean =
+fun makeCall(phoneNumber: String): Boolean =
   Intent(Intent.ACTION_CALL, Uri.parse("tel:${Uri.encode(phoneNumber)}"))
     .startForActivity()
 
-inline fun sendSMS(phoneNumber: String, content: String): Boolean =
+fun sendSMS(phoneNumber: String, content: String): Boolean =
   Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:${Uri.encode(phoneNumber)}"))
     .apply { putExtra("sms_body", content) }
     .startForActivity()
 
-inline fun browse(url: String, newTask: Boolean = false): Boolean =
+fun browse(url: String, newTask: Boolean = false): Boolean =
   Intent(Intent.ACTION_VIEW, Uri.parse(url))
     .apply { if (newTask) newTask() }
     .startForActivity()
@@ -79,14 +75,14 @@ fun email(email: String, subject: String = "", text: String = ""): Boolean =
     }
     .startForActivity()
 
-inline fun installAPK(uri: Uri): Boolean =
+fun installAPK(uri: Uri): Boolean =
   Intent(Intent.ACTION_VIEW)
     .newTask()
     .grantReadPermission()
     .apply { setDataAndType(uri, "application/vnd.android.package-archive") }
     .startForActivity()
 
-inline fun Intent.startForActivity(): Boolean =
+fun Intent.startForActivity(): Boolean =
   try {
     topActivity.startActivity(this)
     true
@@ -95,7 +91,7 @@ inline fun Intent.startForActivity(): Boolean =
     false
   }
 
-inline fun Intent.clearTask(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK) }
+fun Intent.clearTask(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK) }
 
 inline fun Intent.clearTop(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 

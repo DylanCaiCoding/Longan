@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -32,10 +32,6 @@ import android.os.Process
 import android.provider.Settings
 import androidx.core.content.pm.PackageInfoCompat
 
-
-/**
- * @author Dylan Cai
- */
 
 val application: Application get() = AppInitializer.application
 
@@ -59,12 +55,12 @@ inline val isAppDebug: Boolean
 inline val isAppDarkMode: Boolean
   get() = (application.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
 
-inline fun launchAppDetailsSettings(): Boolean =
+fun launchAppDetailsSettings(): Boolean =
   Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
     .apply { data = Uri.fromParts("package", packageName, null) }
     .startForActivity()
 
-inline fun relaunchApp(killProcess: Boolean = true) =
+fun relaunchApp(killProcess: Boolean = true) =
   application.packageManager.getLaunchIntentForPackage(packageName)?.let {
     it.addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_CLEAR_TOP)
     startActivity(it)

@@ -22,9 +22,6 @@ import kotlin.RequiresOptIn.Level.WARNING
 import kotlin.annotation.AnnotationRetention.BINARY
 import kotlin.annotation.AnnotationTarget.*
 
-/**
- * @author Dylan Cai
- */
 
 @RequiresOptIn(level = WARNING)
 @Retention(BINARY)

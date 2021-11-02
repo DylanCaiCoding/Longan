@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan.design
 
@@ -29,6 +29,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.DeprecationLevel.ERROR
+
 
 typealias AlertBuilderFactory<D> = (Context) -> AlertBuilder<D>
 
@@ -307,10 +308,10 @@ inline fun <D : DialogInterface> Context.alertDialog(
 ) =
   factory(this).apply(block)
 
-inline fun AlertBuilder<*>.okButton(noinline onClicked: (dialog: DialogInterface) -> Unit) =
+fun AlertBuilder<*>.okButton(onClicked: (dialog: DialogInterface) -> Unit) =
   positiveButton(android.R.string.ok, onClicked)
 
-inline fun AlertBuilder<*>.cancelButton(noinline onClicked: (dialog: DialogInterface) -> Unit) =
+fun AlertBuilder<*>.cancelButton(onClicked: (dialog: DialogInterface) -> Unit) =
   negativeButton(android.R.string.cancel, onClicked)
 
 inline fun <T> AlertBuilder<*>.items(
@@ -357,29 +358,29 @@ inline fun <T> AlertBuilder<*>.multiChoiceItems(
     onItemSelected(dialog, items[which], which, isChecked)
   }
 
-inline fun Dialog.doOnCancel(noinline block: (DialogInterface) -> Unit) = apply {
+fun Dialog.doOnCancel(block: (DialogInterface) -> Unit) = apply {
   setOnCancelListener(block)
 }
 
-inline fun Dialog.doOnDismiss(noinline block: (DialogInterface) -> Unit) = apply {
+fun Dialog.doOnDismiss(block: (DialogInterface) -> Unit) = apply {
   setOnDismissListener(block)
 }
 
-inline fun Dialog.doOnShow(noinline block: (DialogInterface) -> Unit) = apply {
+fun Dialog.doOnShow(block: (DialogInterface) -> Unit) = apply {
   setOnShowListener(block)
 }
 
-inline fun DialogInterface.doOnCancel(noinline block: (DialogInterface) -> Unit) = apply {
+fun DialogInterface.doOnCancel(block: (DialogInterface) -> Unit) = apply {
   check(this is Dialog)
   setOnCancelListener(block)
 }
 
-inline fun DialogInterface.doOnDismiss(noinline block: (DialogInterface) -> Unit) = apply {
+fun DialogInterface.doOnDismiss(block: (DialogInterface) -> Unit) = apply {
   check(this is Dialog)
   setOnDismissListener(block)
 }
 
-inline fun DialogInterface.doOnShow(noinline block: (DialogInterface) -> Unit) = apply {
+fun DialogInterface.doOnShow(block: (DialogInterface) -> Unit) = apply {
   check(this is Dialog)
   setOnShowListener(block)
 }

@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
 import android.util.Log
 
-/**
- * @author Dylan Cai
- */
 
 fun initLogger(isLoggable: Boolean = true, printer: LoggerPrinter? = null) {
   Logger.isLoggable = { _, _ -> isLoggable }
@@ -65,44 +62,44 @@ inline fun <reified T : Any> Logger(): Logger = object : Logger {
   override val loggerTag: String get() = T::class.java.simpleName.limitLength(23)
 }
 
-inline fun Logger(tag: String): Logger = object : Logger {
+fun Logger(tag: String): Logger = object : Logger {
   override val loggerTag: String get() = tag
 }
 
-inline fun Logger.logVerbose(message: Any?, thr: Throwable? = null) =
+fun Logger.logVerbose(message: Any?, thr: Throwable? = null) =
   log(LogLevel.VERBOSE, loggerTag, message, thr)
 
-inline fun Logger.logDebug(message: Any?, thr: Throwable? = null) =
+fun Logger.logDebug(message: Any?, thr: Throwable? = null) =
   log(LogLevel.DEBUG, loggerTag, message, thr)
 
-inline fun Logger.logInfo(message: Any?, thr: Throwable? = null) =
+fun Logger.logInfo(message: Any?, thr: Throwable? = null) =
   log(LogLevel.INFO, loggerTag, message, thr)
 
-inline fun Logger.logWarn(message: Any?, thr: Throwable? = null) =
+fun Logger.logWarn(message: Any?, thr: Throwable? = null) =
   log(LogLevel.WARN, loggerTag, message, thr)
 
-inline fun Logger.logError(message: Any?, thr: Throwable? = null) =
+fun Logger.logError(message: Any?, thr: Throwable? = null) =
   log(LogLevel.ERROR, loggerTag, message, thr)
 
-inline fun Logger.logWtf(message: Any?, thr: Throwable? = null) =
+fun Logger.logWtf(message: Any?, thr: Throwable? = null) =
   Logger.printer.logWtf(loggerTag, message.toString(), thr)
 
-inline fun logVerbose(message: Any?, thr: Throwable? = null) =
+fun logVerbose(message: Any?, thr: Throwable? = null) =
   log(LogLevel.VERBOSE, TAG, message, thr)
 
-inline fun logDebug(message: Any?, thr: Throwable? = null) =
+fun logDebug(message: Any?, thr: Throwable? = null) =
   log(LogLevel.DEBUG, TAG, message, thr)
 
-inline fun logInfo(message: Any?, thr: Throwable? = null) =
+fun logInfo(message: Any?, thr: Throwable? = null) =
   log(LogLevel.INFO, TAG, message, thr)
 
-inline fun logWarn(message: Any?, thr: Throwable? = null) =
+fun logWarn(message: Any?, thr: Throwable? = null) =
   log(LogLevel.WARN, TAG, message, thr)
 
-inline fun logError(message: Any?, thr: Throwable? = null) =
+fun logError(message: Any?, thr: Throwable? = null) =
   log(LogLevel.ERROR, TAG, message, thr)
 
-inline fun logWtf(message: Any?, thr: Throwable? = null) =
+fun logWtf(message: Any?, thr: Throwable? = null) =
   Logger.printer.logWtf(TAG, message.toString(), thr)
 
 fun log(level: LogLevel, tag: String, message: Any?, thr: Throwable? = null) {

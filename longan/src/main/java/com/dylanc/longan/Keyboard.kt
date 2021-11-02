@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
 import android.widget.EditText
 import androidx.core.view.WindowInsetsCompat.Type
 
-/**
- * @author Dylan Cai
- */
 
-inline fun EditText.showKeyboard() =
+fun EditText.showKeyboard() =
   windowInsetsControllerCompat?.show(Type.ime())
 
-inline fun EditText.hideKeyboard() =
+fun EditText.hideKeyboard() =
   windowInsetsControllerCompat?.hide(Type.ime())
 
-inline fun EditText.toggleKeyboard() =
+fun EditText.toggleKeyboard() =
   if (isKeyboardVisible) hideKeyboard() else showKeyboard()
 
 inline val EditText.isKeyboardVisible: Boolean

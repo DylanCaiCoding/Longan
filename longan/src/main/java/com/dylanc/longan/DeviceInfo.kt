@@ -18,9 +18,6 @@ package com.dylanc.longan
 
 import android.os.Build
 
-/**
- * @author Dylan Cai
- */
 
 inline val sdkVersionName: String get() = Build.VERSION.RELEASE
 

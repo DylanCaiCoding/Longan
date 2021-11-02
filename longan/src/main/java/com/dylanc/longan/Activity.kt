@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
@@ -40,7 +40,7 @@ import kotlin.reflect.KClass
 
 internal val activityCache = LinkedList<Activity>()
 
-inline fun startActivity(intent: Intent) = topActivity.startActivity(intent)
+fun startActivity(intent: Intent) = topActivity.startActivity(intent)
 
 inline fun <reified T : Activity> startActivity(
   vararg pairs: Pair<String, Any?>,
@@ -54,7 +54,7 @@ inline fun <reified T : Activity> Context.startActivity(
 ) =
   startActivity(intentOf<T>(*pairs).apply(block))
 
-inline fun Activity.finishWithResult(vararg pairs: Pair<String, *>) {
+fun Activity.finishWithResult(vararg pairs: Pair<String, *>) {
   setResult(Activity.RESULT_OK, Intent().apply { putExtras(bundleOf(*pairs)) })
   finish()
 }
@@ -91,10 +91,10 @@ fun finishAllActivitiesExceptNewest(): Boolean =
     }
   }
 
-inline fun ComponentActivity.pressBackTwiceToExitApp(toastText: String, delayMillis: Long = 2000) =
+fun ComponentActivity.pressBackTwiceToExitApp(toastText: String, delayMillis: Long = 2000) =
   pressBackTwiceToExitApp(delayMillis) { toast(toastText) }
 
-inline fun ComponentActivity.pressBackTwiceToExitApp(@StringRes toastText: Int, delayMillis: Long = 2000) =
+fun ComponentActivity.pressBackTwiceToExitApp(@StringRes toastText: Int, delayMillis: Long = 2000) =
   pressBackTwiceToExitApp(delayMillis) { toast(toastText) }
 
 inline fun ComponentActivity.pressBackTwiceToExitApp(delayMillis: Long = 2000, crossinline onFirstBackPressed: () -> Unit) {
@@ -113,7 +113,7 @@ inline fun ComponentActivity.pressBackTwiceToExitApp(delayMillis: Long = 2000, c
   })
 }
 
-inline fun ComponentActivity.pressBackToNotExitApp() {
+fun ComponentActivity.pressBackToNotExitApp() {
   onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
     override fun handleOnBackPressed() {
       moveTaskToBack(false)
@@ -121,7 +121,7 @@ inline fun ComponentActivity.pressBackToNotExitApp() {
   })
 }
 
-inline fun Context.checkPermission(permission: String): Boolean =
+fun Context.checkPermission(permission: String): Boolean =
   ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
 
 inline val Activity.windowInsetsControllerCompat: WindowInsetsControllerCompat?

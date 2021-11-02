@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package com.dylanc.longan
 
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 
-/**
- * @author Dylan Cai
- */
 
-inline fun Fragment.withArguments(vararg pairs: Pair<String, *>) = apply {
+fun Fragment.withArguments(vararg pairs: Pair<String, *>) = apply {
   arguments = bundleOf(*pairs)
 }
 
