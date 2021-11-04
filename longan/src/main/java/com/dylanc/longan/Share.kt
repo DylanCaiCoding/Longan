@@ -55,12 +55,11 @@ fun shareFile(uri: Uri, title: String? = null, mimeType: String = uri.mimeType.o
   }
 
 fun shareFiles(uris: List<Uri>, title: String? = null, mimeType: String? = null) {
-  val mime = mimeType ?: if (uris.isNotEmpty()) uris.first().mimeType.orEmpty() else ""
-  share(mime) {
+  share(mimeType ?: uris.firstOrNull()?.mimeType) {
     uris.forEach { addStream(it) }
     setChooserTitle(title)
   }
 }
 
-inline fun share(mimeType: String, crossinline block: ShareCompat.IntentBuilder.() -> Unit) =
+inline fun share(mimeType: String?, crossinline block: ShareCompat.IntentBuilder.() -> Unit) =
   ShareCompat.IntentBuilder(topActivity).apply { setType(mimeType) }.apply(block).startChooser()

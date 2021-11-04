@@ -35,7 +35,6 @@ inline var Fragment.isFullScreen: Boolean
     activity?.isFullScreen = value
   }
 
-
 inline var Activity.isFullScreen: Boolean
   get() = window.decorView.rootWindowInsetsCompat?.isVisible(WindowInsetsCompat.Type.systemBars()) == true
   set(value) {
