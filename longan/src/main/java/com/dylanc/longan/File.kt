@@ -18,6 +18,11 @@
 
 package com.dylanc.longan
 
+import okio.ByteString.Companion.encodeUtf8
+import okio.HashingSink
+import okio.blackholeSink
+import okio.buffer
+import okio.source
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
@@ -31,3 +36,42 @@ inline val fileSeparator: String get() = File.separator
 
 inline fun File.print(crossinline block: PrintWriter.() -> Unit) =
   PrintWriter(BufferedWriter(FileWriter(this))).apply(block).close()
+
+fun File.checkMD5(md5: String): Boolean = calculateMD5() == md5
+
+fun File.checkSHA1(sha1: String): Boolean = calculateSHA1() == sha1
+
+fun File.checkSHA256(sha256: String): Boolean = calculateSHA256() == sha256
+
+fun File.checkSHA512(sha512: String): Boolean = calculateSHA512() == sha512
+
+fun File.checkHmacSHA1(key: String, hmacSHA1: String): Boolean = calculateHmacSHA1(key) == hmacSHA1
+
+fun File.checkHmacSHA256(key: String, hmacSHA256: String): Boolean = calculateHmacSHA256(key) == hmacSHA256
+
+fun File.checkHmacSHA512(key: String, hmacSHA512: String): Boolean = calculateHmacSHA512(key) == hmacSHA512
+
+fun File.calculateMD5(): String = calculateHash(HashingSink.md5(blackholeSink()))
+
+fun File.calculateSHA1(): String = calculateHash(HashingSink.sha1(blackholeSink()))
+
+fun File.calculateSHA256(): String = calculateHash(HashingSink.sha256(blackholeSink()))
+
+fun File.calculateSHA512(): String = calculateHash(HashingSink.sha512(blackholeSink()))
+
+fun File.calculateHmacSHA1(key: String): String =
+  calculateHash(HashingSink.hmacSha1(blackholeSink(), key.encodeUtf8()))
+
+fun File.calculateHmacSHA256(key: String): String =
+  calculateHash(HashingSink.hmacSha256(blackholeSink(), key.encodeUtf8()))
+
+fun File.calculateHmacSHA512(key: String): String =
+  calculateHash(HashingSink.hmacSha512(blackholeSink(), key.encodeUtf8()))
+
+private fun File.calculateHash(hashingSink: HashingSink) =
+  hashingSink.use {
+    source().buffer().use { source ->
+      source.readAll(hashingSink)
+      hashingSink.hash.hex()
+    }
+  }
