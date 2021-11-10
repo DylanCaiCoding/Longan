@@ -37,19 +37,22 @@ inline val fileSeparator: String get() = File.separator
 inline fun File.print(crossinline block: PrintWriter.() -> Unit) =
   PrintWriter(BufferedWriter(FileWriter(this))).apply(block).close()
 
-fun File.checkMD5(md5: String): Boolean = calculateMD5() == md5
+fun File.checkMD5(md5: String): Boolean = calculateMD5().equals(md5, true)
 
-fun File.checkSHA1(sha1: String): Boolean = calculateSHA1() == sha1
+fun File.checkSHA1(sha1: String): Boolean = calculateSHA1().equals(sha1, true)
 
-fun File.checkSHA256(sha256: String): Boolean = calculateSHA256() == sha256
+fun File.checkSHA256(sha256: String): Boolean = calculateSHA256().equals(sha256, true)
 
-fun File.checkSHA512(sha512: String): Boolean = calculateSHA512() == sha512
+fun File.checkSHA512(sha512: String): Boolean = calculateSHA512().equals(sha512, true)
 
-fun File.checkHmacSHA1(key: String, hmacSHA1: String): Boolean = calculateHmacSHA1(key) == hmacSHA1
+fun File.checkHmacSHA1(key: String, hmacSHA1: String): Boolean =
+  calculateHmacSHA1(key).equals(hmacSHA1, true)
 
-fun File.checkHmacSHA256(key: String, hmacSHA256: String): Boolean = calculateHmacSHA256(key) == hmacSHA256
+fun File.checkHmacSHA256(key: String, hmacSHA256: String): Boolean =
+  calculateHmacSHA256(key).equals(hmacSHA256, true)
 
-fun File.checkHmacSHA512(key: String, hmacSHA512: String): Boolean = calculateHmacSHA512(key) == hmacSHA512
+fun File.checkHmacSHA512(key: String, hmacSHA512: String): Boolean =
+  calculateHmacSHA512(key).equals(hmacSHA512, true)
 
 fun File.calculateMD5(): String = calculateHash(HashingSink.md5(blackholeSink()))
 
