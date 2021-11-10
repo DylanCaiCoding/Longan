@@ -31,22 +31,13 @@ val applicationViewModelStore by lazy { ViewModelStore() }
 
 @MainThread
 inline fun <reified VM : ViewModel> ComponentActivity.applicationViewModels(
-  noinline factoryProducer: () -> ViewModelProvider.Factory =
-    { ViewModelProvider.AndroidViewModelFactory.getInstance(application) }
+  noinline factoryProducer: () -> ViewModelProvider.Factory = { defaultViewModelProviderFactory }
 ): Lazy<VM> =
   createApplicationViewModelLazy(factoryProducer)
 
 @MainThread
 inline fun <reified VM : ViewModel> Fragment.applicationViewModels(
-  noinline factoryProducer: () -> ViewModelProvider.Factory =
-    { ViewModelProvider.AndroidViewModelFactory.getInstance(application) }
-): Lazy<VM> =
-  createApplicationViewModelLazy(factoryProducer)
-
-@MainThread
-inline fun <reified VM : ViewModel> ViewModel.applicationViewModels(
-  noinline factoryProducer: () -> ViewModelProvider.Factory =
-    { ViewModelProvider.AndroidViewModelFactory.getInstance(application) }
+  noinline factoryProducer: () -> ViewModelProvider.Factory = { defaultViewModelProviderFactory }
 ): Lazy<VM> =
   createApplicationViewModelLazy(factoryProducer)
 
