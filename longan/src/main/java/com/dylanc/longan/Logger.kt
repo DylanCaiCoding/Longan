@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.dylanc.longan
 
@@ -84,22 +84,22 @@ fun Logger.logError(message: Any?, thr: Throwable? = null) =
 fun Logger.logWtf(message: Any?, thr: Throwable? = null) =
   Logger.printer.logWtf(loggerTag, message.toString(), thr)
 
-fun logVerbose(message: Any?, thr: Throwable? = null) =
+inline fun logVerbose(message: Any?, thr: Throwable? = null) =
   log(LogLevel.VERBOSE, TAG, message, thr)
 
-fun logDebug(message: Any?, thr: Throwable? = null) =
+inline fun logDebug(message: Any?, thr: Throwable? = null) =
   log(LogLevel.DEBUG, TAG, message, thr)
 
-fun logInfo(message: Any?, thr: Throwable? = null) =
+inline fun logInfo(message: Any?, thr: Throwable? = null) =
   log(LogLevel.INFO, TAG, message, thr)
 
-fun logWarn(message: Any?, thr: Throwable? = null) =
+inline fun logWarn(message: Any?, thr: Throwable? = null) =
   log(LogLevel.WARN, TAG, message, thr)
 
-fun logError(message: Any?, thr: Throwable? = null) =
+inline fun logError(message: Any?, thr: Throwable? = null) =
   log(LogLevel.ERROR, TAG, message, thr)
 
-fun logWtf(message: Any?, thr: Throwable? = null) =
+inline fun logWtf(message: Any?, thr: Throwable? = null) =
   Logger.printer.logWtf(TAG, message.toString(), thr)
 
 fun log(level: LogLevel, tag: String, message: Any?, thr: Throwable? = null) {
