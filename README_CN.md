@@ -4,11 +4,9 @@
 
 [![](https://www.jitpack.io/v/DylanCaiCoding/Longan.svg)](https://www.jitpack.io/#DylanCaiCoding/Longan) [![](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://github.com/DylanCaiCoding/Longan/blob/master/LICENSE)
 
-Longan 是一个简化 Android 开发的 Kotlin 工具类集合，可以使代码更加简洁易读。
+Longan 是一个简化 Android 开发的 Kotlin 工具类集合，可以使代码更加简洁易读。**目前有超过 300 个常用方法或属性**，能有效提高开发效率。每个用法都会思考很多，并且参考官方 KTX 库的命名规则和用法，用起来会更加的舒服。具体的实现代码也会优化几版，用尽可能简洁轻量的代码实现功能，有兴趣的可以读下源码。
 
-本库会长期维护，有任何使用上的问题都可以反馈，个人会及时处理。有什么想要的功能都可以提，个人的想法比较多，应该会比大多数人封装的工具更易用，用法更全面，代码更简洁。
-
-个人有些完美主义，每个库都会在实现了功能之后对代码进行优化，基本都会修改两版以上，尽量用简洁轻量的代码实现功能。有兴趣的可以阅读一下源码，应该能增加一些对 Kotlin 的理解。
+本库会长期维护，有任何使用上的问题或者想要的功能都可以反馈，个人会及时处理。
 
 ## Gradle
 
@@ -27,9 +25,9 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.1'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.1'
 }
 ```
 
@@ -64,7 +62,7 @@ dependencies {
 
 ## 反馈
 
-为了更好地完善本库，我希望能听到更多的声音。有任何使用上的问题或者想要的功能都可以加我微信直接反馈，微信号同 GitHub 名： `DylanCaiCoding` ，我会拉个群。加好友时备注个 GitHub，个人不乱加陌生人。
+有任何使用上的问题或者想要的功能都可以提 [issues](https://github.com/DylanCaiCoding/Longan/issues/new) 或者加我微信直接反馈，微信号同 GitHub 名： `DylanCaiCoding` ，我会拉个群。加好友时备注个 GitHub，个人不乱加陌生人。
 
 ## 作者其它的库
 
