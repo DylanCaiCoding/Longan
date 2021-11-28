@@ -24,32 +24,162 @@ Add dependencies：
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.1'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.1'
+}
+```
+## Usage
+
+:pencil: **[Usage documentation](https://dylancaicoding.github.io/Longan)**
+
+## Sample
+
+The following describes some common functions.
+
+When you need Context or Activity, you can get the `application` or `topActivity` property directly.
+
+Start the Activity and pass the parameters:
+
+```kotlin
+startActivity<SomeOtherActivity>("id" to 5)
+```
+
+Use property delegates to get parameters within your Activity:
+
+```kotlin
+class SomeActivity : AppCompatActivity() {
+  private val name: String? by intentExtras("name")          // Get nullable parameter with the Intent
+  private val position: Int by intentExtras("position", 0)   // Get a non-null parameter with a default value with the Intent
+  private val id: String by safeIntentExtras("id")           // Get an artificially non-null parameter with the Intent
 }
 ```
 
-## Wiki
+Create the Fragment and pass the parameters:
 
-### All APIs
+```kotlin
+val fragment = SomeFragment().withArguments("id" to 5)
+```
 
-- [Common APIs](https://github.com/DylanCaiCoding/Longan/wiki/All-Common-APIs)
-- [Design APIs](https://github.com/DylanCaiCoding/Longan/wiki/All-Design-APIs)
+Use property delegates to get parameters within your Fragment:
 
-### Some usage
+```kotlin
+class SomeFragment : Fragment() {
+  private val name: String? by arguments("name")          // Get nullable parameter with the arguments
+  private val position: Int by arguments("position", 0)   // Get a non-null parameter with a default value with the arguments
+  private val id: String by safeArguments("id")           // Get an artificially non-null parameter with the arguments
+}
+```
 
-- [Activity](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Activity)
-- [Dialogs](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Dialogs)
-- [Fragment](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Fragment)
-- [Intents](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Intents)
-- [Logger](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Logger)
-- [SystemBars](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-SystemBars)
-- [Uri](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Uri)
+Simply shows a Toast or Snackbar message:
 
-### Others
+```kotlin
+toast("Hi there!")
+snackbar("Action, reaction", "Click me!") { doStuff() }
+```
 
-- [Q&A](https://github.com/DylanCaiCoding/Longan/wiki/Q&A)
+Show or hide the keyboard:
+
+```kotlin
+editText.showKeyboard()
+editText.hideKeyboard()
+```
+
+Use TabLayout + ViewPager2 to implement the bottom navigation bar of custom style:
+
+```kotlin
+viewPager2.adapter = FragmentStateAdapter(HomeFragment(), ShopFragment(), MineFragment())
+tabLayout.setupWithViewPager2(viewPager2, enableScroll = false) { tab, position ->
+  tab.setCustomView(R.layout.layout_bottom_tab) {
+    findViewById<TextView>(R.id.tv_title).setText(titleList[position])
+    findViewById<ImageView>(R.id.iv_icon).apply {
+      setImageResource(iconList[position])
+      contentDescription = getString(titleList[position])
+    }
+  }
+}
+```
+
+A line of code to double click the back key to exit App or click the back key not to exit App back to the desktop:
+
+```kotlin
+pressBackTwiceToExitApp("To exit app, pressing again")
+// pressBackToNotExitApp()
+```
+
+Immersive status bar, and increase the height of the status bar to the top margin of the title bar, can be adapted to the notch screen:
+
+```kotlin
+immerseStatusBar()
+toolbar.addStatusBarHeightToMarginTop()
+// toolbar.addStatusBarHeightToPaddingTop()
+```
+
+Achieve the countdown to obtain the verification code:
+
+```kotlin
+btnSendCode.startCountDown(this,
+  onTick = {
+    text = "${it} second"
+  },
+  onFinish = {
+    text = "send"
+  })
+```
+
+Make the button click only when the input box has content:
+
+```kotlin
+btnLogin.enableWhenOtherTextNotEmpty(edtAccount, edtPwd)
+```
+
+Click event can set the click interval to prevent repeated clicking within a period of time:
+
+```kotlin
+btnLogin.doOnClick(clickIntervals = 500) { 
+  // ...
+}
+```
+
+Automatically show an empty layout when RecyclerView's data is empty:
+
+```kotlin
+recyclerView.setEmptyView(this, emptyView)
+```
+
+RecyclerView scrolls smoothly to the starting position:
+
+```kotlin
+recyclerView.smoothScrollToStartPosition(position)
+```
+
+Simplifies custom view getting custom properties:
+
+```kotlin
+withStyledAttrs(attrs, R.styleable.CustomView) {
+  textSize = getDimension(R.styleable.CustomView_textSize, 12.sp)
+  textColor = getColor(R.styleable.CustomView_textColor, getCompatColor(R.color.text_normal))
+  icon = getDrawable(R.styleable.CustomView_icon) ?: getCompatDrawable(R.drawable.default_icon)
+  iconSize = getDimension(R.styleable.CustomView_iconSize, 30.dp)
+}
+```
+
+Custom view draws centered or vertically centered text:
+
+```kotlin
+canvas.drawCenterText(text, centerX, centerY, paint)
+canvas.drawCenterVerticalText(text, centerX, centerY, paint)
+```
+
+Switch to the main thread：
+
+```kotlin
+mainThread { 
+  // ...
+}
+```
+
+See the [usage documentation](https://dylancaicoding.github.io/Longan) for more usage.
 
 ## Change log
 

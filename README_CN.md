@@ -4,11 +4,9 @@
 
 [![](https://www.jitpack.io/v/DylanCaiCoding/Longan.svg)](https://www.jitpack.io/#DylanCaiCoding/Longan) [![](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://github.com/DylanCaiCoding/Longan/blob/master/LICENSE)
 
-Longan 是一个简化 Android 开发的 Kotlin 工具类集合，可以使代码更加简洁易读。
+Longan 是一个简化 Android 开发的 Kotlin 工具类集合，可以使代码更加简洁易读。**目前有超过 300 个常用方法或属性**，能有效提高开发效率。每个用法都会思考很多，并且参考官方 KTX 库的命名规则和用法，用起来会更加的舒服。具体的实现代码也会优化几版，用尽可能简洁轻量的代码实现功能，有兴趣的可以读下源码。
 
-本库会长期维护，有任何使用上的问题都可以反馈，个人会及时处理。有什么想要的功能都可以提，个人的想法比较多，应该会比大多数人封装的工具更易用，用法更全面，代码更简洁。
-
-个人有些完美主义，每个库都会在实现了功能之后对代码进行优化，基本都会修改两版以上，尽量用简洁轻量的代码实现功能。有兴趣的可以阅读一下源码，应该能增加一些对 Kotlin 的理解。
+本库会长期维护，有任何使用上的问题或者想要的功能都可以反馈，个人会及时处理。
 
 ## Gradle
 
@@ -27,32 +25,163 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.1'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.1'
 }
 ```
 
-## Wiki
+## 用法
 
-### 全部 APIs
+:pencil: **[使用文档](https://dylancaicoding.github.io/Longan)**
 
-- [Common APIs](https://github.com/DylanCaiCoding/Longan/wiki/All-Common-APIs)
-- [Design APIs](https://github.com/DylanCaiCoding/Longan/wiki/All-Design-APIs)
+## 示例
 
-### 部分用法
+下面介绍部分常用的功能：
 
-- [Activity](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Activity)
-- [Dialogs](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Dialogs)
-- [Fragment](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Fragment)
-- [Intents](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Intents)
-- [Logger](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Logger)
-- [SystemBars](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-SystemBars)
-- [Uri](https://github.com/DylanCaiCoding/Longan/wiki/Longan-%E2%80%93-Uri)
+在需要 Context 或 Activity 的时候，可直接获取 `application` 或 `topActivity` 属性。
 
-### 其它
+跳转 Activity 并传参：
 
-- [Q&A](https://github.com/DylanCaiCoding/Longan/wiki/Q&A)
+```kotlin
+startActivity<SomeOtherActivity>("id" to 5)
+```
+
+在 Activity 内使用属性委托获取参数：
+
+```kotlin
+class SomeActivity : AppCompatActivity() {
+  private val name: String? by intentExtras("name")          // 通过 Intent 获取可空的参数
+  private val position: Int by intentExtras("position", 0)   // 通过 Intent 获取含默认值的非空参数
+  private val id: String by safeIntentExtras("id")           // 通过 Intent 获取人为保证非空的参数
+}
+```
+
+创建带参数的 Fragment：
+
+```kotlin
+val fragment = SomeFragment().withArguments("id" to 5)
+```
+
+在 Fragment 内使用属性委托获取参数：
+
+```kotlin
+class SomeFragment : Fragment() {
+  private val name: String? by arguments("name")          // 通过 arguments 获取可空的参数
+  private val position: Int by arguments("position", 0)   // 通过 arguments 获取含默认值的非空参数
+  private val id: String by safeArguments("id")           // 通过 arguments 获取人为保证非空的参数
+}
+```
+
+显示 Toast 或 Snackbar 消息：
+
+```kotlin
+toast("Hi there!")
+snackbar("Action, reaction", "Click me!") { doStuff() }
+```
+
+显示隐藏键盘：
+
+```kotlin
+editText.showKeyboard()
+editText.hideKeyboard()
+```
+
+快速实现 TabLayout + ViewPager2 的自定义样式的底部导航栏：
+
+```kotlin
+viewPager2.adapter = FragmentStateAdapter(HomeFragment(), ShopFragment(), MineFragment())
+tabLayout.setupWithViewPager2(viewPager2, enableScroll = false) { tab, position ->
+  tab.setCustomView(R.layout.layout_bottom_tab) {
+    findViewById<TextView>(R.id.tv_title).setText(titleList[position])
+    findViewById<ImageView>(R.id.iv_icon).apply {
+      setImageResource(iconList[position])
+      contentDescription = getString(titleList[position])
+    }
+  }
+}
+```
+
+一行代码实现双击返回键退出 App 或者点击返回键不退出 App 回到桌面：
+
+```kotlin
+pressBackTwiceToExitApp("再次点击退出应用")
+// pressBackToNotExitApp()
+```
+
+实现沉浸式状态栏，并且给标题栏的顶边距增加状态栏高度，可以适配刘海水滴屏：
+
+```kotlin
+immerseStatusBar()
+toolbar.addStatusBarHeightToMarginTop()
+// toolbar.addStatusBarHeightToPaddingTop()
+```
+
+快速实现获取验证码的倒计时（默认 60 秒）：
+
+```kotlin
+btnSendCode.startCountDown(this,
+  onTick = {
+    text = "${it}秒"
+  },
+  onFinish = {
+    text = "获取验证码"
+  })
+```
+
+设置按钮在输入框有内容时才能点击：
+
+```kotlin
+btnLogin.enableWhenOtherTextNotEmpty(edtAccount, edtPwd)
+```
+
+点击事件可以设置的点击间隔，防止一段时间内重复点击：
+
+```kotlin
+btnLogin.doOnClick(clickIntervals = 500) { 
+  // ...
+}
+```
+
+在 RecyclerView 数据为空的时候自动显示一个空布局：
+
+```kotlin
+recyclerView.setEmptyView(this, emptyView)
+```
+
+RecyclerView 的 `smoothScrollToPosition()` 方法是滑动到 item 可见，如果从上往下滑会停在底部，一般不符合需求。所以增加了个始终滑动到顶部位置的扩展方法。
+
+```kotlin
+recyclerView.smoothScrollToStartPosition(position)
+```
+
+简化自定义控件获取自定义属性：
+
+```kotlin
+withStyledAttrs(attrs, R.styleable.CustomView) {
+  textSize = getDimension(R.styleable.CustomView_textSize, 12.sp)
+  textColor = getColor(R.styleable.CustomView_textColor, getCompatColor(R.color.text_normal))
+  icon = getDrawable(R.styleable.CustomView_icon) ?: getCompatDrawable(R.drawable.default_icon)
+  iconSize = getDimension(R.styleable.CustomView_iconSize, 30.dp)
+}
+```
+
+自定义控件绘制居中或者垂直居中的文字：
+
+```kotlin
+canvas.drawCenterText(text, centerX, centerY, paint)
+canvas.drawCenterVerticalText(text, centerX, centerY, paint)
+```
+
+切换到主线程，用法与 `thread {...}` 保持了统一：
+
+```kotlin
+mainThread { 
+  // ...
+}
+```
+
+更多的用法请查看[使用文档](https://dylancaicoding.github.io/Longan)。
 
 ## 更新日志
 
@@ -64,7 +193,7 @@ dependencies {
 
 ## 反馈
 
-为了更好地完善本库，我希望能听到更多的声音。有任何使用上的问题或者想要的功能都可以加我微信直接反馈，微信号同 GitHub 名： `DylanCaiCoding` ，我会拉个群。加好友时备注个 GitHub，个人不乱加陌生人。
+有任何使用上的问题或者想要的功能都可以提 [issues](https://github.com/DylanCaiCoding/Longan/issues/new) 或者加我微信直接反馈，微信号 `DylanCaiCoding` ，我会拉个群。加好友时备注个 GitHub，个人不乱加陌生人。
 
 ## 作者其它的库
 
