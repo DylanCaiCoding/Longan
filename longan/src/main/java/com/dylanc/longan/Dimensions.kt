@@ -57,4 +57,3 @@ fun Double.pxToSp(): Int = toFloat().pxToSp()
 
 fun Float.pxToSp(): Int =
   (this / Resources.getSystem().displayMetrics.scaledDensity + 0.5f).toInt()
-

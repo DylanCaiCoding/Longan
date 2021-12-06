@@ -69,11 +69,8 @@ fun TextView.startCountDown(
     }
   }
   countDownTimer.start()
-  lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-      countDownTimer.cancel()
-    }
+  lifecycleOwner.doOnLifecycle(onDestroy = {
+    countDownTimer.cancel()
   })
 }
 
@@ -85,8 +82,8 @@ inline fun TextView.enableWhenOtherTextChanged(
   crossinline block: (Array<out TextView>) -> Boolean
 ) {
   isEnabled = block(textViews)
-  textViews.forEach {
-    it.doAfterTextChanged {
+  textViews.forEach { tv ->
+    tv.doAfterTextChanged {
       isEnabled = block(textViews)
     }
   }

@@ -94,6 +94,9 @@ fun View?.isTouchedAt(x: Float, y: Float): Boolean =
 fun View?.isTouchedAt(x: Int, y: Int): Boolean =
   this?.locationOnScreen?.run { x in left..right && y in top..bottom } ?: false
 
+fun View.findTouchedChild(x: Float, y: Float): View? =
+  findTouchedChild(x.toInt(), y.toInt())
+
 fun View.findTouchedChild(x: Int, y: Int): View? =
   touchables.find { it.isTouchedAt(x, y) }
 

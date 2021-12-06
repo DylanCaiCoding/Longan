@@ -43,7 +43,6 @@ inline fun <reified VM : ViewModel> Fragment.applicationViewModels(
 
 @MainThread
 inline fun <reified VM : ViewModel> createApplicationViewModelLazy(
-  noinline factoryProducer: () -> ViewModelProvider.Factory =
-    { ViewModelProvider.AndroidViewModelFactory.getInstance(application) }
+  noinline factoryProducer: () -> ViewModelProvider.Factory
 ) =
   ViewModelLazy(VM::class, { applicationViewModelStore }, factoryProducer)
