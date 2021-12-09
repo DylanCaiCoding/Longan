@@ -19,6 +19,7 @@
 package com.dylanc.longan
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -27,6 +28,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Process
 import android.provider.Settings
@@ -54,6 +56,10 @@ inline val isAppDebug: Boolean
 
 inline val isAppDarkMode: Boolean
   get() = (application.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
+
+val isLocationEnabled: Boolean
+  get() = (application.getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+    .isProviderEnabled(LocationManager.GPS_PROVIDER)
 
 fun launchAppDetailsSettings(): Boolean =
   Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
