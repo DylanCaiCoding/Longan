@@ -55,7 +55,7 @@ inline fun <reified T : Activity> Context.startActivity(
   startActivity(intentOf<T>(*pairs).apply(block))
 
 fun Activity.finishWithResult(vararg pairs: Pair<String, *>) {
-  setResult(Activity.RESULT_OK, Intent().apply { putExtras(bundleOf(*pairs)) })
+  setResult(Activity.RESULT_OK, Intent().putExtras(bundleOf(*pairs)))
   finish()
 }
 

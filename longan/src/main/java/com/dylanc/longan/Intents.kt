@@ -33,7 +33,7 @@ inline fun <reified T> Context.intentOf(vararg pairs: Pair<String, *>): Intent =
   intentOf<T>(bundleOf(*pairs))
 
 inline fun <reified T> Context.intentOf(bundle: Bundle): Intent =
-  Intent(this, T::class.java).apply { putExtras(bundle) }
+  Intent(this, T::class.java).putExtras(bundle)
 
 inline fun <reified T> Activity.intentExtras(name: String) = lazy<T?> {
   intent.extras[name]
@@ -78,7 +78,7 @@ fun email(email: String, subject: String = "", text: String = ""): Boolean =
 fun installAPK(uri: Uri): Boolean =
   Intent(Intent.ACTION_VIEW)
     .newTask()
-    .grantReadPermission()
+    .grantReadUriPermission()
     .apply { setDataAndType(uri, "application/vnd.android.package-archive") }
     .startForActivity()
 
@@ -109,7 +109,7 @@ fun Intent.noHistory(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_NO_HISTOR
 
 fun Intent.singleTop(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP) }
 
-fun Intent.grantReadPermission(): Intent = apply {
+fun Intent.grantReadUriPermission(): Intent = apply {
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
   }

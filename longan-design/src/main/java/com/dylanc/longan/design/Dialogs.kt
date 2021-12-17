@@ -311,7 +311,7 @@ inline fun <D : DialogInterface> Context.alertDialog(
 fun AlertBuilder<*>.okButton(onClicked: (dialog: DialogInterface) -> Unit) =
   positiveButton(android.R.string.ok, onClicked)
 
-fun AlertBuilder<*>.cancelButton(onClicked: (dialog: DialogInterface) -> Unit) =
+fun AlertBuilder<*>.cancelButton(onClicked: (dialog: DialogInterface) -> Unit = { it.dismiss() }) =
   negativeButton(android.R.string.cancel, onClicked)
 
 inline fun <T> AlertBuilder<*>.items(
