@@ -38,7 +38,7 @@ inline var Fragment.isFullScreen: Boolean
 inline var Activity.isFullScreen: Boolean
   get() = window.decorView.rootWindowInsetsCompat?.isVisible(WindowInsetsCompat.Type.systemBars()) == true
   set(value) {
-    windowInsetsControllerCompat?.run {
+    window.decorView.windowInsetsControllerCompat?.run {
       val systemBars = WindowInsetsCompat.Type.systemBars()
       if (value) show(systemBars) else hide(systemBars)
     }

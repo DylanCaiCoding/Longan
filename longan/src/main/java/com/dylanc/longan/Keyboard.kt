@@ -18,21 +18,44 @@
 
 package com.dylanc.longan
 
-import android.widget.EditText
+import android.app.Activity
+import android.view.View
 import androidx.core.view.WindowInsetsCompat.Type
+import androidx.fragment.app.Fragment
 
 
-fun EditText.showKeyboard() =
-  windowInsetsControllerCompat?.show(Type.ime())
+fun Fragment.showKeyboard() = requireActivity().showKeyboard()
 
-fun EditText.hideKeyboard() =
-  windowInsetsControllerCompat?.hide(Type.ime())
+fun Activity.showKeyboard() = window.decorView.showKeyboard()
 
-fun EditText.toggleKeyboard() =
-  if (isKeyboardVisible) hideKeyboard() else showKeyboard()
+fun View.showKeyboard() = windowInsetsControllerCompat?.show(Type.ime())
 
-inline val EditText.isKeyboardVisible: Boolean
+fun Fragment.hideKeyboard() = requireActivity().hideKeyboard()
+
+fun Activity.hideKeyboard() = window.decorView.hideKeyboard()
+
+fun View.hideKeyboard() = windowInsetsControllerCompat?.hide(Type.ime())
+
+fun Fragment.toggleKeyboard() = requireActivity().toggleKeyboard()
+
+fun Activity.toggleKeyboard() = window.decorView.toggleKeyboard()
+
+fun View.toggleKeyboard() = if (isKeyboardVisible) hideKeyboard() else showKeyboard()
+
+inline val Fragment.isKeyboardVisible: Boolean
+  get() = requireActivity().isKeyboardVisible
+
+inline val Activity.isKeyboardVisible: Boolean
+  get() = window.decorView.isKeyboardVisible
+
+inline val View.isKeyboardVisible: Boolean
   get() = rootWindowInsetsCompat?.isVisible(Type.ime()) == true
 
-inline val EditText.keyboardHeight: Int
+inline val Fragment.keyboardHeight: Int
+  get() = requireActivity().keyboardHeight
+
+inline val Activity.keyboardHeight: Int
+  get() = window.decorView.keyboardHeight
+
+inline val View.keyboardHeight: Int
   get() = rootWindowInsetsCompat?.getInsets(Type.ime())?.bottom ?: -1

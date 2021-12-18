@@ -119,11 +119,21 @@ inline fun View.withStyledAttrs(
   context.obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes).apply(block).recycle()
 }
 
-inline val View.rootWindowInsetsCompat: WindowInsetsCompat?
-  get() = ViewCompat.getRootWindowInsets(this)
+val View.rootWindowInsetsCompat: WindowInsetsCompat?
+  get() {
+    if (rootWindowInsetsCompatCache == null) {
+      rootWindowInsetsCompatCache = ViewCompat.getRootWindowInsets(this)
+    }
+    return rootWindowInsetsCompatCache
+  }
 
-inline val View.windowInsetsControllerCompat: WindowInsetsControllerCompat?
-  get() = ViewCompat.getWindowInsetsController(this)
+val View.windowInsetsControllerCompat: WindowInsetsControllerCompat?
+  get() {
+    if (windowInsetsControllerCompatCache == null) {
+      windowInsetsControllerCompatCache = ViewCompat.getWindowInsetsController(this)
+    }
+    return windowInsetsControllerCompatCache
+  }
 
 fun View.doOnApplyWindowInsets(action: (View, WindowInsetsCompat) -> WindowInsetsCompat) =
   ViewCompat.setOnApplyWindowInsetsListener(this, action)
@@ -131,7 +141,7 @@ fun View.doOnApplyWindowInsets(action: (View, WindowInsetsCompat) -> WindowInset
 fun <T> viewTags(key: Int) = object : ReadWriteProperty<View, T?> {
   @Suppress("UNCHECKED_CAST")
   override fun getValue(thisRef: View, property: KProperty<*>) =
-    thisRef.getTag(key) as T?
+    thisRef.getTag(key) as? T
 
   override fun setValue(thisRef: View, property: KProperty<*>, value: T?) =
     thisRef.setTag(key, value)

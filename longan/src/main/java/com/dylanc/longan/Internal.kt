@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.dylanc.longan
 
 import android.view.View
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 
 internal const val NO_GETTER: String = "Property does not have a getter"
@@ -29,3 +29,5 @@ internal var View.isAddedMarginTop: Boolean? by viewTags(-101)
 internal var View.isAddedPaddingTop: Boolean? by viewTags(-102)
 internal var View.isAddedMarginBottom: Boolean? by viewTags(-103)
 internal var View.lastClickTime: Long? by viewTags(-104)
+internal var View.rootWindowInsetsCompatCache: WindowInsetsCompat? by viewTags(-105)
+internal var View.windowInsetsControllerCompatCache: WindowInsetsControllerCompat? by viewTags(-106)
