@@ -6,6 +6,7 @@
   
 * 部分用法
     * [Activity](/activity)
+    * [ActivityResult](/activityresult)
     * [CustomView](/customview)
     * [Dialogs](/dialogs)
     * [Fragment](/fragment)
