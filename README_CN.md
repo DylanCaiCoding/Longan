@@ -25,9 +25,9 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.1'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.2'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.1'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.2'
 }
 ```
 
@@ -202,7 +202,6 @@ mainThread {
 | [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | 深度解耦标题栏或加载中、加载失败、无数据等视图 |
 | [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX) | 最全面的 ViewBinding 工具                      |
 | [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)       | 让 MMKV 更加易用                               |
-| [ActivityResultLauncher](https://github.com/DylanCaiCoding/ActivityResultLauncher) | 优雅地替代 `startActivityForResult()`          |
 
 ## License
 
