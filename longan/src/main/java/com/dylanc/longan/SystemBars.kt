@@ -37,7 +37,8 @@ fun Fragment.immerseStatusBar(lightMode: Boolean = true) {
 
 fun Activity.immerseStatusBar(lightMode: Boolean = true) {
   decorFitsSystemWindows = false
-  windowInsetsControllerCompat?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+  window.decorView.windowInsetsControllerCompat?.systemBarsBehavior =
+    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
   transparentStatusBar()
   isLightStatusBar = lightMode
   contentView.addNavigationBarHeightToMarginBottom()
@@ -50,9 +51,9 @@ inline var Fragment.isLightStatusBar: Boolean
   }
 
 inline var Activity.isLightStatusBar: Boolean
-  get() = windowInsetsControllerCompat?.isAppearanceLightStatusBars == true
+  get() = window.decorView.windowInsetsControllerCompat?.isAppearanceLightStatusBars == true
   set(value) {
-    windowInsetsControllerCompat?.isAppearanceLightStatusBars = value
+    window.decorView.windowInsetsControllerCompat?.isAppearanceLightStatusBars = value
   }
 
 inline var Fragment.statusBarColor: Int
@@ -146,9 +147,9 @@ inline var Fragment.isLightNavigationBar: Boolean
   }
 
 inline var Activity.isLightNavigationBar: Boolean
-  get() = windowInsetsControllerCompat?.isAppearanceLightNavigationBars == true
+  get() = window.decorView.windowInsetsControllerCompat?.isAppearanceLightNavigationBars == true
   set(value) {
-    windowInsetsControllerCompat?.isAppearanceLightNavigationBars = value
+    window.decorView.windowInsetsControllerCompat?.isAppearanceLightNavigationBars = value
   }
 
 fun Fragment.transparentNavigationBar() {

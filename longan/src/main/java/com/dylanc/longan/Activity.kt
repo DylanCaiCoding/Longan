@@ -124,9 +124,6 @@ fun ComponentActivity.pressBackToNotExitApp() {
 fun Context.checkPermission(permission: String): Boolean =
   ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
 
-inline val Activity.windowInsetsControllerCompat: WindowInsetsControllerCompat?
-  get() = WindowCompat.getInsetsController(window, window.decorView)
-
 var Activity.decorFitsSystemWindows: Boolean
   @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
   get() = noGetter()

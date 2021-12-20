@@ -6,7 +6,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.1'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.2'
 }
 ```
 
@@ -38,6 +38,37 @@ dependencies {
 | `Activity.activity`                                          | 作用域的 this 不是 Activity 时获取 Activity         |
 | `FragmentActivity.fragmentActivity`                          | 作用域的 this 不是 Activity 时获取 FragmentActivity |
 | `ComponentActivity.lifecycleOwner`                           | 作用域的 this 不是 Activity 时获取 LifecycleOwner   |
+
+### [ActivityResult.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ActivityResult.kt)
+
+| 用法                                                         | 作用                                         |
+| ------------------------------------------------------------ | -------------------------------------------- |
+| `ActivityResultCaller.startActivityLauncher {...}`           | 注册 `startActivityForResult()` 的启动器     |
+| `ActivityResultCaller.startIntentSenderLauncher {...}`       | 注册 `startIntentSenderForResult()` 的启动器 |
+| `ActivityResultCaller.requestPermissionLauncher {...}`       | 注册请求单个权限的启动器                     |
+| `ActivityResultCaller.requestMultiplePermissionsLauncher {...}` | 注册请求多个权限的启动器                     |
+| `ActivityResultCaller.takePicturePreviewLauncher {...}`      | 注册拍照预览的启动器                         |
+| `ActivityResultCaller.takePictureLauncher {...}`             | 注册拍照的启动器                             |
+| `ActivityResultCaller.takeVideoLauncher {...}`               | 注册录像的启动器                             |
+| `ActivityResultCaller.pickContactLauncher{...}`              | 注册选择联系人的启动器                       |
+| `ActivityResultCaller.pickContentLauncher {...}`             | 注册选择单个图片、视频的启动器               |
+| `ActivityResultCaller.getContentLauncher {...}`              | 注册选择单个图片、视频的启动器               |
+| `ActivityResultCaller.getMultipleContentsLauncher {...}`     | 注册选择多个图片、视频的启动器               |
+| `ActivityResultCaller.openDocumentLauncher {...}`            | 注册打开单个文档的启动器                     |
+| `ActivityResultCaller.openMultipleDocumentsLauncher {...}`   | 注册打开多个文档的启动器                     |
+| `ActivityResultCaller.openDocumentTreeLauncher {...}`        | 注册打开文档目录的启动器                     |
+| `ActivityResultCaller.createDocumentLauncher {...}`          | 注册创建文档的启动器                         |
+| `ActivityResultCaller.launchAppSettingsLauncher {...}`       | 注册启动 App 设置页的启动器                  |
+| `ActivityResultCaller.cropPictureLauncher {...}`             | 注册裁剪图片的启动器                         |
+| `ActivityResultCaller.enableLocationLauncher {...}`          | 注册开启定位的启动器                         |
+| `ActivityResultCaller.enableBluetoothLauncher {...}`         | 注册开启蓝牙的启动器                         |
+| `ActivityResultCaller.launchWifiSettingsLauncher {...}`      | 注册启动 Wifi 设置页的启动器                 |
+| `ActivityResultCaller.openWifiPanelLauncher {...}`           | 注册打开 Wifi 面板的启动器                   |
+| `ActivityResultLauncher<Unit/Viod>.launch()`                 | 启动无参的启动器                             |
+| `ActivityResultLauncher<Array<T>>.launch(varage input)`      | 启动可变参数的启动器                         |
+| `ActivityResultLauncher<Intent>.launch<SomeActivity>(...)`   | 启动 `startActivityForResult()` 的启动器     |
+| `ActivityResultLauncher<IntentSenderRequest>.launch(intentSender, ...)` | 启动 `startIntentSenderForResult()` 的启动器 |
+| `ActivityResultLauncher<CropPictureRequest>.launch(inputUri, ...)` | 启动裁剪图片的启动器                         |
 
 ### [Application.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Application.kt)
 
@@ -92,9 +123,9 @@ dependencies {
 | `ContentResolver.queryMediaDownloads(uri, [projection], [selection], [selectionArgs], [sortOrder]) {...}` | 查询匹配的下载 Uri     |
 | `ContentResolver.insert(uri, [block])`                       | 插入 Uri               |
 | `ContentResolver.insertMediaImage(uri, [block])`             | 插入图片 Uri           |
-| `ContentResolver.insertMediaVideo(uri, [block])`             | 插入视频 Uri           |
-| `ContentResolver.insertMediaAudio(uri, [block])`             | 插入音频 Uri           |
-| `ContentResolver.insertMediaDownload(uri, [block])`          | 插入下载 Uri           |
+| `ContentResolver.insertMediaVideo([block])`                  | 插入视频 Uri           |
+| `ContentResolver.insertMediaAudio([block])`                  | 插入音频 Uri           |
+| `ContentResolver.insertMediaDownload([block])`               | 插入下载 Uri           |
 | `ContentResolver.update(uri, [where], [selectionArgs]) {...}` | 更新 Uri               |
 | `ContentResolver.delete(uri, [where], [selectionArgs])`      | 删除 Uri               |
 
@@ -230,20 +261,21 @@ dependencies {
 
 ### [Keyboard.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Keyboard.kt)
 
-| 用法                         | 作用             |
-| ---------------------------- | ---------------- |
-| `EditText.showKeyboard()`    | 显示键盘         |
-| `EditText.hideKeyboard()`    | 隐藏键盘         |
-| `EditText.toggleKeyboard()`  | 切换键盘显示状态 |
-| `EditText.isKeyboardVisible` | 判断键盘是否可见 |
-| `EditText.keyboardHeight`    | 获取键盘高度     |
+| 用法                                       | 作用             |
+| ------------------------------------------ | ---------------- |
+| `Activity/Fragment/View.showKeyboard()`    | 显示键盘         |
+| `Activity/Fragment/View.hideKeyboard()`    | 隐藏键盘         |
+| `Activity/Fragment/View.toggleKeyboard()`  | 切换键盘显示状态 |
+| `Activity/Fragment/View.isKeyboardVisible` | 判断键盘是否可见 |
+| `Activity/Fragment/View.keyboardHeight`    | 获取键盘高度     |
 
 ### [Lifecycle.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Lifecycle.kt)
 
-| 用法                                 | 作用                               |
-| ------------------------------------ | ---------------------------------- |
-| `LifecycleOwner.doOnLifecycle {...}` | 监听 Activity 或 Fragment 生命周期 |
-| `Fragment.doOnViewLifecycle {...}`   | 监听 Fragment 视图的生命周期       |
+| 用法                                     | 作用                                   |
+| ---------------------------------------- | -------------------------------------- |
+| `Application.doOnActivityLifecycle(...)` | 监听所有 Activity 的生命周期           |
+| `LifecycleOwner.doOnLifecycle {...}`     | 监听当前 Activity 或 Fragment 生命周期 |
+| `Fragment.doOnViewLifecycle {...}`       | 监听当前 Fragment 视图的生命周期       |
 
 ### [Logger.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Logger.kt)
 
