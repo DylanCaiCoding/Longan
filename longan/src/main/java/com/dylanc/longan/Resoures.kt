@@ -18,43 +18,28 @@
 
 package com.dylanc.longan
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.annotation.*
 import androidx.core.content.res.ResourcesCompat
 
 
 @ColorInt
-fun View.getCompatColor(@ColorRes id: Int): Int =
-  context.getCompatColor(id)
+fun getCompatColor(@ColorRes id: Int): Int =
+  ResourcesCompat.getColor(application.resources, id, null)
 
-@ColorInt
-fun Context.getCompatColor(@ColorRes id: Int): Int =
-  ResourcesCompat.getColor(resources, id, null)
+fun getCompatDrawable(@DrawableRes id: Int): Drawable? =
+  ResourcesCompat.getDrawable(application.resources, id, null)
 
-fun View.getCompatDrawable(@DrawableRes id: Int): Drawable? =
-  context.getCompatDrawable(id)
+fun getCompatFont(@FontRes id: Int): Typeface? =
+  ResourcesCompat.getFont(application, id)
 
-fun Context.getCompatDrawable(@DrawableRes id: Int): Drawable? =
-  ResourcesCompat.getDrawable(resources, id, null)
+fun getString(@StringRes id: Int): String =
+  application.getString(id)
 
-fun View.getCompatDimen(@DimenRes id: Int): Float =
-  context.getCompatDimen(id)
-
-fun Context.getCompatDimen(@DimenRes id: Int): Float =
-  ResourcesCompat.getFloat(resources, id)
-
-fun View.getCompatFont(@FontRes id: Int): Typeface? =
-  context.getCompatFont(id)
-
-fun Context.getCompatFont(@FontRes id: Int): Typeface? =
-  ResourcesCompat.getFont(this, id)
-
-fun View.getString(@StringRes id: Int): String =
-  context.getString(id)
+fun getDimension(@DimenRes id: Int): Float =
+  application.resources.getDimension(id)
 
 @ColorInt
 fun parseColor(colorString: String): Int =
