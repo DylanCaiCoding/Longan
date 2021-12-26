@@ -24,9 +24,9 @@ Add dependencies：
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.1'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.2'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.1'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.2'
 }
 ```
 ## Usage
@@ -191,8 +191,7 @@ See the [usage documentation](https://dylancaicoding.github.io/Longan) for more 
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | Decoupling the code of toolbar or loading status view. |
 | [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX) | The most comprehensive utils of ViewBinding.                 |
-| [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)       | Easier to use the MMKV.                                      |
-| [ActivityResultLauncher](https://github.com/DylanCaiCoding/ActivityResultLauncher) | Replace startActivityForResult() method gracefully.           |
+| [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)       | Easier to use the MMKV.                                      ||
 
 ## License
 
