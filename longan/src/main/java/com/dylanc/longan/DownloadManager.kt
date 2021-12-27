@@ -28,6 +28,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresPermission
+import androidx.core.content.getSystemService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
@@ -45,7 +46,7 @@ inline fun <R> DownloadManager.query(downloadId: Long, block: (Cursor) -> R): R?
 
 class DownloadRequestBuilder internal constructor(url: String) {
   private val request = DownloadManager.Request(Uri.parse(url))
-  private val downloadManager = application.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+  private val downloadManager = application.getSystemService<DownloadManager>()
   private var onComplete: ((Uri) -> Unit)? = null
   private var onChange: ((downloadedSize: Int, totalSize: Int, status: Int) -> Unit)? = null
   private var scheduleExecutor: ScheduledExecutorService? = null
@@ -147,7 +148,7 @@ class DownloadRequestBuilder internal constructor(url: String) {
   }
 
   internal fun build() {
-    downloadId = downloadManager.enqueue(request)
+    downloadId = downloadManager?.enqueue(request) ?: -1
     progressObserver = onChange?.let { DownloadProgressObserver() }?.also {
       contentResolver.registerContentObserver(Uri.parse("content://downloads/my_downloads"), true, it)
     }
@@ -162,7 +163,7 @@ class DownloadRequestBuilder internal constructor(url: String) {
     override fun onChange(selfChange: Boolean) {
       scheduleExecutor?.scheduleAtFixedRate({
         mainThread {
-          downloadManager.query(downloadId) { cursor ->
+          downloadManager?.query(downloadId) { cursor ->
             val downloadedSize = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
             val totalSize = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
             val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
@@ -186,7 +187,7 @@ class DownloadRequestBuilder internal constructor(url: String) {
           progressObserver = null
         }
         onComplete?.let { onComplete ->
-          downloadManager.query(downloadId) { cursor ->
+          downloadManager?.query(downloadId) { cursor ->
             val uriString = cursor.getString(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI))
             onComplete(Uri.parse(uriString))
           }

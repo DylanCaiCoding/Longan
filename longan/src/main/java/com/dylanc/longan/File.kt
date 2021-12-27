@@ -23,12 +23,46 @@ import okio.HashingSink
 import okio.blackholeSink
 import okio.buffer
 import okio.source
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
-import java.io.PrintWriter
+import java.io.*
 import java.net.URLConnection
 
+
+fun File.isExistOrCreateNewFile(): Boolean =
+  try {
+    if (exists()) {
+      isFile
+    } else {
+      parentFile.isExistOrCreateNewDir() && createNewFile()
+    }
+  } catch (e: IOException) {
+    e.printStackTrace()
+    false
+  }
+
+fun File?.isExistOrCreateNewDir(): Boolean =
+  when{
+    this == null ->false
+    exists() -> isDirectory
+    else ->mkdir()
+  }
+
+fun File.createNewFileAfterDeleteExist(): Boolean =
+  try {
+    if (exists()) {
+      delete() && parentFile.isExistOrCreateNewDir() && createNewFile()
+    } else {
+      parentFile.isExistOrCreateNewDir() && createNewFile()
+    }
+  } catch (e: IOException) {
+    e.printStackTrace()
+    false
+  }
+
+fun File.rename(newName: String): Boolean =
+  exists() && newName.isNotEmpty() && name != newName &&
+      File("${parent.orEmpty()}$fileSeparator$newName").let { renameFile ->
+        !renameFile.exists() && renameTo(renameFile)
+      }
 
 inline val File.mimeType: String? get() = URLConnection.guessContentTypeFromName(name)
 

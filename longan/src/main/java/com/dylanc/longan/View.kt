@@ -20,12 +20,14 @@ package com.dylanc.longan
 
 import android.content.res.TypedArray
 import android.graphics.Outline
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
+import androidx.core.content.withStyledAttributes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -103,12 +105,13 @@ fun View.findTouchedChild(x: Int, y: Int): View? =
 /**
  * Computes the coordinates of this view on the screen.
  */
-inline val View.locationOnScreen: LocationOnScreen
+inline val View.locationOnScreen: Rect
   get() = IntArray(2).let {
     getLocationOnScreen(it)
-    LocationOnScreen(it[0], it[1], it[0] + width, it[1] + height)
+    Rect(it[0], it[1], it[0] + width, it[1] + height)
   }
 
+@Deprecated("", replaceWith = ReplaceWith("withStyledAttributes(set, attrs, defStyleAttr, defStyleRes, block)"))
 inline fun View.withStyledAttrs(
   set: AttributeSet?,
   @StyleableRes attrs: IntArray,
@@ -116,7 +119,25 @@ inline fun View.withStyledAttrs(
   @StyleRes defStyleRes: Int = 0,
   block: TypedArray.() -> Unit
 ) {
-  context.obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes).apply(block).recycle()
+  context.withStyledAttributes(set, attrs, defStyleAttr, defStyleRes, block)
+}
+
+inline fun View.withStyledAttributes(
+  set: AttributeSet?,
+  @StyleableRes attrs: IntArray,
+  @AttrRes defStyleAttr: Int = 0,
+  @StyleRes defStyleRes: Int = 0,
+  block: TypedArray.() -> Unit
+) {
+  context.withStyledAttributes(set, attrs, defStyleAttr, defStyleRes, block)
+}
+
+inline fun View.withStyledAttributes(
+  @StyleRes resourceId: Int,
+  attrs: IntArray,
+  block: TypedArray.() -> Unit
+) {
+  context.withStyledAttributes(resourceId, attrs, block)
 }
 
 val View.rootWindowInsetsCompat: WindowInsetsCompat?
@@ -146,10 +167,3 @@ fun <T> viewTags(key: Int) = object : ReadWriteProperty<View, T?> {
   override fun setValue(thisRef: View, property: KProperty<*>, value: T?) =
     thisRef.setTag(key, value)
 }
-
-data class LocationOnScreen(
-  val left: Int,
-  val top: Int,
-  val right: Int,
-  val bottom: Int,
-)
