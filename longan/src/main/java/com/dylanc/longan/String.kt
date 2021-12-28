@@ -19,7 +19,6 @@
 package com.dylanc.longan
 
 import android.text.format.Formatter
-import android.util.Patterns
 import androidx.core.util.PatternsCompat
 import org.json.JSONObject
 import java.util.*
@@ -30,6 +29,19 @@ const val REGEX_ID_CARD_15: String =
 
 const val REGEX_ID_CARD_18: String =
   "^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9Xx])$"
+
+/**
+ * Regex of exact phone number. Update at 2021.05.13.
+ * - China mobile: 134,135,136,137,138,139,147,148,150,151,152,157,158,159,172,178,182,183,184,187,188,195,198
+ * - China unicom: 130,131,132,145,146,155,156,166,175,176,185,186,196
+ * - China telecom: 133,149,153,173,174,177,180,181,189,191,193,199
+ * - China nrta: 190,192,197
+ * - China mobile virtual: 165,1703,1705,1706
+ * - China unicom virtual: 167,1704,1707,1708,1709,171
+ * - China telecom virtual: 162,1700,1701,1702
+ */
+const val REGEX_PHONE_EXACT :String =
+  "^1(3\\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\\d|9[0-35-9])\\d{8}$"
 
 inline val randomUUIDString: String
   get() = UUID.randomUUID().toString()
@@ -44,7 +56,7 @@ fun String.limitLength(length: Int): String =
   if (this.length <= length) this else substring(0, length)
 
 fun String.isPhone(): Boolean =
-  Patterns.PHONE.matcher(this).matches()
+  REGEX_PHONE_EXACT.toRegex().matches(this)
 
 fun String.isDomainName(): Boolean =
   PatternsCompat.DOMAIN_NAME.matcher(this).matches()

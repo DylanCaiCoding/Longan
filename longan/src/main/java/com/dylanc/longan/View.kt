@@ -111,7 +111,10 @@ inline val View.locationOnScreen: Rect
     Rect(it[0], it[1], it[0] + width, it[1] + height)
   }
 
-@Deprecated("", replaceWith = ReplaceWith("withStyledAttributes(set, attrs, defStyleAttr, defStyleRes, block)"))
+@Deprecated(
+  "Replace with new api",
+  replaceWith = ReplaceWith("withStyledAttributes(set, attrs, defStyleAttr, defStyleRes, block)")
+)
 inline fun View.withStyledAttrs(
   set: AttributeSet?,
   @StyleableRes attrs: IntArray,
