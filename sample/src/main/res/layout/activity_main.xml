@@ -24,6 +24,7 @@
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     tools:listitem="@layout/item_text" />
 
+
   <TextView
     android:id="@+id/textView"
     android:layout_width="match_parent"

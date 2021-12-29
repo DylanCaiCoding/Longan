@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.dylanc.longan.sample">
 
+  <uses-permission android:name="android.permission.BLUETOOTH" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission
     android:name="android.permission.WRITE_EXTERNAL_STORAGE"
     android:maxSdkVersion="28" />
@@ -24,6 +26,10 @@
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
+
+      <meta-data
+        android:name="activity_meta_data"
+        android:value="D1234567890123456789012345678901234567890" />
     </activity>
 
     <provider
@@ -35,6 +41,10 @@
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/file_paths" />
     </provider>
+
+    <meta-data
+      android:name="app_meta_data"
+      android:value="AppMetaData" />
   </application>
 
 </manifest>

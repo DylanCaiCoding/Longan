@@ -13,6 +13,7 @@
     * [Intents](/usage/intents)
     * [Keyboard](/usage/keyboard)
     * [Logger](/usage/logger)
+    * [MMKV](/usage/mmkv)
     * [SystemBars](/usage/systembars)
     * [Uri](/usage/uri)
     * [ViewModels](/usage/viewmodels)

@@ -1,19 +1,22 @@
 package com.dylanc.longan.sample.ui
 
+import android.animation.Animator
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.dylanc.longan.addStatusBarHeightToMarginTop
+import androidx.core.animation.addListener
+import androidx.core.content.contentValuesOf
+import androidx.core.os.postDelayed
+import androidx.core.text.*
+import com.dylanc.longan.*
 import com.dylanc.longan.design.doOnDismiss
 import com.dylanc.longan.design.multiChoiceSelector
 import com.dylanc.longan.design.selector
 import com.dylanc.longan.design.singleChoiceSelector
-import com.dylanc.longan.immerseStatusBar
-import com.dylanc.longan.pressBackTwiceToExitApp
 import com.dylanc.longan.sample.R
 import com.dylanc.longan.sample.adapter.TextAdapter
 import com.dylanc.longan.sample.databinding.ActivityMainBinding
-import com.dylanc.longan.toast
 import com.dylanc.viewbinding.binding
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,8 +35,22 @@ class MainActivity : AppCompatActivity() {
       toolbar.addStatusBarHeightToMarginTop()
       recyclerView.adapter = adapter
       adapter.submitList(items)
+//      toast(activityMetaDataOf<MainActivity>("activity_meta_data"))
+      val file = File("$cacheDirPath${fileSeparator}test", "test123.md")
+//      file.isDirectory
+//      file.createNewFile()
+//      file.delete()
+//      file.exists()
+      toast(file.createNewFileAfterDeleteExist().toString())
     }
     pressBackTwiceToExitApp("再次点击退出应用")
+    mainHandler.postDelayed(1000) {
+
+    }
+
+    binding.textView.text = buildSpannedString {
+      bold { italic { append("baidu") } }
+    }
   }
 
   private fun onItemClick(id: Int) {
