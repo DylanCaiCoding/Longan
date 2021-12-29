@@ -6,7 +6,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.2'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.3'
 }
 ```
 
@@ -197,25 +197,29 @@ dependencies {
 
 ### [File.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/File.kt)
 
-| 用法                                    | 作用                  |
-| --------------------------------------- | --------------------- |
-| `File.mimeType`                         | 获取文件的 MIME 类型  |
-| `fileSeparator`                         | 获取文件分隔符        |
-| `File.print {...}`                      | 打印内容到文件        |
-| `File.checkMD5(md5)`                    | 检测 MD5 的值         |
-| `File.checkSHA1(sha1)`                  | 检测 SHA1 的值        |
-| `File.checkSHA256(sha256)`              | 检测 SHA256 的值      |
-| `File.checkSHA512(sha512)`              | 检测 SHA512 的值      |
-| `File.checkHmacSHA1(key, hmacSHA1)`     | 检测 HMAC-SHA1 的值   |
-| `File.checkHmacSHA256(key, hmacSHA256)` | 检测 HMAC-SHA256 的值 |
-| `File.checkHmacSHA512(key, hmacSHA512)` | 检测 HMAC-SHA512 的值 |
-| `File.calculateMD5()`                   | 计算 MD5 的值         |
-| `File.calculateSHA1()`                  | 计算 SHA1 的值        |
-| `File.calculateSHA256()`                | 计算 SHA256 的值      |
-| `File.calculateSHA512()`                | 计算 SHA512 的值      |
-| `File.calculateHmacSHA1(key)`           | 计算 HMAC-SHA1 的值   |
-| `File.calculateHmacSHA256(key)`         | 计算 HMAC-SHA256 的值 |
-| `File.calculateHmacSHA512(key)`         | 计算 HMAC-SHA512 的值 |
+| 用法                                    | 作用                               |
+| --------------------------------------- | ---------------------------------- |
+| `File.isExistOrCreateNewFile()`         | 判断是否存在，不存在则创建新文件   |
+| `File?.isExistOrCreateNewDir()`         | 判断是否存在，不存在则创建新文件夹 |
+| `File.createNewFileAfterDeleteExist()`  | 创建新文件，如果文件已存在则先删除 |
+| `File.rename(name)`                     | 重命名文件                         |
+| `File.mimeType`                         | 获取文件的 MIME 类型               |
+| `fileSeparator`                         | 获取文件分隔符                     |
+| `File.print {...}`                      | 打印内容到文件                     |
+| `File.checkMD5(md5)`                    | 检测 MD5 的值                      |
+| `File.checkSHA1(sha1)`                  | 检测 SHA1 的值                     |
+| `File.checkSHA256(sha256)`              | 检测 SHA256 的值                   |
+| `File.checkSHA512(sha512)`              | 检测 SHA512 的值                   |
+| `File.checkHmacSHA1(key, hmacSHA1)`     | 检测 HMAC-SHA1 的值                |
+| `File.checkHmacSHA256(key, hmacSHA256)` | 检测 HMAC-SHA256 的值              |
+| `File.checkHmacSHA512(key, hmacSHA512)` | 检测 HMAC-SHA512 的值              |
+| `File.calculateMD5()`                   | 计算 MD5 的值                      |
+| `File.calculateSHA1()`                  | 计算 SHA1 的值                     |
+| `File.calculateSHA256()`                | 计算 SHA256 的值                   |
+| `File.calculateSHA512()`                | 计算 SHA512 的值                   |
+| `File.calculateHmacSHA1(key)`           | 计算 HMAC-SHA1 的值                |
+| `File.calculateHmacSHA256(key)`         | 计算 HMAC-SHA256 的值              |
+| `File.calculateHmacSHA512(key)`         | 计算 HMAC-SHA512 的值              |
 
 ### [Flow.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Flow.kt)
 
@@ -290,6 +294,16 @@ dependencies {
 | `[Logger].logVerWtf(message, [thr])`  | 打印 Wtf 等级的日志                      |
 | `initLogger([isLoggable], [printer])` | 初始化 Logger (可选)                     |
 
+### [MetaData.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/MetaData.kt)
+
+| 用法                          | 作用                             |
+| ----------------------------- | -------------------------------- |
+| `applicationMetaDataOf(name)` | 获取 application 的 meta-data 值 |
+| `activityMetaDataOf<T>(name)` | 获取 activity 的 meta-data 值    |
+| `serviceMetaDataOf<T>(name)`  | 获取 service 的 meta-data 值     |
+| `providerMetaDataOf<T>(name)` | 获取 provider 的 meta-data 值    |
+| `receiverMetaDataOf<T>(name)` | 获取 receiver 的 meta-data 值    |
+
 ### [Network.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Network.kt)
 
 | 用法                         | 作用                   |
@@ -339,14 +353,14 @@ dependencies {
 
 ### [Rescoures.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Rescoures.kt)
 
-| 用法                                 | 作用                  |
-| ------------------------------------ | --------------------- |
-| `Context/View.getCompatColor(id)`    | 根据 id 获取颜色      |
-| `Context/View.getCompatDrawable(id)` | 根据 id 获取 Drawable |
-| `Context/View.getCompatDimen(id)`    | 根据 id 获取数字      |
-| `Context/View.getCompatFont(id)`     | 根据 id 获取字体      |
-| `View.getString(id)`                 | 根据 id 获取字符串    |
-| `parseColor(colorString)`            | 根据字符串获取颜色    |
+| 用法                                          | 作用                  |
+| --------------------------------------------- | --------------------- |
+| `View.getString(id)`                          | 根据 id 获取字符串    |
+| `Context/Fragment/View.getDimension(id)`      | 根据 id 获取数字      |
+| `Context/Fragment/View.getCompatColor(id)`    | 根据 id 获取颜色      |
+| `Context/Fragment/View.getCompatDrawable(id)` | 根据 id 获取 Drawable |
+| `Context/Fragment/View.getCompatFont(id)`     | 根据 id 获取字体      |
+| `parseColor(colorString)`                     | 根据字符串获取颜色    |
 
 ### [Screen.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Screen.kt)
 
@@ -460,7 +474,7 @@ dependencies {
 | `View?.isTouchedAt(x, y)`                                    | 判断控件是否在触摸位置上          |
 | `View.findTouchedChild(view, x, y)`                          | 寻找触摸位置上的子控件            |
 | `View.locationOnScreen`                                      | 获取控件在屏幕的位置              |
-| `View.withStyledAttrs(set, attrs, [defStyleAttr], [defStyleRes]) {...}` | 获取自定义属性                    |
+| `View.withStyledAttributes(set, attrs, [defStyleAttr], [defStyleRes]) {...}` | 获取自定义属性                    |
 | `View.doOnApplyWindowInsets {...}`                           | 监听应用 WindowInsets             |
 | `View.rootWindowInsetsCompat`                                | 获取根视图的 WinowInsetsCompat    |
 | `View.windowInsetsControllerCompat`                          | 获取 WindowInsetsControllerCompat |

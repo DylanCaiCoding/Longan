@@ -6,7 +6,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.2'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.3'
 }
 ```
 

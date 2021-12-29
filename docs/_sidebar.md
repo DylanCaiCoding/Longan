@@ -1,21 +1,21 @@
 * [介绍](/)
 
 * 所有 APIs
-    * [Common APIS](/commonapis)
-    * [Design APIS](/designapis)
+    * [Common APIS](/apis/commonapis)
+    * [Design APIS](/apis/designapis)
   
 * 部分用法
-    * [Activity](/activity)
-    * [ActivityResult](/activityresult)
-    * [CustomView](/customview)
-    * [Dialogs](/dialogs)
-    * [Fragment](/fragment)
-    * [Intents](/intents)
-    * [Keyboard](/keyboard)
-    * [Logger](/logger)
-    * [SystemBars](/systembars)
-    * [Uri](/uri)
-    * [ViewModels](/viewmodels)
+    * [Activity](/usage/activity)
+    * [ActivityResult](/usage/activityresult)
+    * [CustomView](/usage/customview)
+    * [Dialogs](/usage/dialogs)
+    * [Fragment](/usage/fragment)
+    * [Intents](/usage/intents)
+    * [Keyboard](/usage/keyboard)
+    * [Logger](/usage/logger)
+    * [SystemBars](/usage/systembars)
+    * [Uri](/usage/uri)
+    * [ViewModels](/usage/viewmodels)
 
 * 其它
-    * [Q&A](/q&a)
+    * [Q&A](/others/q&a)

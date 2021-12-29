@@ -24,9 +24,9 @@ Add dependencies：
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.2'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.3'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.2'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.3'
 }
 ```
 ## Usage
@@ -156,7 +156,7 @@ recyclerView.smoothScrollToStartPosition(position)
 Simplifies custom view getting custom properties:
 
 ```kotlin
-withStyledAttrs(attrs, R.styleable.CustomView) {
+withStyledAttributes(attrs, R.styleable.CustomView) {
   textSize = getDimension(R.styleable.CustomView_textSize, 12.sp)
   textColor = getColor(R.styleable.CustomView_textColor, getCompatColor(R.color.text_normal))
   icon = getDrawable(R.styleable.CustomView_icon) ?: getCompatDrawable(R.drawable.default_icon)
@@ -191,7 +191,7 @@ See the [usage documentation](https://dylancaicoding.github.io/Longan) for more 
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | Decoupling the code of toolbar or loading status view. |
 | [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX) | The most comprehensive utils of ViewBinding.                 |
-| [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)       | Easier to use the MMKV.                                      ||
+| [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)       | Use MMKV with property delegates.                                  |
 
 ## License
 

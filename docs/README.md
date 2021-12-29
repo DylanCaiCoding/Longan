@@ -6,7 +6,7 @@
 
 Longan 是一个简化 Android 开发的 Kotlin 工具类集合，可以使代码更加简洁易读。
 
-**目前有超过 300 个常用方法或属性**，能有效提高开发效率。每个用法都会思考很多，并且参考官方 KTX 库的命名规则和用法，用起来会更加的舒服。具体的实现代码也会优化几版，用尽可能简洁轻量的代码实现功能，有兴趣的可以读下源码。
+**目前有超过 300 个常用方法或属性，能有效提高开发效率**。每个用法都会思考很多，并且参考官方 KTX 库的命名规则和用法，用起来会更加的舒服。具体的实现代码也会优化几版，用尽可能简洁轻量的代码实现功能，有兴趣的可以读下源码。
 
 本库会长期维护，有任何使用上的问题或者想要的功能都可以反馈。
 
@@ -27,9 +27,9 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.2'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.3'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.2'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.3'
 }
 ```
 
@@ -42,8 +42,8 @@ dependencies {
 | 库                                                           | 简介                                           |
 | ------------------------------------------------------------ | ---------------------------------------------- |
 | [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | 深度解耦标题栏或加载中、加载失败、无数据等视图 |
-| [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX)     | 最全面的 ViewBinding 工具                   |
-| [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)                 | 让 MMKV 更加易用                            |
+| [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX)     | 最全面的 ViewBinding 工具                |
+| [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)                 | 用属性委托的方式使用 MMKV                  |
 
 ## License
 
