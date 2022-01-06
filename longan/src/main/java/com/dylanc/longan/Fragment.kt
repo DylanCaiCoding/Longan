@@ -22,7 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 
 
-fun Fragment.withArguments(vararg pairs: Pair<String, *>) = apply {
+fun <T : Fragment> T.withArguments(vararg pairs: Pair<String, *>) = apply {
   arguments = bundleOf(*pairs)
 }
 

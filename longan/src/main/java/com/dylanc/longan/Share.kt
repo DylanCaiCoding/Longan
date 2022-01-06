@@ -54,12 +54,11 @@ fun shareFile(uri: Uri, title: String? = null, mimeType: String = uri.mimeType.o
     setChooserTitle(title)
   }
 
-fun shareFiles(uris: List<Uri>, title: String? = null, mimeType: String? = null) {
+fun shareFiles(uris: List<Uri>, title: String? = null, mimeType: String? = null) =
   share(mimeType ?: uris.firstOrNull()?.mimeType) {
     uris.forEach { addStream(it) }
     setChooserTitle(title)
   }
-}
 
 inline fun share(mimeType: String?, crossinline block: ShareCompat.IntentBuilder.() -> Unit) =
-  ShareCompat.IntentBuilder(topActivity).apply { setType(mimeType) }.apply(block).startChooser()
+  ShareCompat.IntentBuilder(topActivity).setType(mimeType).apply(block).startChooser()

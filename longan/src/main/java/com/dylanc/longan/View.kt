@@ -121,9 +121,8 @@ inline fun View.withStyledAttrs(
   @AttrRes defStyleAttr: Int = 0,
   @StyleRes defStyleRes: Int = 0,
   block: TypedArray.() -> Unit
-) {
+) =
   context.withStyledAttributes(set, attrs, defStyleAttr, defStyleRes, block)
-}
 
 inline fun View.withStyledAttributes(
   set: AttributeSet?,
@@ -131,17 +130,8 @@ inline fun View.withStyledAttributes(
   @AttrRes defStyleAttr: Int = 0,
   @StyleRes defStyleRes: Int = 0,
   block: TypedArray.() -> Unit
-) {
+) =
   context.withStyledAttributes(set, attrs, defStyleAttr, defStyleRes, block)
-}
-
-inline fun View.withStyledAttributes(
-  @StyleRes resourceId: Int,
-  attrs: IntArray,
-  block: TypedArray.() -> Unit
-) {
-  context.withStyledAttributes(resourceId, attrs, block)
-}
 
 val View.rootWindowInsetsCompat: WindowInsetsCompat?
   get() {
