@@ -1,5 +1,8 @@
 <resources>
   <string name="app_name">Longan</string>
+  <string name="exit_app">To exit app, pressing again</string>
+  <string name="dialogs">Dialogs</string>
+  <string name="spannable_string">SpannableString</string>
   <string name="selector">selector</string>
   <string name="single_choice_selector">single choice selector</string>
   <string name="multi_choice_selector">multi choice selector</string>

@@ -26,6 +26,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled = true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -41,21 +42,19 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     implementation project(path: ':longan')
     implementation project(path: ':longan-design')
     implementation "androidx.core:core-ktx:$coreVersion"
-//    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "com.google.android.material:material:$materialVersion"
-    implementation 'com.github.DylanCaiCoding.ViewBindingKTX:viewbinding-ktx:1.2.4'
+    implementation 'com.github.DylanCaiCoding.ViewBindingKTX:viewbinding-ktx:2.0.0'
+    implementation 'com.github.DylanCaiCoding.ViewBindingKTX:viewbinding-base:2.0.0'
     implementation "org.jetbrains.anko:anko:0.10.8"
     implementation "org.jetbrains.anko:anko-design:0.10.8"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1'
-    implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.2.1"
-    implementation 'androidx.camera:camera-lifecycle:1.0.2'
-    implementation "androidx.camera:camera-camera2:1.0.2"
-//    implementation "androidx.camera:camera-view:1.0.0-alpha32"
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.3.1"
 
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$junitExtVersion"
