@@ -18,11 +18,14 @@
 
 package com.dylanc.longan
 
+import android.graphics.Color
 import android.graphics.Paint
 import android.os.CountDownTimer
 import android.text.method.HideReturnsTransformationMethod
+import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -49,6 +52,11 @@ inline var TextView.isPasswordVisible: Boolean
 
 fun TextView.addUnderline() {
   paint.flags = Paint.UNDERLINE_TEXT_FLAG
+}
+
+fun TextView.setLinkMovementMethod(@ColorInt highlightColor:Int = Color.TRANSPARENT) {
+  movementMethod = LinkMovementMethod.getInstance()
+  this.highlightColor = highlightColor
 }
 
 fun TextView.startCountDown(
