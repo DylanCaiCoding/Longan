@@ -19,12 +19,12 @@
 package com.dylanc.longan
 
 import android.content.ContentResolver
-import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import androidx.core.content.contentValuesOf
 
 
 inline val contentResolver: ContentResolver get() = application.contentResolver
@@ -100,29 +100,29 @@ inline fun <R> ContentResolver.queryMediaDownloads(
 ): R? =
   query(EXTERNAL_MEDIA_DOWNLOADS_URI, projection, selection, selectionArgs, sortOrder, block)
 
-inline fun ContentResolver.insert(uri: Uri, crossinline block: ContentValues.() -> Unit = {}): Uri? =
-  contentResolver.insert(uri, contentValues(block))
+fun ContentResolver.insert(uri: Uri, vararg pairs: Pair<String, Any?>): Uri? =
+  contentResolver.insert(uri, contentValuesOf(*pairs))
 
-inline fun ContentResolver.insertMediaImage(crossinline block: ContentValues.() -> Unit = {}): Uri? =
-  contentResolver.insert(EXTERNAL_MEDIA_IMAGES_URI, block)
+fun ContentResolver.insertMediaImage(vararg pairs: Pair<String, Any?>): Uri? =
+  contentResolver.insert(EXTERNAL_MEDIA_IMAGES_URI, *pairs)
 
-inline fun ContentResolver.insertMediaVideo(crossinline block: ContentValues.() -> Unit = {}): Uri? =
-  contentResolver.insert(EXTERNAL_MEDIA_VIDEO_URI, block)
+fun ContentResolver.insertMediaVideo(vararg pairs: Pair<String, Any?>): Uri? =
+  contentResolver.insert(EXTERNAL_MEDIA_VIDEO_URI, *pairs)
 
-inline fun ContentResolver.insertMediaAudio(crossinline block: ContentValues.() -> Unit = {}): Uri? =
-  contentResolver.insert(EXTERNAL_MEDIA_AUDIO_URI, block)
+fun ContentResolver.insertMediaAudio(vararg pairs: Pair<String, Any?>): Uri? =
+  contentResolver.insert(EXTERNAL_MEDIA_AUDIO_URI, *pairs)
 
 @RequiresApi(Build.VERSION_CODES.Q)
-inline fun ContentResolver.insertMediaDownload(crossinline block: ContentValues.() -> Unit = {}): Uri? =
-  contentResolver.insert(EXTERNAL_MEDIA_DOWNLOADS_URI, block)
+fun ContentResolver.insertMediaDownload(vararg pairs: Pair<String, Any?>): Uri? =
+  contentResolver.insert(EXTERNAL_MEDIA_DOWNLOADS_URI, *pairs)
 
-inline fun ContentResolver.update(
+fun ContentResolver.update(
   @RequiresPermission.Write uri: Uri,
+  vararg pairs: Pair<String, Any?>,
   where: String? = null,
-  selectionArgs: Array<String>? = null,
-  crossinline block: ContentValues.() -> Unit
+  selectionArgs: Array<String>? = null
 ): Int =
-  update(uri, contentValues(block), where, selectionArgs)
+  update(uri, contentValuesOf(*pairs), where, selectionArgs)
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 fun ContentResolver.delete(

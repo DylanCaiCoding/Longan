@@ -48,10 +48,10 @@ import androidx.core.content.ContextCompat
 import java.io.File
 
 
-fun ActivityResultLauncher<Unit>.launch() = launch(Unit)
+fun ActivityResultLauncher<Unit>.launch(options: ActivityOptionsCompat? = null) = launch(Unit, options)
 
 @JvmName("launchVoid")
-fun ActivityResultLauncher<Void>.launch() = launch(null)
+fun ActivityResultLauncher<Void>.launch(options: ActivityOptionsCompat? = null) = launch(null, options)
 
 inline fun <reified T> ActivityResultLauncher<Array<T>>.launch(vararg input: T) = launch(arrayOf(*input))
 
@@ -241,7 +241,7 @@ open class CropPictureContract : ActivityResultContract<CropPictureRequest, Uri>
   private lateinit var outputUri: Uri
 
   @CallSuper
-  override fun createIntent(context: Context, input: CropPictureRequest):Intent {
+  override fun createIntent(context: Context, input: CropPictureRequest): Intent {
     outputUri = context.contentResolver.insert(EXTERNAL_MEDIA_IMAGES_URI, input.outputContentValues)!!
     return Intent("com.android.camera.action.CROP")
       .setDataAndType(input.inputUri, "image/*")

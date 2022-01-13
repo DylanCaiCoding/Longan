@@ -21,7 +21,6 @@ package com.dylanc.longan
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.text.Layout
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
@@ -29,16 +28,11 @@ import android.text.style.*
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.annotation.RequiresApi
 import androidx.core.text.inSpans
-import android.graphics.Typeface
-
-import android.text.style.TypefaceSpan
 
 
 private const val IMAGE_SPAN_TEXT = "<img/>"
 private const val SPACE_SPAN_TEXT = "<space/>"
-private val LINE_SEPARATOR = System.getProperty("line.separator")
 
 inline fun SpannableStringBuilder.size(
   size: Float,
@@ -50,13 +44,13 @@ inline fun SpannableStringBuilder.size(
   builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder = inSpans(AbsoluteSizeSpan(size), builderAction)
 
-inline fun SpannableStringBuilder.alignOpposite(
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = alignment(Layout.Alignment.ALIGN_OPPOSITE, builderAction)
-
 inline fun SpannableStringBuilder.alignCenter(
   builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder = alignment(Layout.Alignment.ALIGN_CENTER, builderAction)
+
+inline fun SpannableStringBuilder.alignOpposite(
+  builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = alignment(Layout.Alignment.ALIGN_OPPOSITE, builderAction)
 
 inline fun SpannableStringBuilder.alignment(
   alignment: Layout.Alignment,
@@ -82,7 +76,7 @@ inline fun SpannableStringBuilder.fontFamily(
 inline fun SpannableStringBuilder.typeface(
   typeface: Typeface,
   builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = inSpans(CustomTypefaceSpan(typeface), builderAction)
+): SpannableStringBuilder = inSpans(TypefaceSpanCompat(typeface), builderAction)
 
 inline fun SpannableStringBuilder.url(
   url: String,
@@ -91,34 +85,26 @@ inline fun SpannableStringBuilder.url(
 
 inline fun SpannableStringBuilder.bullet(
   gapWidth: Float,
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = bullet(gapWidth.toInt(), builderAction)
-
-inline fun SpannableStringBuilder.bullet(
-  gapWidth: Int = BulletSpan.STANDARD_GAP_WIDTH,
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = inSpans(BulletSpan(gapWidth), builderAction)
-
-inline fun SpannableStringBuilder.bullet(
-  gapWidth: Float,
-  @ColorInt color: Int,
+  @ColorInt color: Int? = null,
   builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder = bullet(gapWidth.toInt(), color, builderAction)
 
 inline fun SpannableStringBuilder.bullet(
   gapWidth: Int = BulletSpan.STANDARD_GAP_WIDTH,
-  @ColorInt color: Int,
+  @ColorInt color: Int? = null,
   builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = inSpans(BulletSpan(gapWidth, color), builderAction)
+): SpannableStringBuilder {
+  val span = if (color == null) BulletSpan(gapWidth) else BulletSpan(gapWidth, color)
+  return inSpans(span, builderAction)
+}
 
 inline fun SpannableStringBuilder.quote(
+  @ColorInt color: Int? = null,
   builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = inSpans(QuoteSpan(), builderAction)
-
-inline fun SpannableStringBuilder.quote(
-  @ColorInt color: Int,
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = inSpans(QuoteSpan(color), builderAction)
+): SpannableStringBuilder {
+  val span = if (color == null) QuoteSpan() else QuoteSpan(color)
+  return inSpans(span, builderAction)
+}
 
 inline fun SpannableStringBuilder.leadingMargin(
   first: Float,
@@ -133,7 +119,7 @@ inline fun SpannableStringBuilder.leadingMargin(
 ): SpannableStringBuilder = inSpans(LeadingMarginSpan.Standard(first, rest), builderAction)
 
 fun SpannableStringBuilder.clickable(
-  @ColorInt color: Int = -1,
+  @ColorInt color: Int? = null,
   isUnderlineText: Boolean = true,
   onClick: (View) -> Unit,
   builderAction: SpannableStringBuilder.() -> Unit
@@ -143,7 +129,7 @@ fun SpannableStringBuilder.clickable(
   }
 
   override fun updateDrawState(ds: TextPaint) {
-    ds.color = if (color == -1) ds.linkColor else color
+    ds.color = color ?: ds.linkColor
     ds.isUnderlineText = isUnderlineText
   }
 }, builderAction)
@@ -169,7 +155,7 @@ fun SpannableStringBuilder.append(
 
 fun SpannableStringBuilder.appendClickable(
   text: CharSequence?,
-  @ColorInt color: Int = -1,
+  @ColorInt color: Int? = null,
   isUnderlineText: Boolean = true,
   onClick: (View) -> Unit
 ): SpannableStringBuilder = clickable(color, isUnderlineText, onClick) { append(text) }
@@ -202,11 +188,9 @@ fun SpannableStringBuilder.appendSpace(
 ): SpannableStringBuilder = inSpans(SpaceSpan(size, color)) { append(SPACE_SPAN_TEXT) }
 
 class SpaceSpan constructor(private val width: Int, color: Int = Color.TRANSPARENT) : ReplacementSpan() {
-  private val paint: Paint = Paint()
-
-  init {
-    paint.color = color
-    paint.style = Paint.Style.FILL
+  private val paint = Paint().apply {
+    this.color = color
+    style = Paint.Style.FILL
   }
 
   override fun getSize(
@@ -220,13 +204,12 @@ class SpaceSpan constructor(private val width: Int, color: Int = Color.TRANSPARE
     canvas: Canvas, text: CharSequence?,
     @androidx.annotation.IntRange(from = 0) start: Int,
     @androidx.annotation.IntRange(from = 0) end: Int,
-    x: Float, top: Int, y: Int, bottom: Int,
-    paint: Paint
+    x: Float, top: Int, y: Int, bottom: Int, paint: Paint
   ) =
     canvas.drawRect(x, top.toFloat(), x + width, bottom.toFloat(), this.paint)
 }
 
-class CustomTypefaceSpan(private val newType: Typeface) : TypefaceSpan("") {
+class TypefaceSpanCompat(private val newType: Typeface) : TypefaceSpan(null) {
   override fun updateDrawState(ds: TextPaint) {
     ds.applyTypeFace(newType)
   }

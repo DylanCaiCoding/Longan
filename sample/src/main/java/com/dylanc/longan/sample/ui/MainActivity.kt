@@ -4,22 +4,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dylanc.longan.pressBackTwiceToExitApp
 import com.dylanc.longan.sample.R
-import com.dylanc.longan.sample.adapter.IntDiffCallback
 import com.dylanc.longan.sample.databinding.ActivityRecyclerViewBinding
 import com.dylanc.longan.sample.databinding.ItemTextBinding
 import com.dylanc.longan.startActivity
-import com.dylanc.viewbinding.base.simpleListAdapter
+import com.dylanc.viewbinding.base.simpleIntListAdapter
 import com.dylanc.viewbinding.binding
 
 
 class MainActivity : AppCompatActivity() {
 
   private val binding: ActivityRecyclerViewBinding by binding()
-  private val items = listOf(
-    R.string.dialogs,
-    R.string.spannable_string
-  )
-  private val adapter = simpleListAdapter<Int, ItemTextBinding>(IntDiffCallback()) {
+  private val items = listOf(R.string.dialogs, R.string.spannable_string)
+  private val adapter = simpleIntListAdapter<ItemTextBinding> {
     tvTitle.setText(it)
   }
 

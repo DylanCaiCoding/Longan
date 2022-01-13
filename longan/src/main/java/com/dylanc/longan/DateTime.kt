@@ -52,3 +52,9 @@ fun LocalDateTime.format(pattern: String, timeZone: TimeZone = TimeZone.currentS
   DateTimeFormatter.ofPattern(pattern).withZone(timeZone.toJavaZoneId()).format(toJavaLocalDateTime())
 
 fun LocalDateTime.toInstant(): Instant = toInstant(TimeZone.currentSystemDefault())
+
+val LocalDateTime.isToday: Boolean
+  get() = date.isToday
+
+val LocalDate.isToday: Boolean
+  get() = this == Clock.System.todayAt(TimeZone.currentSystemDefault())

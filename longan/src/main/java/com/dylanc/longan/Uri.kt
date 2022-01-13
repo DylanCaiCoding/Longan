@@ -20,7 +20,6 @@ package com.dylanc.longan
 
 import android.app.RecoverableSecurityException
 import android.content.ContentUris
-import android.content.ContentValues
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -63,10 +62,10 @@ fun File.toUri(authority: String = fileProviderAuthority): Uri =
     Uri.fromFile(this)
   }
 
-inline fun Uri.update(crossinline block: ContentValues.() -> Unit): Boolean =
+fun Uri.update(vararg pairs: Pair<String, Any?>): Boolean =
   contentResolver.update(
-    this, "${BaseColumns._ID} = ?",
-    arrayOf(ContentUris.parseId(this).toString()), block
+    this, *pairs, where = "${BaseColumns._ID} = ?",
+    selectionArgs = arrayOf(ContentUris.parseId(this).toString())
   ) > 0
 
 @ExperimentalApi

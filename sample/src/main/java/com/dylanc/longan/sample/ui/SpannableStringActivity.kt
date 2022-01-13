@@ -2,7 +2,7 @@ package com.dylanc.longan.sample.ui
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.MenuItem
+import android.text.method.LinkMovementMethod
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.*
 import com.dylanc.longan.*
@@ -33,8 +33,8 @@ class SpannableStringActivity : AppCompatActivity() {
         scale(2f) { appendLine("scale(2f)") }
         append("content")
         superscript { appendLine("superscript") }
-        subscript { append("subscript") }
         appendLine("content")
+        subscript { append("subscript") }
         size(18.sp) { appendLine("size(18.sp)") }
         alignCenter { appendLine("alignCenter") }
         alignOpposite { appendLine("alignOpposite") }
@@ -47,13 +47,12 @@ class SpannableStringActivity : AppCompatActivity() {
         fontFamily("monospace") { appendLine("fontFamily(\"monospace\")") }
         bullet(8.dp) { appendLine("bullet(8.dp, Color.RED)") }
         quote(Color.RED) { appendLine("quote(Color.RED)") }
-        appendClickable(R.mipmap.ic_launcher) {
-          toast("click image")
-        }
+        appendClickable(R.mipmap.ic_launcher) { toast("click image") }
         appendLine()
-        appendClickable("appendClickable") { toast("click it") }
+        appendClickable("appendClickable") { toast("click text") }
       }
-      textView.setLinkMovementMethod()
+      textView.movementMethod = LinkMovementMethod.getInstance()
+      textView.transparentHighlightColor()
     }
   }
 

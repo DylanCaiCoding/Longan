@@ -54,9 +54,8 @@ fun TextView.addUnderline() {
   paint.flags = Paint.UNDERLINE_TEXT_FLAG
 }
 
-fun TextView.setLinkMovementMethod(@ColorInt highlightColor:Int = Color.TRANSPARENT) {
-  movementMethod = LinkMovementMethod.getInstance()
-  this.highlightColor = highlightColor
+fun TextView.transparentHighlightColor(){
+  highlightColor = Color.TRANSPARENT
 }
 
 fun TextView.startCountDown(

@@ -7,12 +7,13 @@ import com.dylanc.longan.design.multiChoiceSelector
 import com.dylanc.longan.design.selector
 import com.dylanc.longan.design.singleChoiceSelector
 import com.dylanc.longan.sample.R
-import com.dylanc.longan.sample.adapter.IntDiffCallback
 import com.dylanc.longan.sample.databinding.ActivityRecyclerViewBinding
 import com.dylanc.longan.sample.databinding.ItemTextBinding
 import com.dylanc.longan.toast
-import com.dylanc.viewbinding.base.simpleListAdapter
+import com.dylanc.viewbinding.base.simpleIntListAdapter
 import com.dylanc.viewbinding.binding
+import com.dylanc.viewbinding.updateCustomTab
+import com.google.android.material.tabs.TabLayout
 
 
 class DialogsActivity : AppCompatActivity() {
@@ -23,7 +24,7 @@ class DialogsActivity : AppCompatActivity() {
     R.string.single_choice_selector,
     R.string.multi_choice_selector,
   )
-  private val adapter = simpleListAdapter<Int, ItemTextBinding>(IntDiffCallback()) {
+  private val adapter = simpleIntListAdapter<ItemTextBinding> {
     tvTitle.setText(it)
   }
 
