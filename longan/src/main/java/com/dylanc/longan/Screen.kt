@@ -24,7 +24,6 @@ import android.content.res.Configuration
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 
-
 inline val screenWidth: Int get() = application.resources.displayMetrics.widthPixels
 
 inline val screenHeight: Int get() = application.resources.displayMetrics.heightPixels

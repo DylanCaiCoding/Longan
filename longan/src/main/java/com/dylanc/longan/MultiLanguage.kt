@@ -25,7 +25,6 @@ import android.os.Build
 import androidx.core.content.edit
 import java.util.*
 
-
 private var appLanguageCache: Locale? = null
 
 val systemLanguage: Locale

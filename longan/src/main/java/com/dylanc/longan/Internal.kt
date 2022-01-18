@@ -20,7 +20,6 @@ import android.view.View
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
-
 internal const val NO_GETTER: String = "Property does not have a getter"
 
 internal fun noGetter(): Nothing = throw NotImplementedError(NO_GETTER)

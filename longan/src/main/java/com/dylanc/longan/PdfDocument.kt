@@ -26,7 +26,6 @@ import android.print.PrintAttributes
 import java.io.File
 import java.io.FileOutputStream
 
-
 fun Bitmap.toA4PdfDoc(): PdfDocument =
   listOf(this).toA4PdfDoc()
 

@@ -22,7 +22,6 @@ import android.app.Application
 import android.content.Context
 import androidx.startup.Initializer
 
-
 internal class AppInitializer : Initializer<Unit> {
 
   override fun create(context: Context) {
@@ -38,8 +37,4 @@ internal class AppInitializer : Initializer<Unit> {
   }
 
   override fun dependencies() = emptyList<Class<Initializer<*>>>()
-
-  companion object {
-    internal lateinit var application: Application private set
-  }
 }

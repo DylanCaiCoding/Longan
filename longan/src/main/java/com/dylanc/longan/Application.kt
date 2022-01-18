@@ -35,8 +35,8 @@ import android.provider.Settings
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.PackageInfoCompat
 
-
-val application: Application get() = AppInitializer.application
+lateinit var application: Application
+  internal set
 
 inline val packageName: String get() = application.packageName
 

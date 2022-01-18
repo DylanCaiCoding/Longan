@@ -18,6 +18,5 @@
 
 package com.dylanc.longan
 
-
 inline fun <T> List<T>.percentage(predicate: (T) -> Boolean) =
   filter(predicate).size.toFloat() / size

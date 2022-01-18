@@ -21,7 +21,6 @@ package com.dylanc.longan
 import android.graphics.Canvas
 import android.graphics.Paint
 
-
 fun Canvas.drawCenterVerticalText(text: String, centerX: Float, centerY: Float, paint: Paint) =
   drawCenterText(text, centerX, centerY, paint, Paint.Align.LEFT)
 

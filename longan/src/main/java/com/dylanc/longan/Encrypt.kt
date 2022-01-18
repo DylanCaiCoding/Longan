@@ -21,7 +21,6 @@ package com.dylanc.longan
 import okio.ByteString.Companion.encodeUtf8
 import okio.ByteString.Companion.toByteString
 
-
 fun String.encryptMD5(): String = encodeUtf8().md5().hex()
 
 fun ByteArray.encryptMD5(): String = toByteString().md5().hex()

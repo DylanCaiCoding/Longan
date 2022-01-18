@@ -39,7 +39,6 @@ import java.io.FileNotFoundException
 import java.io.InputStream
 import java.io.OutputStream
 
-
 lateinit var fileProviderAuthority: String
 
 inline val EXTERNAL_MEDIA_IMAGES_URI: Uri

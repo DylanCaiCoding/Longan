@@ -31,7 +31,6 @@ import androidx.annotation.RequiresPermission
 import androidx.core.content.getSystemService
 import androidx.lifecycle.LiveData
 
-
 @get:RequiresPermission(ACCESS_NETWORK_STATE)
 val isNetworkAvailable: Boolean
   get() = application.getSystemService<ConnectivityManager>()?.run {

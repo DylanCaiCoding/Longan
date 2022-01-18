@@ -24,7 +24,6 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 
-
 /**
  * Display the Snackbar with the [Snackbar.LENGTH_SHORT] duration.
  *

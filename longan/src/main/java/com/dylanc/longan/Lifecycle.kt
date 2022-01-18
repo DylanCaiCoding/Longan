@@ -26,7 +26,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 
-
 fun Application.doOnActivityLifecycle(
   onActivityCreated: ((Activity, Bundle?) -> Unit)? = null,
   onActivityStarted: ((Activity) -> Unit)? = null,

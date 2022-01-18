@@ -26,7 +26,6 @@ import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 
-
 val applicationViewModelStore by lazy { ViewModelStore() }
 
 @MainThread

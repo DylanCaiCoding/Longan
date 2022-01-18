@@ -36,7 +36,6 @@ import androidx.lifecycle.LifecycleOwner
 import java.util.*
 import kotlin.reflect.KClass
 
-
 internal val activityCache = LinkedList<Activity>()
 
 fun startActivity(intent: Intent) = topActivity.startActivity(intent)

@@ -27,7 +27,6 @@ import androidx.annotation.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 
-
 fun View.getString(@StringRes id: Int): String =
   context.getString(id)
 

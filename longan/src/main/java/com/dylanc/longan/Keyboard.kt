@@ -23,7 +23,6 @@ import android.view.View
 import androidx.core.view.WindowInsetsCompat.Type
 import androidx.fragment.app.Fragment
 
-
 fun Fragment.showKeyboard() = requireActivity().showKeyboard()
 
 fun Activity.showKeyboard() = window.decorView.showKeyboard()

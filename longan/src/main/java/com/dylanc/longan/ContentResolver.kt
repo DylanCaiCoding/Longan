@@ -26,7 +26,6 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.core.content.contentValuesOf
 
-
 inline val contentResolver: ContentResolver get() = application.contentResolver
 
 inline fun <R> ContentResolver.query(

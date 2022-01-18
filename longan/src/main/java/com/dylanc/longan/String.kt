@@ -23,7 +23,6 @@ import androidx.core.util.PatternsCompat
 import org.json.JSONObject
 import java.util.*
 
-
 const val REGEX_ID_CARD_15: String =
   "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$"
 

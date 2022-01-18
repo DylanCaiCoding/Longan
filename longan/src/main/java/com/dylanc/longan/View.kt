@@ -34,7 +34,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-
 fun List<View>.doOnClick(clickIntervals: Int, isSharingIntervals: Boolean = false, block: () -> Unit) =
   forEach { it.doOnClick(clickIntervals, isSharingIntervals, block) }
 

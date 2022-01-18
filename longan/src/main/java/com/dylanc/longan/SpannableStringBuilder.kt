@@ -30,7 +30,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.text.inSpans
 
-
 private const val IMAGE_SPAN_TEXT = "<img/>"
 private const val SPACE_SPAN_TEXT = "<space/>"
 

@@ -21,7 +21,6 @@ package com.dylanc.longan
 import android.content.res.Resources
 import android.util.TypedValue
 
-
 inline val Int.dp: Float get() = toFloat().dp
 
 inline val Long.dp: Float get() = toFloat().dp

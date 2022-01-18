@@ -47,7 +47,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import java.io.File
 
-
 fun ActivityResultLauncher<Unit>.launch(options: ActivityOptionsCompat? = null) = launch(Unit, options)
 
 @JvmName("launchVoid")

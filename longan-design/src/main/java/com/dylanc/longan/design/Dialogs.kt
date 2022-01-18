@@ -30,7 +30,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.DeprecationLevel.ERROR
 
-
 typealias AlertBuilderFactory<D> = (Context) -> AlertBuilder<D>
 
 val Material: AlertBuilderFactory<DialogInterface> = { context ->

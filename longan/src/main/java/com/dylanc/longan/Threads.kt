@@ -21,16 +21,15 @@ package com.dylanc.longan
 import android.os.Handler
 import android.os.Looper
 
-
-val mainHandler by lazy { Handler(Looper.getMainLooper()) }
+val mainThreadHandler by lazy { Handler(Looper.getMainLooper()) }
 
 fun mainThread(block: () -> Unit) {
   if (Looper.myLooper() != Looper.getMainLooper()) {
-    mainHandler.post(block)
+    mainThreadHandler.post(block)
   } else {
     block()
   }
 }
 
 fun mainThread(delayMillis: Long, block: () -> Unit) =
-  mainHandler.postDelayed(block, delayMillis)
+  mainThreadHandler.postDelayed(block, delayMillis)

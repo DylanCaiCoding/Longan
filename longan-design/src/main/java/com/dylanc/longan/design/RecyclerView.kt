@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_END
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_START
 import androidx.recyclerview.widget.RecyclerView
 
-
 fun RecyclerView.setEmptyView(owner: LifecycleOwner, emptyView: View) =
   observeDataEmpty(owner) { emptyView.isVisible = it }
 

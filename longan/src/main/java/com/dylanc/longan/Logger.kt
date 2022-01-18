@@ -20,7 +20,6 @@ package com.dylanc.longan
 
 import android.util.Log
 
-
 fun initLogger(isLoggable: Boolean = true, printer: LoggerPrinter? = null) {
   Logger.isLoggable = { _, _ -> isLoggable }
   printer?.let { Logger.printer = it }

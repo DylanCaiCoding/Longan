@@ -30,7 +30,6 @@ import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 
-
 fun Fragment.immerseStatusBar(lightMode: Boolean = true) {
   activity?.immerseStatusBar(lightMode)
 }

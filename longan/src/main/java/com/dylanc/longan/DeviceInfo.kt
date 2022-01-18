@@ -18,7 +18,6 @@ package com.dylanc.longan
 
 import android.os.Build
 
-
 inline val sdkVersionName: String get() = Build.VERSION.RELEASE
 
 inline val sdkVersionCode: Int get() = Build.VERSION.SDK_INT

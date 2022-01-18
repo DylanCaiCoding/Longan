@@ -24,7 +24,6 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.pm.PackageManager
 
-
 fun applicationMetaDataOf(name: String): String? =
   try {
     application.packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)

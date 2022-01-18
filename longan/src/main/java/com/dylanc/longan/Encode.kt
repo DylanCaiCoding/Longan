@@ -22,7 +22,6 @@ import android.util.Base64
 import java.net.URLDecoder
 import java.net.URLEncoder
 
-
 fun ByteArray.base64Encode(flag: Int = Base64.DEFAULT): ByteArray =
   Base64.encode(this, flag)
 

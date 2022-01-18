@@ -22,7 +22,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 fun saveCrashLogLocally(dirPath: String = cacheDirPath) =
   handleUncaughtException { thread, e ->
     val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())

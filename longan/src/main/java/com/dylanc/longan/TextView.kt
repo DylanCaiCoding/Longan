@@ -33,7 +33,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import kotlin.math.roundToInt
 
-
 inline val TextView.textString: String get() = text.toString()
 
 fun TextView.isTextEmpty(): Boolean = textString.isEmpty()

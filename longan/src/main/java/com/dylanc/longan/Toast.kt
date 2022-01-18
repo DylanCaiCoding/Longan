@@ -29,7 +29,6 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 
-
 fun Fragment.toast(message: CharSequence?): Toast =
   requireActivity().toast(message)
 

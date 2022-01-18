@@ -21,7 +21,6 @@ package com.dylanc.longan
 import android.net.Uri
 import androidx.core.app.ShareCompat
 
-
 fun shareText(content: String, title: String? = null) =
   share("text/plain") {
     setText(content)
