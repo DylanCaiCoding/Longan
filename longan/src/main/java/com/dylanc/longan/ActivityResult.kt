@@ -170,6 +170,9 @@ fun ActivityResultCaller.createDocumentLauncher(callback: ActivityResultCallback
 fun ActivityResultCaller.launchAppSettingsLauncher(callback: ActivityResultCallback<Unit>) =
   registerForActivityResult(LaunchAppSettingsContract(), callback)
 
+fun ActivityResultCaller.launchNotificationSettingsLauncher(callback: ActivityResultCallback<Unit>) =
+  registerForActivityResult(LaunchNotificationSettingsContract(), callback)
+
 fun ActivityResultCaller.cropPictureLauncher(callback: ActivityResultCallback<Uri>) =
   registerForActivityResult(CropPictureContract(), callback)
 
@@ -272,6 +275,20 @@ class LaunchAppSettingsContract : ActivityResultContract<Unit, Unit>() {
   override fun createIntent(context: Context, input: Unit?) =
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
       .setData(Uri.fromParts("package", context.packageName, null))
+
+  override fun parseResult(resultCode: Int, intent: Intent?) = Unit
+}
+
+class LaunchNotificationSettingsContract : ActivityResultContract<Unit, Unit>() {
+  override fun createIntent(context: Context, input: Unit?) =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+    } else {
+      Intent("android.settings.APP_NOTIFICATION_SETTINGS")
+        .putExtra("app_package", context.packageName)
+        .putExtra("app_uid", context.applicationInfo.uid)
+    }
 
   override fun parseResult(resultCode: Int, intent: Intent?) = Unit
 }
