@@ -2,17 +2,19 @@ package com.dylanc.longan
 
 import kotlinx.datetime.*
 import kotlinx.datetime.TimeZone
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.time.DayOfWeek.*
 import java.time.format.TextStyle
 import java.util.*
 
 class DateTimeTest {
 
-  private val epochMillis = 1643738522000
+  private val epochMillis = 1643673600000
   private val epochSeconds = epochMillis / 1000
-  private val localDateTime = LocalDateTime(2022, 2, 2, 2, 2, 2)
-  private val timeString = "2022-02-02 02:02:02"
+  private val localDateTime = LocalDateTime(2022, 2, 1, 8, 0, 0)
+  private val localDate = localDateTime.date
+  private val timeString = "2022-02-01 08:00:00"
   private val timePattern = "yyyy-MM-dd HH:mm:ss"
   private val timeZone = TimeZone.currentSystemDefault()
 
@@ -70,15 +72,13 @@ class DateTimeTest {
   fun getWeekString() {
     val dayOfWeek = localDateTime.dayOfWeek
 
-    assertEquals("星期三", dayOfWeek.getDisplayName(TextStyle.FULL, Locale.CHINA))
-    assertEquals("周三", dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.CHINA))
-    assertEquals("三", dayOfWeek.getDisplayName(TextStyle.NARROW, Locale.CHINA))
+    assertEquals("星期二", dayOfWeek.getDisplayName(TextStyle.FULL, Locale.CHINA))
+    assertEquals("周二", dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.CHINA))
+    assertEquals("二", dayOfWeek.getDisplayName(TextStyle.NARROW, Locale.CHINA))
 
-    assertEquals("Wednesday", dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
-    assertEquals("Wed", dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
-    assertEquals("W", dayOfWeek.getDisplayName(TextStyle.NARROW, Locale.ENGLISH))
-    DayOfWeek.MONDAY
-    Month.JANUARY
+    assertEquals("Tuesday", dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
+    assertEquals("Tue", dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
+    assertEquals("T", dayOfWeek.getDisplayName(TextStyle.NARROW, Locale.ENGLISH))
   }
 
   @Test
@@ -92,5 +92,28 @@ class DateTimeTest {
     assertEquals("February", month.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
     assertEquals("Feb", month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
     assertEquals("F", month.getDisplayName(TextStyle.NARROW, Locale.ENGLISH))
+  }
+
+  @Test
+  fun getFirstDayOrLastDay() {
+    assertEquals("2022-02-01", localDate.firstDayOfMonth().toString())
+    assertEquals("2022-02-28", localDate.lastDayOfMonth().toString())
+    assertEquals("2022-03-01", localDate.firstDayOfNextMonth().toString())
+    assertEquals("2022-01-01", localDate.firstDayOfLastMonth().toString())
+    assertEquals("2022-01-01", localDate.firstDayOfYear().toString())
+    assertEquals("2022-12-31", localDate.lastDayOfYear().toString())
+    assertEquals("2023-01-01", localDate.firstDayOfNextYear().toString())
+    assertEquals("2021-01-01", localDate.firstDayOfLastYear().toString())
+  }
+
+  @Test
+  fun getSomeWeek() {
+    assertEquals("2022-02-06", localDate.firstInMonth(SUNDAY).toString())
+    assertEquals("2022-02-27", localDate.lastInMonth(SUNDAY).toString())
+    assertEquals("2022-02-08", localDate.next(TUESDAY).toString())
+    assertEquals("2022-01-25", localDate.previous(TUESDAY).toString())
+    assertEquals("2022-02-01", localDate.nextOrSame(TUESDAY).toString())
+    assertEquals("2022-02-01", localDate.previousOrSame(TUESDAY).toString())
+    assertEquals("2022-02-09", localDate.dayOfWeekInMonth(2, WEDNESDAY).toString())
   }
 }
