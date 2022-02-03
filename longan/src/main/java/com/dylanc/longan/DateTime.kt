@@ -20,10 +20,14 @@ package com.dylanc.longan
 
 import kotlinx.datetime.*
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoField.DAY_OF_MONTH
+import java.time.temporal.ChronoField.DAY_OF_YEAR
+import java.time.temporal.ChronoUnit.MONTHS
+import java.time.temporal.ChronoUnit.YEARS
 import java.time.temporal.TemporalAdjusters
-import java.time.ZonedDateTime as jtZonedDateTime
-import java.time.LocalDateTime as jtLocalDateTime
 import java.time.LocalDate as jtLocalDate
+import java.time.LocalDateTime as jtLocalDateTime
+import java.time.ZonedDateTime as jtZonedDateTime
 
 fun Instant.Companion.parse(text: String, pattern: String, timeZone: TimeZone): Instant =
   jtZonedDateTime.parse(text, DateTimeFormatter.ofPattern(pattern).withZone(timeZone.toJavaZoneId())).toInstant().toKotlinInstant()
@@ -55,7 +59,8 @@ fun LocalDate.isToday(timeZone: TimeZone): Boolean = this == Clock.System.todayA
 
 fun LocalDateTime.isYesterday(timeZone: TimeZone): Boolean = date.isYesterday(timeZone)
 
-fun LocalDate.isYesterday(timeZone: TimeZone): Boolean = this == Clock.System.todayAt(timeZone).minus(1, DateTimeUnit.DAY)
+fun LocalDate.isYesterday(timeZone: TimeZone): Boolean =
+  this == Clock.System.todayAt(timeZone).minus(1, DateTimeUnit.DAY)
 
 fun LocalDate.firstDayOfYear(): LocalDate =
   toJavaLocalDate().with(TemporalAdjusters.firstDayOfYear()).toKotlinLocalDate()
@@ -66,8 +71,14 @@ fun LocalDate.firstDayOfMonth(): LocalDate =
 fun LocalDate.firstDayOfNextMonth(): LocalDate =
   toJavaLocalDate().with(TemporalAdjusters.firstDayOfNextMonth()).toKotlinLocalDate()
 
+fun LocalDate.firstDayOfLastMonth(): LocalDate =
+  toJavaLocalDate().with { it.with(DAY_OF_MONTH, 1).minus(1, MONTHS) }.toKotlinLocalDate()
+
 fun LocalDate.firstDayOfNextYear(): LocalDate =
   toJavaLocalDate().with(TemporalAdjusters.firstDayOfNextYear()).toKotlinLocalDate()
+
+fun LocalDate.firstDayOfLastYear(): LocalDate =
+  toJavaLocalDate().with { it.with(DAY_OF_YEAR, 1).minus(1, YEARS) }.toKotlinLocalDate()
 
 fun LocalDate.lastDayOfMonth(): LocalDate =
   toJavaLocalDate().with(TemporalAdjusters.lastDayOfMonth()).toKotlinLocalDate()
