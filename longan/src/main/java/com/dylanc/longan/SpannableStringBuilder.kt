@@ -161,8 +161,10 @@ fun SpannableStringBuilder.appendClickable(
 
 fun SpannableStringBuilder.appendClickable(
   drawable: Drawable,
+  width: Int = drawable.intrinsicWidth,
+  height: Int = drawable.intrinsicHeight,
   onClick: (View) -> Unit
-): SpannableStringBuilder = clickable(onClick = onClick) { append(drawable) }
+): SpannableStringBuilder = clickable(onClick = onClick) { append(drawable, width, height) }
 
 fun SpannableStringBuilder.appendClickable(
   @DrawableRes resourceId: Int,
