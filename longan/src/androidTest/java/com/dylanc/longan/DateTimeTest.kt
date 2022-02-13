@@ -1,7 +1,8 @@
 package com.dylanc.longan
 
-import kotlinx.datetime.*
-import kotlinx.datetime.TimeZone
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toLocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.DayOfWeek.*
@@ -16,36 +17,35 @@ class DateTimeTest {
   private val localDate = localDateTime.date
   private val timeString = "2022-02-01 08:00:00"
   private val timePattern = "yyyy-MM-dd HH:mm:ss"
-  private val timeZone = TimeZone.currentSystemDefault()
 
   @Test
   fun millisecondsToString() {
-    assertEquals(timeString, Instant.fromEpochMilliseconds(epochMillis).format(timePattern, timeZone))
+    assertEquals(timeString, Instant.fromEpochMilliseconds(epochMillis).format(timePattern))
   }
 
   @Test
   fun millisecondsToLocalDateTime() {
-    assertEquals(localDateTime, Instant.fromEpochMilliseconds(epochMillis).toLocalDateTime(timeZone))
+    assertEquals(localDateTime, Instant.fromEpochMilliseconds(epochMillis).toLocalDateTime(systemTimeZone))
   }
 
   @Test
   fun secondsToString() {
-    assertEquals(timeString, Instant.fromEpochSeconds(epochSeconds).format(timePattern, timeZone))
+    assertEquals(timeString, Instant.fromEpochSeconds(epochSeconds).format(timePattern))
   }
 
   @Test
   fun secondsToLocalDateTime() {
-    assertEquals(localDateTime, Instant.fromEpochSeconds(epochSeconds).toLocalDateTime(timeZone))
+    assertEquals(localDateTime, Instant.fromEpochSeconds(epochSeconds).toLocalDateTime(systemTimeZone))
   }
 
   @Test
   fun stringToMilliseconds() {
-    assertEquals(epochMillis, timeString.toInstant(timePattern, timeZone).toEpochMilliseconds())
+    assertEquals(epochMillis, timeString.toEpochMilliseconds(timePattern))
   }
 
   @Test
   fun stringToSeconds() {
-    assertEquals(epochSeconds, timeString.toInstant(timePattern, timeZone).epochSeconds)
+    assertEquals(epochSeconds, timeString.toEpochSeconds(timePattern))
   }
 
   @Test
@@ -60,12 +60,12 @@ class DateTimeTest {
 
   @Test
   fun localDateTimeToMilliseconds() {
-    assertEquals(epochMillis, localDateTime.toInstant(timeZone).toEpochMilliseconds())
+    assertEquals(epochMillis, localDateTime.toInstant().toEpochMilliseconds())
   }
 
   @Test
   fun localDateTimeToSeconds() {
-    assertEquals(epochSeconds, localDateTime.toInstant(timeZone).epochSeconds)
+    assertEquals(epochSeconds, localDateTime.toInstant().epochSeconds)
   }
 
   @Test
@@ -87,7 +87,7 @@ class DateTimeTest {
 
     assertEquals("二月", month.getDisplayName(TextStyle.FULL, Locale.CHINA))
     assertEquals("2月", month.getDisplayName(TextStyle.SHORT, Locale.CHINA))
-    assertEquals("2", month.getDisplayName(TextStyle.NARROW, Locale.CHINA))
+    assertEquals("二", month.getDisplayName(TextStyle.NARROW, Locale.CHINA))
 
     assertEquals("February", month.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
     assertEquals("Feb", month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
@@ -95,7 +95,7 @@ class DateTimeTest {
   }
 
   @Test
-  fun getFirstDayOrLastDay() {
+  fun getFirstOrLastDay() {
     assertEquals("2022-02-01", localDate.firstDayOfMonth().toString())
     assertEquals("2022-02-28", localDate.lastDayOfMonth().toString())
     assertEquals("2022-03-01", localDate.firstDayOfNextMonth().toString())
