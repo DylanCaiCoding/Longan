@@ -32,20 +32,33 @@ import java.time.temporal.TemporalAdjuster
 import java.time.temporal.TemporalAdjusters
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
-import java.time.LocalDate as jtLocalDate
-import java.time.LocalDateTime as jtLocalDateTime
-import java.time.ZonedDateTime as jtZonedDateTime
 
-val systemTimeZone: TimeZone by SystemTimezoneProperty()
+val systemTimeZone: TimeZone by object : ReadOnlyProperty<Any?, TimeZone> {
+  private lateinit var timeZone: TimeZone
+
+  override fun getValue(thisRef: Any?, property: KProperty<*>): TimeZone {
+    if (!::timeZone.isInitialized) {
+      timeZone = TimeZone.currentSystemDefault()
+      application.registerReceiver(object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent?) {
+          if (intent?.action == Intent.ACTION_TIMEZONE_CHANGED) {
+            timeZone = TimeZone.currentSystemDefault()
+          }
+        }
+      }, IntentFilter(Intent.ACTION_TIMEZONE_CHANGED))
+    }
+    return timeZone
+  }
+}
 
 fun Instant.Companion.parse(text: String, pattern: String, timeZone: TimeZone = systemTimeZone): Instant =
-  jtZonedDateTime.parse(text, DateTimeFormatter.ofPattern(pattern).withZone(timeZone.toJavaZoneId())).toInstant().toKotlinInstant()
+  java.time.ZonedDateTime.parse(text, DateTimeFormatter.ofPattern(pattern).withZone(timeZone.toJavaZoneId())).toInstant().toKotlinInstant()
 
 fun LocalDateTime.Companion.parse(text: String, pattern: String): LocalDateTime =
-  jtLocalDateTime.parse(text, DateTimeFormatter.ofPattern(pattern)).toKotlinLocalDateTime()
+  java.time.LocalDateTime.parse(text, DateTimeFormatter.ofPattern(pattern)).toKotlinLocalDateTime()
 
 fun LocalDate.Companion.parse(text: String, pattern: String): LocalDate =
-  jtLocalDate.parse(text, DateTimeFormatter.ofPattern(pattern)).toKotlinLocalDate()
+  java.time.LocalDate.parse(text, DateTimeFormatter.ofPattern(pattern)).toKotlinLocalDate()
 
 fun String.toInstant(pattern: String, timeZone: TimeZone = systemTimeZone): Instant = Instant.parse(this, pattern, timeZone)
 
@@ -57,14 +70,16 @@ fun String.toEpochMilliseconds(pattern: String, timeZone: TimeZone = systemTimeZ
 
 fun String.toEpochSeconds(pattern: String, timeZone: TimeZone = systemTimeZone): Long = toInstant(pattern, timeZone).epochSeconds
 
+fun LocalDateTime.toInstant() = toInstant(systemTimeZone)
+
+fun Instant.toLocalDateTime() = toLocalDateTime(systemTimeZone)
+
 fun Instant.format(pattern: String, timeZone: TimeZone = systemTimeZone): String =
   DateTimeFormatter.ofPattern(pattern).withZone(timeZone.toJavaZoneId()).format(toJavaInstant())
 
 fun LocalDateTime.format(pattern: String): String = DateTimeFormatter.ofPattern(pattern).format(toJavaLocalDateTime())
 
 fun LocalDate.format(pattern: String): String = DateTimeFormatter.ofPattern(pattern).format(toJavaLocalDate())
-
-fun LocalDateTime.toInstant() = toInstant(systemTimeZone)
 
 val Clock.System.today: LocalDate get() = Clock.System.todayAt(systemTimeZone)
 
@@ -165,20 +180,30 @@ fun LocalDate.previous(dayOfWeek: DayOfWeek): LocalDate = with(TemporalAdjusters
 
 fun LocalDate.previousOrSame(dayOfWeek: DayOfWeek): LocalDate = with(TemporalAdjusters.previousOrSame(dayOfWeek))
 
-private class SystemTimezoneProperty : ReadOnlyProperty<Any?, TimeZone> {
-  private var timeZone: TimeZone? = null
+fun Instant.plus(period: DateTimePeriod): Instant = plus(period, systemTimeZone)
 
-  override fun getValue(thisRef: Any?, property: KProperty<*>): TimeZone {
-    if (timeZone == null) {
-      timeZone = TimeZone.currentSystemDefault()
-      application.registerReceiver(object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent?) {
-          if (intent?.action == Intent.ACTION_TIMEZONE_CHANGED) {
-            timeZone = TimeZone.currentSystemDefault()
-          }
-        }
-      }, IntentFilter(Intent.ACTION_TIMEZONE_CHANGED))
-    }
-    return timeZone!!
-  }
-}
+fun Instant.plus(value: Int, unit: DateTimeUnit): Instant = plus(value, unit, systemTimeZone)
+
+fun Instant.plus(value: Long, unit: DateTimeUnit): Instant = plus(value, unit, systemTimeZone)
+
+fun Instant.plus(unit: DateTimeUnit): Instant = plus(unit, systemTimeZone)
+
+fun Instant.minus(period: DateTimePeriod): Instant = minus(period, systemTimeZone)
+
+fun Instant.minus(value: Int, unit: DateTimeUnit): Instant = minus(value, unit, systemTimeZone)
+
+fun Instant.minus(value: Long, unit: DateTimeUnit): Instant = minus(value, unit, systemTimeZone)
+
+fun Instant.minus(unit: DateTimeUnit): Instant = minus(unit, systemTimeZone)
+
+fun Instant.minus(other: Instant, unit: DateTimeUnit): Long = minus(other, unit, systemTimeZone)
+
+fun Instant.until(other: Instant, unit: DateTimeUnit): Long = until(other, unit, systemTimeZone)
+
+fun Instant.daysUntil(other: Instant) = daysUntil(other, systemTimeZone)
+
+fun Instant.monthsUntil(other: Instant) = monthsUntil(other, systemTimeZone)
+
+fun Instant.yearsUntil(other: Instant) = yearsUntil(other, systemTimeZone)
+
+fun Instant.periodUntil(other: Instant): DateTimePeriod = periodUntil(other, systemTimeZone)
