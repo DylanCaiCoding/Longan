@@ -2,7 +2,6 @@ package com.dylanc.longan
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.toLocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.DayOfWeek.*
@@ -25,7 +24,7 @@ class DateTimeTest {
 
   @Test
   fun millisecondsToLocalDateTime() {
-    assertEquals(localDateTime, Instant.fromEpochMilliseconds(epochMillis).toLocalDateTime(systemTimeZone))
+    assertEquals(localDateTime, Instant.fromEpochMilliseconds(epochMillis).toLocalDateTime())
   }
 
   @Test
@@ -35,7 +34,7 @@ class DateTimeTest {
 
   @Test
   fun secondsToLocalDateTime() {
-    assertEquals(localDateTime, Instant.fromEpochSeconds(epochSeconds).toLocalDateTime(systemTimeZone))
+    assertEquals(localDateTime, Instant.fromEpochSeconds(epochSeconds).toLocalDateTime())
   }
 
   @Test
