@@ -22,7 +22,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
@@ -35,7 +34,7 @@ import android.provider.MediaStore
 import android.provider.Settings
 import androidx.activity.result.*
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS
 import androidx.annotation.CallSuper
@@ -45,6 +44,7 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import java.io.File
 
 fun ActivityResultLauncher<Unit>.launch(options: ActivityOptionsCompat? = null) = launch(Unit, options)
@@ -70,10 +70,10 @@ fun <T : Activity> ActivityResultLauncher<IntentSenderRequest>.launch(
     .let { launch(it) }
 
 fun ActivityResultCaller.startActivityLauncher(callback: ActivityResultCallback<ActivityResult>) =
-  registerForActivityResult(ActivityResultContracts.StartActivityForResult(), callback)
+  registerForActivityResult(StartActivityForResult(), callback)
 
 fun ActivityResultCaller.startIntentSenderLauncher(callback: ActivityResultCallback<ActivityResult>) =
-  registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult(), callback)
+  registerForActivityResult(StartIntentSenderForResult(), callback)
 
 fun ActivityResultCaller.requestPermissionLauncher(
   onGranted: () -> Unit,
@@ -98,7 +98,7 @@ fun ActivityResultCaller.requestPermissionLauncher(
 }
 
 fun ActivityResultCaller.requestPermissionLauncher(callback: ActivityResultCallback<Boolean>) =
-  registerForActivityResult(ActivityResultContracts.RequestPermission(), callback)
+  registerForActivityResult(RequestPermission(), callback)
 
 fun ActivityResultCaller.requestMultiplePermissionsLauncher(
   onAllGranted: () -> Unit,
@@ -132,40 +132,40 @@ fun ActivityResultCaller.requestMultiplePermissionsLauncher(
 }
 
 fun ActivityResultCaller.requestMultiplePermissionsLauncher(callback: ActivityResultCallback<Map<String, Boolean>>) =
-  registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions(), callback)
+  registerForActivityResult(RequestMultiplePermissions(), callback)
 
 fun ActivityResultCaller.takePicturePreviewLauncher(callback: ActivityResultCallback<Bitmap>) =
-  registerForActivityResult(ActivityResultContracts.TakePicturePreview(), callback)
+  registerForActivityResult(TakePicturePreview(), callback)
 
 fun ActivityResultCaller.takePictureLauncher(callback: ActivityResultCallback<Boolean>) =
-  InputCacheUriLauncher(registerForActivityResult(ActivityResultContracts.TakePicture(), callback), "jpg")
+  SaveToUriLauncher(registerForActivityResult(TakePicture(), callback), EXTERNAL_MEDIA_IMAGES_URI, "jpg")
 
 fun ActivityResultCaller.takeVideoLauncher(callback: ActivityResultCallback<Bitmap>) =
-  InputCacheUriLauncher(registerForActivityResult(ActivityResultContracts.TakeVideo(), callback), "mp4")
+  SaveToUriLauncher(registerForActivityResult(TakeVideo(), callback), EXTERNAL_MEDIA_VIDEO_URI, "mp4")
 
 fun ActivityResultCaller.pickContactLauncher(callback: ActivityResultCallback<Uri>) =
-  registerForActivityResult(ActivityResultContracts.PickContact(), callback)
+  registerForActivityResult(PickContact(), callback)
 
 fun ActivityResultCaller.pickContentLauncher(callback: ActivityResultCallback<Uri>) =
   MediaUriResultLauncher(registerForActivityResult(PickContentContract(), callback))
 
 fun ActivityResultCaller.getContentLauncher(callback: ActivityResultCallback<Uri>) =
-  MediaUriResultLauncher(registerForActivityResult(ActivityResultContracts.GetContent(), callback))
+  MediaUriResultLauncher(registerForActivityResult(GetContent(), callback))
 
 fun ActivityResultCaller.getMultipleContentsLauncher(callback: ActivityResultCallback<List<Uri>>) =
-  MediaUriResultLauncher(registerForActivityResult(ActivityResultContracts.GetMultipleContents(), callback))
+  MediaUriResultLauncher(registerForActivityResult(GetMultipleContents(), callback))
 
 fun ActivityResultCaller.openDocumentLauncher(callback: ActivityResultCallback<Uri>) =
-  registerForActivityResult(ActivityResultContracts.OpenDocument(), callback)
+  registerForActivityResult(OpenDocument(), callback)
 
 fun ActivityResultCaller.openMultipleDocumentsLauncher(callback: ActivityResultCallback<List<Uri>>) =
-  registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments(), callback)
+  registerForActivityResult(OpenMultipleDocuments(), callback)
 
 fun ActivityResultCaller.openDocumentTreeLauncher(callback: ActivityResultCallback<Uri>) =
-  registerForActivityResult(ActivityResultContracts.OpenDocumentTree(), callback)
+  registerForActivityResult(OpenDocumentTree(), callback)
 
 fun ActivityResultCaller.createDocumentLauncher(callback: ActivityResultCallback<Uri>) =
-  registerForActivityResult(ActivityResultContracts.CreateDocument(), callback)
+  registerForActivityResult(CreateDocument(), callback)
 
 fun ActivityResultCaller.launchAppSettingsLauncher(callback: ActivityResultCallback<Unit>) =
   registerForActivityResult(LaunchAppSettingsContract(), callback)
@@ -173,7 +173,7 @@ fun ActivityResultCaller.launchAppSettingsLauncher(callback: ActivityResultCallb
 fun ActivityResultCaller.launchNotificationSettingsLauncher(callback: ActivityResultCallback<Unit>) =
   registerForActivityResult(LaunchNotificationSettingsContract(), callback)
 
-fun ActivityResultCaller.cropPictureLauncher(callback: ActivityResultCallback<Uri>) =
+fun ActivityResultCaller.cropPictureLauncher(callback: ActivityResultCallback<Boolean>) =
   registerForActivityResult(CropPictureContract(), callback)
 
 fun ActivityResultCaller.enableLocationLauncher(
@@ -222,43 +222,30 @@ fun ActivityResultCaller.openWifiPanelLauncher(callback: ActivityResultCallback<
 
 fun ActivityResultLauncher<CropPictureRequest>.launch(
   inputUri: Uri,
-  aspectX: Int = 1,
-  aspectY: Int = 1,
-  outputX: Int = 512,
-  outputY: Int = 512,
-  outputContentValues: ContentValues = ContentValues()
+  outputUri: Uri,
+  vararg extras: Pair<String, Any?>
 ) =
-  launch(CropPictureRequest(inputUri, aspectX, aspectY, outputX, outputY, outputContentValues))
+  launch(CropPictureRequest(inputUri, outputUri, extras))
 
-data class CropPictureRequest @JvmOverloads constructor(
+class CropPictureRequest constructor(
   val inputUri: Uri,
-  var aspectX: Int = 1,
-  var aspectY: Int = 1,
-  var outputX: Int = 512,
-  var outputY: Int = 512,
-  var outputContentValues: ContentValues = ContentValues()
+  val outputUri: Uri,
+  val extras: Array<out Pair<String, Any?>>
 )
 
-open class CropPictureContract : ActivityResultContract<CropPictureRequest, Uri>() {
-  private lateinit var outputUri: Uri
+open class CropPictureContract : ActivityResultContract<CropPictureRequest, Boolean>() {
 
   @CallSuper
-  override fun createIntent(context: Context, input: CropPictureRequest): Intent {
-    outputUri = context.contentResolver.insert(EXTERNAL_MEDIA_IMAGES_URI, input.outputContentValues)!!
-    return Intent("com.android.camera.action.CROP")
+  override fun createIntent(context: Context, input: CropPictureRequest) =
+    Intent("com.android.camera.action.CROP")
       .setDataAndType(input.inputUri, "image/*")
-      .putExtra(MediaStore.EXTRA_OUTPUT, outputUri)
-      .putExtra("aspectX", input.aspectX)
-      .putExtra("aspectY", input.aspectY)
-      .putExtra("outputX", input.outputX)
-      .putExtra("outputY", input.outputY)
+      .putExtra(MediaStore.EXTRA_OUTPUT, input.outputUri)
       .putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
       .putExtra("return-data", false)
+      .putExtras(bundleOf(*input.extras))
       .grantReadUriPermission()
-  }
 
-  override fun parseResult(resultCode: Int, intent: Intent?): Uri? =
-    if (resultCode == Activity.RESULT_OK) outputUri else null
+  override fun parseResult(resultCode: Int, intent: Intent?) = resultCode == Activity.RESULT_OK
 }
 
 class PickContentContract : ActivityResultContract<String, Uri>() {
@@ -349,15 +336,14 @@ class RequestPermissionContract : ActivityResultContract<String, Pair<String, Bo
     return permission to if (grantResults == null || grantResults.isEmpty()) false else grantResults[0] == PackageManager.PERMISSION_GRANTED
   }
 
-  override fun getSynchronousResult(context: Context, input: String?): SynchronousResult<Pair<String, Boolean>>? {
-    return when {
+  override fun getSynchronousResult(context: Context, input: String?): SynchronousResult<Pair<String, Boolean>>? =
+    when {
       input == null -> SynchronousResult("" to false)
       ContextCompat.checkSelfPermission(context, input) == PackageManager.PERMISSION_GRANTED -> {
         SynchronousResult(input to true)
       }
       else -> null
     }
-  }
 }
 
 class MediaUriResultLauncher(launcher: ActivityResultLauncher<String>) : DecorActivityResultLauncher<String>(launcher) {
@@ -367,11 +353,11 @@ class MediaUriResultLauncher(launcher: ActivityResultLauncher<String>) : DecorAc
   fun launchForVideo() = launch("video/*")
 }
 
-class InputCacheUriLauncher(launcher: ActivityResultLauncher<Uri>, private val suffixes: String) : DecorActivityResultLauncher<Uri>(launcher) {
+class SaveToUriLauncher(launcher: ActivityResultLauncher<Uri>, private val uri: Uri, private val suffixes: String) :
+  DecorActivityResultLauncher<Uri>(launcher) {
 
-  fun launch() =
-    File("$externalCacheDirPath$fileSeparator${System.currentTimeMillis()}.$suffixes")
-      .toUri().also { launch(it) }
+  fun launchAndSaveToCache() =
+    File("$externalCacheDirPath$fileSeparator${System.currentTimeMillis()}.$suffixes").toUri().also { launch(it) }
 }
 
 abstract class DecorActivityResultLauncher<T>(private val launcher: ActivityResultLauncher<T>) : ActivityResultLauncher<T>() {
