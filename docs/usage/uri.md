@@ -7,19 +7,19 @@
 ```kotlin
 // Container for information about each video.
 data class Video(
-    val uri: Uri,
-    val name: String,
-    val duration: Int,
-    val size: Int
+  val uri: Uri,
+  val name: String,
+  val duration: Int,
+  val size: Int
 )
 
 val videoList = mutableListOf<Video>()
 
 val projection = arrayOf(
-    MediaStore.Video.Media._ID,
-    MediaStore.Video.Media.DISPLAY_NAME,
-    MediaStore.Video.Media.DURATION,
-    MediaStore.Video.Media.SIZE
+  MediaStore.Video.Media._ID,
+  MediaStore.Video.Media.DISPLAY_NAME,
+  MediaStore.Video.Media.DURATION,
+  MediaStore.Video.Media.SIZE
 )
 
 contentResolver.queryMediaVideos(projection) { cursor ->
@@ -43,18 +43,16 @@ contentResolver.queryMediaVideos(projection) { cursor ->
 ```kotlin
 val audioUri = contentResolver.insertMediaAudio()
 
-val videoUri = contentResolver.insertMediaVideo {
-  displayName = "emergency.mp4"
-  videoDescription = "This is an emergency video."
-}
+val videoUri = contentResolver.insertMediaVideo(
+  MediaStore.Video.Media.DISPLAY_NAME to "emergency.mp4",
+  MediaStore.Video.Media.DESCRIPTION to "This is an emergency video."
+)
 ```
 
 ### 更新多媒体文件
 
 ```kotlin
-audioUri.update {
-  displayName = "My Workout Playlist.mp3"
-}
+audioUri.update(MediaStore.Audio.Media.DISPLAY_NAME to "My Workout Playlist.mp3")
 ```
 
 ### 删除多媒体文件
@@ -67,7 +65,7 @@ contentResolver.delete(uri)
 
 在 `AndroidManifest` 配置 FileProvider。
 
-```kotlin
+```xml
 <provider
   android:name="androidx.core.content.FileProvider"
   android:authorities="${applicationId}.fileProvider"
