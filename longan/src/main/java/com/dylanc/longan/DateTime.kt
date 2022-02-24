@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import kotlinx.datetime.*
+import kotlinx.datetime.TimeZone
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField.DAY_OF_MONTH
 import java.time.temporal.ChronoField.DAY_OF_YEAR
@@ -30,6 +31,7 @@ import java.time.temporal.ChronoUnit.MONTHS
 import java.time.temporal.ChronoUnit.YEARS
 import java.time.temporal.TemporalAdjuster
 import java.time.temporal.TemporalAdjusters
+import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -70,16 +72,18 @@ fun String.toEpochMilliseconds(pattern: String, timeZone: TimeZone = systemTimeZ
 
 fun String.toEpochSeconds(pattern: String, timeZone: TimeZone = systemTimeZone): Long = toInstant(pattern, timeZone).epochSeconds
 
-fun LocalDateTime.toInstant() = toInstant(systemTimeZone)
+fun LocalDateTime.toInstant(): Instant = toInstant(systemTimeZone)
 
-fun Instant.toLocalDateTime() = toLocalDateTime(systemTimeZone)
+fun Instant.toLocalDateTime(): LocalDateTime = toLocalDateTime(systemTimeZone)
 
-fun Instant.format(pattern: String, timeZone: TimeZone = systemTimeZone): String =
-  DateTimeFormatter.ofPattern(pattern).withZone(timeZone.toJavaZoneId()).format(toJavaInstant())
+fun Instant.format(pattern: String, timeZone: TimeZone = systemTimeZone, locale: Locale? = null): String =
+  DateTimeFormatter(pattern, locale).withZone(timeZone.toJavaZoneId()).format(toJavaInstant())
 
-fun LocalDateTime.format(pattern: String): String = DateTimeFormatter.ofPattern(pattern).format(toJavaLocalDateTime())
+fun LocalDateTime.format(pattern: String, locale: Locale? = null): String =
+  DateTimeFormatter(pattern, locale).format(toJavaLocalDateTime())
 
-fun LocalDate.format(pattern: String): String = DateTimeFormatter.ofPattern(pattern).format(toJavaLocalDate())
+fun LocalDate.format(pattern: String, locale: Locale? = null): String =
+  DateTimeFormatter(pattern, locale).format(toJavaLocalDate())
 
 val Clock.System.today: LocalDate get() = Clock.System.todayAt(systemTimeZone)
 
@@ -200,10 +204,13 @@ fun Instant.minus(other: Instant, unit: DateTimeUnit): Long = minus(other, unit,
 
 fun Instant.until(other: Instant, unit: DateTimeUnit): Long = until(other, unit, systemTimeZone)
 
-fun Instant.daysUntil(other: Instant) = daysUntil(other, systemTimeZone)
+fun Instant.daysUntil(other: Instant): Int = daysUntil(other, systemTimeZone)
 
-fun Instant.monthsUntil(other: Instant) = monthsUntil(other, systemTimeZone)
+fun Instant.monthsUntil(other: Instant): Int = monthsUntil(other, systemTimeZone)
 
-fun Instant.yearsUntil(other: Instant) = yearsUntil(other, systemTimeZone)
+fun Instant.yearsUntil(other: Instant): Int = yearsUntil(other, systemTimeZone)
 
 fun Instant.periodUntil(other: Instant): DateTimePeriod = periodUntil(other, systemTimeZone)
+
+private fun DateTimeFormatter(pattern: String, locale: Locale?): DateTimeFormatter =
+  if (locale != null) DateTimeFormatter.ofPattern(pattern, locale) else DateTimeFormatter.ofPattern(pattern)
