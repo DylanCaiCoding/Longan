@@ -98,7 +98,7 @@ fun LocalDate.isYesterday(timeZone: TimeZone = systemTimeZone): Boolean =
 
 fun LocalDateTime.withYear(year: Int): LocalDateTime = toJavaLocalDateTime().withYear(year).toKotlinLocalDateTime()
 
-fun LocalDateTime.withMonth(year: Int): LocalDateTime = toJavaLocalDateTime().withMonth(year).toKotlinLocalDateTime()
+fun LocalDateTime.withMonth(month: Int): LocalDateTime = toJavaLocalDateTime().withMonth(month).toKotlinLocalDateTime()
 
 fun LocalDateTime.withDayOfMonth(dayOfMonth: Int): LocalDateTime = toJavaLocalDateTime().withDayOfMonth(dayOfMonth).toKotlinLocalDateTime()
 
@@ -146,7 +146,7 @@ fun LocalDateTime.previousOrSame(dayOfWeek: DayOfWeek): LocalDateTime = with(Tem
 
 fun LocalDate.withYear(year: Int): LocalDate = toJavaLocalDate().withYear(year).toKotlinLocalDate()
 
-fun LocalDate.withMonth(year: Int): LocalDate = toJavaLocalDate().withMonth(year).toKotlinLocalDate()
+fun LocalDate.withMonth(month: Int): LocalDate = toJavaLocalDate().withMonth(month).toKotlinLocalDate()
 
 fun LocalDate.withDayOfMonth(dayOfMonth: Int): LocalDate = toJavaLocalDate().withDayOfMonth(dayOfMonth).toKotlinLocalDate()
 
