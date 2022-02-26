@@ -6,7 +6,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.3'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.5'
 }
 ```
 
@@ -103,6 +103,16 @@ dependencies {
 | `Canvas.drawCenterVerticalText(text, centerX, centerY, paint)` | 绘制垂直居中的文字 |
 | `Canvas.drawCenterText(text, centerX, centerY, paint)`       | 绘制居中的文字     |
 
+### [Clipboard.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Clipboard.kt)
+
+| 用法                                                     | 作用             |
+| -------------------------------------------------------- | ---------------- |
+| `CharSequence/Uri/Intent.copyToClipboard([label])`       | 复制到剪贴板     |
+| `getTextFromClipboard()`                                 | 获取剪贴板的文本 |
+| `clearClipboard()`                                       | 清理剪贴板      |
+| `doOnClipboardChanged(listener)`                         | 监听剪贴板的变化 |
+| `ClipboardManager.OnPrimaryClipChangedListener.cancel()` | 移除剪贴板监听器 |
+
 ### [Collections.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Collections.kt)
 
 | 用法                       | 作用                         |
@@ -148,6 +158,55 @@ dependencies {
 | -------------------------------- | ------------------ |
 | `saveCrashLogLocally([dirPath])` | 保存崩溃日志到本地 |
 | `handleUncaughtException {...}`  | 处理未捕获的异常   |
+
+### [DateTime.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DateTime.kt)
+
+| 用法                                                         | 作用                                       |
+| ------------------------------------------------------------ | ------------------------------------------ |
+| `Instant.Companion.parse(text, pattern, [timeZone])`         | 字符串转 Instant                           |
+| `LocalDateTime.Companion.parse(text, pattern)`               | 字符串转 LocalDateTime                     |
+| `LocalDate.Companion.parse(text, pattern)`                   | 字符串转 LocalDate                         |
+| `String.toInstant(pattern, [timeZone])`                      | 字符串转 Instant                           |
+| `String.toLocalDateTime(pattern)`                            | 字符串转 LocalDateTime                     |
+| `String.toLocalDate(pattern)`                                | 字符串转 LocalDate                         |
+| `Instant.format(pattern, [timeZone])`                        | Instant 转字符串                           |
+| `LocalDateTime.format(pattern)`                              | LocalDateTime 转字符串                     |
+| `LocalDate.format(pattern)`                                  | LocalDateTime 转字符串                     |
+| `LocalDateTime/LocalDate.isToday([timeZone])`                | 判断是不是今天                              |
+| `LocalDateTime/LocalDate.isYesterday([timeZone])`            | 判断是不是昨天                              |
+| `LocalDateTime/LocalDate.withYear(year))`                    | 修改年份                                   |
+| `LocalDateTime/LocalDate.withMonth(month))`                  | 修改月份                                   |
+| `LocalDateTime/LocalDate.withDayOfMonth(dayOfMonth)`         | 修改当月的天数                              |
+| `LocalDateTime/LocalDate.withDayOfYear(dayOfYear)`           | 修改今年的天数                              |
+| `LocalDateTime/LocalDate.with {...})`                        | 修改日期或时间                              |
+| `LocalDateTime.withHour(hour)`                               | 修改小时                                   |
+| `LocalDateTime.withMinute(minute)`                           | 修改分钟                                   |
+| `LocalDateTime.withSecond(second)`                           | 修改秒                                     |
+| `LocalDateTime.withNano(nano)`                               | 修改纳秒                                   |
+| `LocalDateTime/LocalDate.firstDayOfYear()`                   | 今年的第一天                                |
+| `LocalDateTime/LocalDate.lastDayOfYear()`                    | 今年的最后一天                              |
+| `LocalDateTime/LocalDate.firstDayOfNextYear()`               | 名年的第一天                                |
+| `LocalDateTime/LocalDate.firstDayOfLastYear()`               | 去年的第一天                                |
+| `LocalDateTime/LocalDate.firstDayOfMonth()`                  | 这个月的第一天                              |
+| `LocalDateTime/LocalDate.lastDayOfMonth()`                   | 这个月的最后一天                            |
+| `LocalDateTime/LocalDate.firstDayOfNextMonth()`              | 下个月的第一天                              |
+| `LocalDateTime/LocalDate.firstDayOfLastMonth()`              | 上个月的第一天                              |
+| `LocalDateTime/LocalDate.firstInMonth(dayOfWeek)`            | 这个月的第一个周几                           |
+| `LocalDateTime/LocalDate.lastInMonth(dayOfWeek)`             | 这个月的最后一个周几                         |
+| `LocalDateTime/LocalDate.dayOfWeekInMonth(ordinal, dayOfWeek)` | 这个月的第几个周几                         |
+| `LocalDateTime/LocalDate.next(dayOfWeek)`                    | 下一个周几，不包含今天                        |
+| `LocalDateTime/LocalDate.nextOrSame(dayOfWeek)`              | 下一个周几，包含今天                         |
+| `LocalDateTime/LocalDate.previous(dayOfWeek)`                | 上一个周几，不包含今天                       |
+| `LocalDateTime/LocalDate.previousOrSame(dayOfWeek)`          | 上一个周几，包含今天                         |
+| `Instant.plus(period)`                                       | 增加一个周期                               |
+| `Instant.plus([value], unit)`                                | 增加指定数量的日期或时间单位                  |
+| `Instant.minus(period)`                                      | 减少一个周期                               |
+| `Instant.minus([value], unit)`                               | 减少指定数量的日期或时间单位                  |
+| `Instant.until(instant, unit)`                               | 将两时刻差值计算为指定日期或时间单位的数量      |
+| `Instant.daysUntil(instant)`                                 | 两时刻相差的多少天                          |
+| `Instant.monthsUntil(instant)`                               | 两时刻相差的多少个月                        |
+| `Instant.yearsUntil(instant)`                                | 两时刻相差的多少年                          |
+| `Instant.periodUntil(instant)`                               | 两时刻相差的时间段                          |
 
 ### [DeviceInfo.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DeviceInfo.kt)
 
@@ -383,6 +442,30 @@ dependencies {
 | `shareTextAndImages(text, uris,[title])` | 分享文字和多张图片 |
 | `shareFile(text, [title], [mimeType])`   | 分享单个文件       |
 | `shareFiles(text, [title], [mimeType])`  | 分享多个文件       |
+
+### [SpannableStringBuilder.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/SpannableStringBuilder.kt)
+
+| 用法                                                         | 作用                 |
+| ------------------------------------------------------------ | -------------------- |
+| `SpannableStringBuilder#size(size) {...}`                    | 设置大小             |
+| `SpannableStringBuilder#alignCenter {...}`                   | 设置段落居中         |
+| `SpannableStringBuilder#alignOpposite {...}`                 | 设置段落居右         |
+| `SpannableStringBuilder#blur(radius, [style]) {...}`         | 设置模糊             |
+| `SpannableStringBuilder#fontFamily(family) {...}`            | 设置字体系列         |
+| `SpannableStringBuilder#typeface(typeface) {...}`            | 设置字体             |
+| `SpannableStringBuilder#url(url) {...}`                      | 设置超链接           |
+| `SpannableStringBuilder#bullet(gapWidth, [color]) {...}`     | 设置段落的列表标记   |
+| `SpannableStringBuilder#quote([color]) {...}`                | 设置段落的引用线颜色 |
+| `SpannableStringBuilder#leadingMargin(first, [rest]) {...}`  | 设置缩进             |
+| `SpannableStringBuilder#append(drawable, [width], [height]) {...}` | 追加图片             |
+| `SpannableStringBuilder#append(drawableId) {...}`            | 追加图片             |
+| `SpannableStringBuilder#append(bitmap) {...}`                | 追加图片             |
+| `SpannableStringBuilder#appendClickable(text, [color], [isUnderlineText]) {...}` | 追加可点击的文字     |
+| `SpannableStringBuilder#appendClickable(drawable, [width], [height]) {...}` | 追加可点击的图片     |
+| `SpannableStringBuilder#appendClickable(drawableId) {...}`   | 追加可点击的图片     |
+| `SpannableStringBuilder#appendClickable(bitmap) {...}`       | 追加可点击的图片     |
+| `SpannableStringBuilder#appendSpace(size, [color]) {...}`    | 追加空白             |
+
 
 ### [String.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/String.kt)
 

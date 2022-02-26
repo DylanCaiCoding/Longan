@@ -6,7 +6,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.3'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.5'
 }
 ```
 
@@ -62,6 +62,6 @@ dependencies {
 
 | 用法                                                         | 作用                      |
 | ------------------------------------------------------------ | ------------------------- |
-| `FragmentActivity/Fragment.FragmentStateAdapter(fragments)`  | 创建 FragmentStateAdapter |
-| `FragmentActivity/Fragment.FragmentStateAdapter(itemCount) {...}` | 创建 FragmentStateAdapter |
+| `FragmentActivity/Fragment.FragmentStateAdapter(fragments, [isLazyLoading])`  | 创建 FragmentStateAdapter |
+| `FragmentActivity/Fragment.FragmentStateAdapter(itemCount, [isLazyLoading]) {...}` | 创建 FragmentStateAdapter |
 | `ViewPager2.findFragment(fragmentManager, position)`         | 获取 Fragment             |
