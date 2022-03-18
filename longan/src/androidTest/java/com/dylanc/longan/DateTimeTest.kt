@@ -1,40 +1,42 @@
 package com.dylanc.longan
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.DayOfWeek.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.TextStyle
+import java.time.temporal.ChronoUnit.DAYS
 import java.util.*
 
 class DateTimeTest {
 
   private val epochMillis = 1643673600000
   private val epochSeconds = epochMillis / 1000
-  private val localDateTime = LocalDateTime(2022, 2, 1, 8, 0, 0)
-  private val localDate = localDateTime.date
+  private val localDateTime = LocalDateTime.of(2022, 2, 1, 8, 0, 0)
+  private val localDate = localDateTime.toLocalDate()
   private val timeString = "2022-02-01 08:00:00"
   private val timePattern = "yyyy-MM-dd HH:mm:ss"
 
   @Test
   fun millisecondsToString() {
-    assertEquals(timeString, Instant.fromEpochMilliseconds(epochMillis).format(timePattern))
+    assertEquals(timeString, Instant.ofEpochMilli(epochMillis).format(timePattern))
   }
 
   @Test
   fun millisecondsToLocalDateTime() {
-    assertEquals(localDateTime, Instant.fromEpochMilliseconds(epochMillis).toLocalDateTime())
+    assertEquals(localDateTime, Instant.ofEpochMilli(epochMillis).toLocalDateTime())
   }
 
   @Test
   fun secondsToString() {
-    assertEquals(timeString, Instant.fromEpochSeconds(epochSeconds).format(timePattern))
+    assertEquals(timeString, Instant.ofEpochSecond(epochSeconds).format(timePattern))
   }
 
   @Test
   fun secondsToLocalDateTime() {
-    assertEquals(localDateTime, Instant.fromEpochSeconds(epochSeconds).toLocalDateTime())
+    assertEquals(localDateTime, Instant.ofEpochSecond(epochSeconds).toLocalDateTime())
   }
 
   @Test
@@ -59,12 +61,12 @@ class DateTimeTest {
 
   @Test
   fun localDateTimeToMilliseconds() {
-    assertEquals(epochMillis, localDateTime.toInstant().toEpochMilliseconds())
+    assertEquals(epochMillis, localDateTime.toEpochMilli())
   }
 
   @Test
   fun localDateTimeToSeconds() {
-    assertEquals(epochSeconds, localDateTime.toInstant().epochSeconds)
+    assertEquals(epochSeconds, localDateTime.toEpochSecond())
   }
 
   @Test
@@ -115,4 +117,25 @@ class DateTimeTest {
     assertEquals("2022-02-01", localDate.previousOrSame(TUESDAY).toString())
     assertEquals("2022-02-09", localDate.dayOfWeekInMonth(2, WEDNESDAY).toString())
   }
+
+  private fun getFriendlyTimeString(millis: Long): String {
+    val localDateTime = Instant.ofEpochMilli(millis).toLocalDateTime()
+    val today = LocalDate.now()
+    val pattern = when {
+      localDateTime.toLocalDate() == today -> "HH:mm"
+      localDateTime.toLocalDate() == today.minus(1, DAYS) -> "昨天 HH:mm"
+      localDateTime.toLocalDate() >= today.previousOrSame(MONDAY) -> "EE HH:mm"
+      localDateTime.year == today.year -> "MM月dd日 ${localDateTime.timeRange} HH:mm"
+      else -> "yyyy年MM月dd日 ${localDateTime.timeRange} HH:mm"
+    }
+    return localDateTime.format(pattern, Locale.CHINA)
+  }
+
+  private val LocalDateTime.timeRange: String
+    get() = when (hour) {
+      in 0..5 -> "凌晨"
+      in 6..12 -> "早上"
+      in 13..17 -> "下午"
+      else -> "晚上"
+    }
 }

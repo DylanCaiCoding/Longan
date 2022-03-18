@@ -22,97 +22,81 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import kotlinx.datetime.*
-import kotlinx.datetime.TimeZone
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField.DAY_OF_MONTH
 import java.time.temporal.ChronoField.DAY_OF_YEAR
+import java.time.temporal.ChronoUnit
 import java.time.temporal.ChronoUnit.MONTHS
 import java.time.temporal.ChronoUnit.YEARS
-import java.time.temporal.TemporalAdjuster
 import java.time.temporal.TemporalAdjusters
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-val systemTimeZone: TimeZone by object : ReadOnlyProperty<Any?, TimeZone> {
-  private lateinit var timeZone: TimeZone
+val systemZoneId: ZoneId by object : ReadOnlyProperty<Any?, ZoneId> {
+  private lateinit var zoneId: ZoneId
 
-  override fun getValue(thisRef: Any?, property: KProperty<*>): TimeZone {
-    if (!::timeZone.isInitialized) {
-      timeZone = TimeZone.currentSystemDefault()
+  override fun getValue(thisRef: Any?, property: KProperty<*>): ZoneId {
+    if (!::zoneId.isInitialized) {
+      zoneId = ZoneId.systemDefault()
       application.registerReceiver(object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent?) {
           if (intent?.action == Intent.ACTION_TIMEZONE_CHANGED) {
-            timeZone = TimeZone.currentSystemDefault()
+            TimeZone.setDefault(null)
+            zoneId = ZoneId.systemDefault()
           }
         }
       }, IntentFilter(Intent.ACTION_TIMEZONE_CHANGED))
     }
-    return timeZone
+    return zoneId
   }
 }
 
-fun Instant.Companion.parse(text: String, pattern: String, timeZone: TimeZone = systemTimeZone): Instant =
-  java.time.ZonedDateTime.parse(text, DateTimeFormatter.ofPattern(pattern).withZone(timeZone.toJavaZoneId())).toInstant().toKotlinInstant()
-
-fun LocalDateTime.Companion.parse(text: String, pattern: String): LocalDateTime =
-  java.time.LocalDateTime.parse(text, DateTimeFormatter.ofPattern(pattern)).toKotlinLocalDateTime()
-
-fun LocalDate.Companion.parse(text: String, pattern: String): LocalDate =
-  java.time.LocalDate.parse(text, DateTimeFormatter.ofPattern(pattern)).toKotlinLocalDate()
-
-fun String.toInstant(pattern: String, timeZone: TimeZone = systemTimeZone): Instant = Instant.parse(this, pattern, timeZone)
-
-fun String.toLocalDateTime(pattern: String): LocalDateTime = LocalDateTime.parse(this, pattern)
-
-fun String.toLocalDate(pattern: String): LocalDate = LocalDate.parse(this, pattern)
-
-fun String.toEpochMilliseconds(pattern: String, timeZone: TimeZone = systemTimeZone): Long = toInstant(pattern, timeZone).toEpochMilliseconds()
-
-fun String.toEpochSeconds(pattern: String, timeZone: TimeZone = systemTimeZone): Long = toInstant(pattern, timeZone).epochSeconds
-
-fun LocalDateTime.toInstant(): Instant = toInstant(systemTimeZone)
-
-fun Instant.toLocalDateTime(): LocalDateTime = toLocalDateTime(systemTimeZone)
-
-fun Instant.format(pattern: String, timeZone: TimeZone = systemTimeZone, locale: Locale? = null): String =
-  DateTimeFormatter(pattern, locale).withZone(timeZone.toJavaZoneId()).format(toJavaInstant())
+fun Instant.format(pattern: String, zone: ZoneId = systemZoneId, locale: Locale? = null): String =
+  DateTimeFormatter(pattern, locale).withZone(zone).format(this)
 
 fun LocalDateTime.format(pattern: String, locale: Locale? = null): String =
-  DateTimeFormatter(pattern, locale).format(toJavaLocalDateTime())
+  DateTimeFormatter(pattern, locale).format(this)
 
 fun LocalDate.format(pattern: String, locale: Locale? = null): String =
-  DateTimeFormatter(pattern, locale).format(toJavaLocalDate())
+  DateTimeFormatter(pattern, locale).format(this)
 
-val Clock.System.today: LocalDate get() = Clock.System.todayAt(systemTimeZone)
+fun LocalDateTime.toInstant(zone: ZoneId = systemZoneId): Instant =
+  atZone(zone).toInstant()
 
-fun LocalDateTime.isToday(timeZone: TimeZone = systemTimeZone): Boolean = date.isToday(timeZone)
+fun Instant.toLocalDateTime(zone: ZoneId = systemZoneId): LocalDateTime =
+  LocalDateTime.ofInstant(this, zone)
 
-fun LocalDate.isToday(timeZone: TimeZone = systemTimeZone): Boolean = this == Clock.System.todayAt(timeZone)
+fun LocalDateTime.toEpochSecond(zone: ZoneId = systemZoneId): Long =
+  atZone(zone).toEpochSecond()
 
-fun LocalDateTime.isYesterday(timeZone: TimeZone = systemTimeZone): Boolean = date.isYesterday(timeZone)
+fun LocalDateTime.toEpochMilli(zone: ZoneId = systemZoneId): Long =
+  toEpochSecond(zone) * 1000 + toLocalTime().nano / 1000000
 
-fun LocalDate.isYesterday(timeZone: TimeZone = systemTimeZone): Boolean =
-  this == Clock.System.todayAt(timeZone).minus(1, DateTimeUnit.DAY)
+fun String.toInstant(pattern: String, zone: ZoneId = systemZoneId): Instant =
+  ZonedDateTime.parse(this, DateTimeFormatter.ofPattern(pattern).withZone(zone)).toInstant()
 
-fun LocalDateTime.withYear(year: Int): LocalDateTime = toJavaLocalDateTime().withYear(year).toKotlinLocalDateTime()
+fun String.toLocalDateTime(pattern: String): LocalDateTime =
+  LocalDateTime.parse(this, DateTimeFormatter.ofPattern(pattern))
 
-fun LocalDateTime.withMonth(month: Int): LocalDateTime = toJavaLocalDateTime().withMonth(month).toKotlinLocalDateTime()
+fun String.toLocalDate(pattern: String): LocalDate =
+  LocalDate.parse(this, DateTimeFormatter.ofPattern(pattern))
 
-fun LocalDateTime.withDayOfMonth(dayOfMonth: Int): LocalDateTime = toJavaLocalDateTime().withDayOfMonth(dayOfMonth).toKotlinLocalDateTime()
+fun String.toEpochMilliseconds(pattern: String, zone: ZoneId = systemZoneId): Long =
+  toInstant(pattern, zone).toEpochMilli()
 
-fun LocalDateTime.withDayOfYear(dayOfYear: Int): LocalDateTime = toJavaLocalDateTime().withDayOfYear(dayOfYear).toKotlinLocalDateTime()
+fun String.toEpochSeconds(pattern: String, zone: ZoneId = systemZoneId): Long =
+  toInstant(pattern, zone).epochSecond
 
-fun LocalDateTime.withHour(hour: Int): LocalDateTime = toJavaLocalDateTime().withHour(hour).toKotlinLocalDateTime()
+fun LocalDateTime.isToday(zone: ZoneId = systemZoneId): Boolean = toLocalDate().isToday(zone)
 
-fun LocalDateTime.withMinute(minute: Int): LocalDateTime = toJavaLocalDateTime().withMinute(minute).toKotlinLocalDateTime()
+fun LocalDate.isToday(zone: ZoneId = systemZoneId): Boolean = this == LocalDate.now(zone)
 
-fun LocalDateTime.withSecond(second: Int): LocalDateTime = toJavaLocalDateTime().withSecond(second).toKotlinLocalDateTime()
+fun LocalDateTime.isYesterday(zone: ZoneId = systemZoneId): Boolean = toLocalDate().isYesterday(zone)
 
-fun LocalDateTime.withNano(nano: Int): LocalDateTime = toJavaLocalDateTime().withNano(nano).toKotlinLocalDateTime()
-
-fun LocalDateTime.with(adjuster: TemporalAdjuster): LocalDateTime = toJavaLocalDateTime().with(adjuster).toKotlinLocalDateTime()
+fun LocalDate.isYesterday(zone: ZoneId = systemZoneId): Boolean =
+  this == LocalDate.now(zone).minus(1, ChronoUnit.DAYS)
 
 fun LocalDateTime.firstDayOfYear(): LocalDateTime = with(TemporalAdjusters.firstDayOfYear())
 
@@ -144,16 +128,6 @@ fun LocalDateTime.previous(dayOfWeek: DayOfWeek): LocalDateTime = with(TemporalA
 
 fun LocalDateTime.previousOrSame(dayOfWeek: DayOfWeek): LocalDateTime = with(TemporalAdjusters.previousOrSame(dayOfWeek))
 
-fun LocalDate.withYear(year: Int): LocalDate = toJavaLocalDate().withYear(year).toKotlinLocalDate()
-
-fun LocalDate.withMonth(month: Int): LocalDate = toJavaLocalDate().withMonth(month).toKotlinLocalDate()
-
-fun LocalDate.withDayOfMonth(dayOfMonth: Int): LocalDate = toJavaLocalDate().withDayOfMonth(dayOfMonth).toKotlinLocalDate()
-
-fun LocalDate.withDayOfYear(dayOfYear: Int): LocalDate = toJavaLocalDate().withDayOfYear(dayOfYear).toKotlinLocalDate()
-
-fun LocalDate.with(adjuster: TemporalAdjuster): LocalDate = toJavaLocalDate().with(adjuster).toKotlinLocalDate()
-
 fun LocalDate.firstDayOfYear(): LocalDate = with(TemporalAdjusters.firstDayOfYear())
 
 fun LocalDate.lastDayOfYear(): LocalDate = with(TemporalAdjusters.lastDayOfYear())
@@ -183,34 +157,6 @@ fun LocalDate.nextOrSame(dayOfWeek: DayOfWeek): LocalDate = with(TemporalAdjuste
 fun LocalDate.previous(dayOfWeek: DayOfWeek): LocalDate = with(TemporalAdjusters.previous(dayOfWeek))
 
 fun LocalDate.previousOrSame(dayOfWeek: DayOfWeek): LocalDate = with(TemporalAdjusters.previousOrSame(dayOfWeek))
-
-fun Instant.plus(period: DateTimePeriod): Instant = plus(period, systemTimeZone)
-
-fun Instant.plus(value: Int, unit: DateTimeUnit): Instant = plus(value, unit, systemTimeZone)
-
-fun Instant.plus(value: Long, unit: DateTimeUnit): Instant = plus(value, unit, systemTimeZone)
-
-fun Instant.plus(unit: DateTimeUnit): Instant = plus(unit, systemTimeZone)
-
-fun Instant.minus(period: DateTimePeriod): Instant = minus(period, systemTimeZone)
-
-fun Instant.minus(value: Int, unit: DateTimeUnit): Instant = minus(value, unit, systemTimeZone)
-
-fun Instant.minus(value: Long, unit: DateTimeUnit): Instant = minus(value, unit, systemTimeZone)
-
-fun Instant.minus(unit: DateTimeUnit): Instant = minus(unit, systemTimeZone)
-
-fun Instant.minus(other: Instant, unit: DateTimeUnit): Long = minus(other, unit, systemTimeZone)
-
-fun Instant.until(other: Instant, unit: DateTimeUnit): Long = until(other, unit, systemTimeZone)
-
-fun Instant.daysUntil(other: Instant): Int = daysUntil(other, systemTimeZone)
-
-fun Instant.monthsUntil(other: Instant): Int = monthsUntil(other, systemTimeZone)
-
-fun Instant.yearsUntil(other: Instant): Int = yearsUntil(other, systemTimeZone)
-
-fun Instant.periodUntil(other: Instant): DateTimePeriod = periodUntil(other, systemTimeZone)
 
 private fun DateTimeFormatter(pattern: String, locale: Locale?): DateTimeFormatter =
   if (locale != null) DateTimeFormatter.ofPattern(pattern, locale) else DateTimeFormatter.ofPattern(pattern)

@@ -45,7 +45,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
     implementation "com.squareup.okio:okio:$okioVersion"
-    api "org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion"
 
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$junitExtVersion"
