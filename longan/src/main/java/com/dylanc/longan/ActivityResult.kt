@@ -30,6 +30,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.activity.result.*
@@ -57,7 +58,7 @@ inline fun <reified T> ActivityResultLauncher<Array<T>>.launch(vararg input: T) 
 inline fun <reified T : Activity> ActivityResultLauncher<Intent>.launch(vararg pairs: Pair<String, *>) =
   launch(topActivity.intentOf<T>(*pairs))
 
-fun <T : Activity> ActivityResultLauncher<IntentSenderRequest>.launch(
+fun ActivityResultLauncher<IntentSenderRequest>.launch(
   intentSender: IntentSender,
   fillInIntent: Intent? = null,
   @Flag flagsValues: Int = 0,
@@ -82,7 +83,7 @@ fun ActivityResultCaller.requestPermissionLauncher(
 ): ActivityResultLauncher<String> {
   var permissionLauncher: ActivityResultLauncher<String>? = null
   var permission: String? = null
-  val launchAppSettingsLauncher = launchAppSettingsLauncher {
+  val launchAppSettingsLauncher = appSettingsLauncher {
     permissionLauncher?.launch(permission)
   }
   permissionLauncher = registerForActivityResult(RequestPermissionContract()) {
@@ -107,7 +108,7 @@ fun ActivityResultCaller.requestMultiplePermissionsLauncher(
 ): ActivityResultLauncher<Array<String>> {
   var permissionsLauncher: ActivityResultLauncher<Array<String>>? = null
   val deniedList = mutableListOf<String>()
-  val launchAppSettingsLauncher = launchAppSettingsLauncher {
+  val launchAppSettingsLauncher = appSettingsLauncher {
     permissionsLauncher?.launch(deniedList.toTypedArray())
   }
   permissionsLauncher = requestMultiplePermissionsLauncher { result ->
@@ -167,10 +168,10 @@ fun ActivityResultCaller.openDocumentTreeLauncher(callback: ActivityResultCallba
 fun ActivityResultCaller.createDocumentLauncher(callback: ActivityResultCallback<Uri>) =
   registerForActivityResult(CreateDocument(), callback)
 
-fun ActivityResultCaller.launchAppSettingsLauncher(callback: ActivityResultCallback<Unit>) =
+fun ActivityResultCaller.appSettingsLauncher(callback: ActivityResultCallback<Unit>) =
   registerForActivityResult(LaunchAppSettingsContract(), callback)
 
-fun ActivityResultCaller.launchNotificationSettingsLauncher(callback: ActivityResultCallback<Unit>) =
+fun ActivityResultCaller.notificationSettingsLauncher(callback: ActivityResultCallback<Unit>) =
   registerForActivityResult(LaunchNotificationSettingsContract(), callback)
 
 fun ActivityResultCaller.cropPictureLauncher(callback: ActivityResultCallback<Boolean>) =
@@ -222,15 +223,15 @@ fun ActivityResultCaller.openWifiPanelLauncher(callback: ActivityResultCallback<
 
 fun ActivityResultLauncher<CropPictureRequest>.launch(
   inputUri: Uri,
-  outputUri: Uri,
-  vararg extras: Pair<String, Any?>
+  vararg extras: Pair<String, Any?>,
+  outputUri: Uri? = null
 ) =
-  launch(CropPictureRequest(inputUri, outputUri, extras))
+  launch(CropPictureRequest(inputUri, outputUri, bundleOf(*extras)))
 
 class CropPictureRequest constructor(
   val inputUri: Uri,
-  val outputUri: Uri,
-  val extras: Array<out Pair<String, Any?>>
+  val outputUri: Uri? = null,
+  val extras: Bundle = Bundle()
 )
 
 open class CropPictureContract : ActivityResultContract<CropPictureRequest, Boolean>() {
@@ -239,10 +240,10 @@ open class CropPictureContract : ActivityResultContract<CropPictureRequest, Bool
   override fun createIntent(context: Context, input: CropPictureRequest) =
     Intent("com.android.camera.action.CROP")
       .setDataAndType(input.inputUri, "image/*")
-      .putExtra(MediaStore.EXTRA_OUTPUT, input.outputUri)
+      .putExtra(MediaStore.EXTRA_OUTPUT, input.outputUri ?: contentResolver.insertMediaImage())
       .putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
       .putExtra("return-data", false)
-      .putExtras(bundleOf(*input.extras))
+      .putExtras(input.extras)
       .grantReadUriPermission()
 
   override fun parseResult(resultCode: Int, intent: Intent?) = resultCode == Activity.RESULT_OK
@@ -287,9 +288,8 @@ class EnableLocationContract : ActivityResultContract<Unit, Boolean>() {
 
   override fun parseResult(resultCode: Int, intent: Intent?) = isLocationEnabled
 
-  override fun getSynchronousResult(context: Context, input: Unit?): SynchronousResult<Boolean>? {
-    return if (isLocationEnabled) SynchronousResult(true) else null
-  }
+  override fun getSynchronousResult(context: Context, input: Unit?): SynchronousResult<Boolean>? =
+    if (isLocationEnabled) SynchronousResult(true) else null
 }
 
 class EnableBluetoothContract : ActivityResultContract<Unit, Boolean>() {
@@ -300,9 +300,8 @@ class EnableBluetoothContract : ActivityResultContract<Unit, Boolean>() {
   override fun parseResult(resultCode: Int, intent: Intent?) =
     resultCode == Activity.RESULT_OK
 
-  override fun getSynchronousResult(context: Context, input: Unit?): SynchronousResult<Boolean>? {
-    return if (isBluetoothEnabled) SynchronousResult(true) else null
-  }
+  override fun getSynchronousResult(context: Context, input: Unit?): SynchronousResult<Boolean>? =
+    if (isBluetoothEnabled) SynchronousResult(true) else null
 }
 
 @RequiresApi(Build.VERSION_CODES.Q)
