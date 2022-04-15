@@ -21,13 +21,10 @@ package com.dylanc.longan
 import android.text.format.Formatter
 import androidx.core.util.PatternsCompat
 import org.json.JSONObject
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.*
-
-const val REGEX_ID_CARD_15: String =
-  "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$"
-
-const val REGEX_ID_CARD_18: String =
-  "^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9Xx])$"
 
 /**
  * Regex of exact phone number. Update at 2021.05.13.
@@ -39,8 +36,14 @@ const val REGEX_ID_CARD_18: String =
  * - China unicom virtual: 167,1704,1707,1708,1709,171
  * - China telecom virtual: 162,1700,1701,1702
  */
-const val REGEX_PHONE_EXACT :String =
+const val REGEX_PHONE_EXACT: String =
   "^1(3\\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\\d|9[0-35-9])\\d{8}$"
+
+const val REGEX_ID_CARD_15: String =
+  "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$"
+
+const val REGEX_ID_CARD_18: String =
+  "^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9Xx])$"
 
 inline val randomUUIDString: String
   get() = UUID.randomUUID().toString()
@@ -86,3 +89,15 @@ fun String.isJson(): Boolean =
   } catch (e: Exception) {
     false
   }
+
+fun Float.toNumberString(fractionDigits: Int = 2, minIntDigits: Int = 1, isGrouping: Boolean = false, isHalfUp: Boolean = true): String =
+  toDouble().toNumberString(fractionDigits, minIntDigits, isGrouping, isHalfUp)
+
+fun Double.toNumberString(fractionDigits: Int = 2, minIntDigits: Int = 1, isGrouping: Boolean = false, isHalfUp: Boolean = true): String =
+  (NumberFormat.getInstance() as DecimalFormat).apply {
+    isGroupingUsed = isGrouping
+    roundingMode = if (isHalfUp) RoundingMode.HALF_UP else RoundingMode.DOWN
+    minimumIntegerDigits = minIntDigits
+    minimumFractionDigits = fractionDigits
+    maximumFractionDigits = fractionDigits
+  }.format(this)
