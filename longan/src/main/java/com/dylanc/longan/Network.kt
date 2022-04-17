@@ -18,13 +18,17 @@
 
 package com.dylanc.longan
 
-import android.Manifest.permission.ACCESS_NETWORK_STATE
-import android.Manifest.permission.ACCESS_WIFI_STATE
+import android.Manifest.permission.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.*
 import android.net.NetworkRequest
+import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.annotation.RequiresPermission
@@ -69,6 +73,12 @@ val isMobileData: Boolean
 @get:RequiresPermission(ACCESS_WIFI_STATE)
 inline val isWifiEnabled: Boolean
   get() = application.getSystemService<WifiManager>()?.isWifiEnabled == true
+
+inline val ScanResult.is24GHz: Boolean
+  get() = frequency in 2400..2550
+
+inline val ScanResult.is5GHz: Boolean
+  get() = frequency in 5500..5800
 
 class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constructor() : LiveData<Boolean>() {
 
@@ -121,6 +131,31 @@ class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
 
     override fun onLost(network: Network) {
       postValue(false)
+    }
+  }
+}
+
+class WifiListLiveData @RequiresPermission(allOf = [ACCESS_WIFI_STATE, CHANGE_WIFI_STATE]) constructor() : LiveData<List<ScanResult>>() {
+
+  private val wifiManager: WifiManager by lazy(LazyThreadSafetyMode.NONE) {
+    application.getSystemService(Context.WIFI_SERVICE) as WifiManager
+  }
+
+  @Suppress("DEPRECATION")
+  @Deprecated("The ability for apps to trigger scan requests will be removed in a future release.")
+  fun startScan() = wifiManager.startScan()
+
+  override fun onActive() {
+    application.registerReceiver(broadcastReceiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+  }
+
+  override fun onInactive() {
+    application.unregisterReceiver(broadcastReceiver)
+  }
+
+  private val broadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      value = wifiManager.scanResults
     }
   }
 }
