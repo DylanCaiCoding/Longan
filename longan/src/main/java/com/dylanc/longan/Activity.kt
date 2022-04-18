@@ -89,14 +89,18 @@ fun finishAllActivitiesExceptNewest(): Boolean =
     }
   }
 
-fun ComponentActivity.pressBackTwiceToExitApp(toastText: String, delayMillis: Long = 2000) =
-  pressBackTwiceToExitApp(delayMillis) { toast(toastText) }
+fun ComponentActivity.pressBackTwiceToExitApp(toastText: String, delayMillis: Long = 2000, owner: LifecycleOwner = this) =
+  pressBackTwiceToExitApp(delayMillis, owner) { toast(toastText) }
 
-fun ComponentActivity.pressBackTwiceToExitApp(@StringRes toastText: Int, delayMillis: Long = 2000) =
-  pressBackTwiceToExitApp(delayMillis) { toast(toastText) }
+fun ComponentActivity.pressBackTwiceToExitApp(@StringRes toastText: Int, delayMillis: Long = 2000, owner: LifecycleOwner = this) =
+  pressBackTwiceToExitApp(delayMillis, owner) { toast(toastText) }
 
-inline fun ComponentActivity.pressBackTwiceToExitApp(delayMillis: Long = 2000, crossinline onFirstBackPressed: () -> Unit) {
-  onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+fun ComponentActivity.pressBackTwiceToExitApp(
+  delayMillis: Long = 2000,
+  owner: LifecycleOwner = this,
+  onFirstBackPressed: () -> Unit
+) =
+  onBackPressedDispatcher.addCallback(owner, object : OnBackPressedCallback(true) {
     private var lastBackTime: Long = 0
 
     override fun handleOnBackPressed() {
@@ -109,15 +113,13 @@ inline fun ComponentActivity.pressBackTwiceToExitApp(delayMillis: Long = 2000, c
       }
     }
   })
-}
 
-fun ComponentActivity.pressBackToNotExitApp() {
-  onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+fun ComponentActivity.pressBackToNotExitApp(owner: LifecycleOwner = this) =
+  onBackPressedDispatcher.addCallback(owner, object : OnBackPressedCallback(true) {
     override fun handleOnBackPressed() {
       moveTaskToBack(false)
     }
   })
-}
 
 fun Context.checkPermission(permission: String): Boolean =
   ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
