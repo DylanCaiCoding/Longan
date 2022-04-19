@@ -34,15 +34,15 @@ inline fun <reified T> Context.intentOf(vararg pairs: Pair<String, *>): Intent =
 inline fun <reified T> Context.intentOf(bundle: Bundle): Intent =
   Intent(this, T::class.java).putExtras(bundle)
 
-inline fun <reified T> Activity.intentExtras(name: String) = lazy<T?> {
+fun <T> Activity.intentExtras(name: String) = lazy<T?> {
   intent.extras[name]
 }
 
-inline fun <reified T> Activity.intentExtras(name: String, default: T) = lazy {
+fun <T> Activity.intentExtras(name: String, default: T) = lazy {
   intent.extras[name] ?: default
 }
 
-inline fun <reified T> Activity.safeIntentExtras(name: String) = lazy<T> {
+fun <T> Activity.safeIntentExtras(name: String) = lazy<T> {
   checkNotNull(intent.extras[name]) { "No intent value for key \"$name\"" }
 }
 

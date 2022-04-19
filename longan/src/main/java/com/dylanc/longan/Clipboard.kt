@@ -20,6 +20,7 @@ package com.dylanc.longan
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.ClipboardManager.OnPrimaryClipChangedListener
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -44,10 +45,10 @@ fun clearClipboard() =
   (application.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
     .setPrimaryClip(ClipData.newPlainText(null, ""))
 
-fun doOnClipboardChanged(listener: ClipboardManager.OnPrimaryClipChangedListener) =
+fun doOnClipboardChanged(listener: OnPrimaryClipChangedListener): OnPrimaryClipChangedListener =
   (application.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-    .addPrimaryClipChangedListener(listener)
+    .addPrimaryClipChangedListener(listener).let { listener }
 
-fun ClipboardManager.OnPrimaryClipChangedListener.cancel() =
+fun OnPrimaryClipChangedListener.cancel() =
   (application.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
     .removePrimaryClipChangedListener(this)

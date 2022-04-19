@@ -54,13 +54,13 @@ val systemZoneId: ZoneId by object : ReadOnlyProperty<Any?, ZoneId> {
 }
 
 fun Instant.format(pattern: String, zone: ZoneId = systemZoneId, locale: Locale? = null): String =
-  DateTimeFormatter(pattern, locale).withZone(zone).format(this)
+  dateTimeFormatterOf(pattern, locale).withZone(zone).format(this)
 
 fun LocalDateTime.format(pattern: String, locale: Locale? = null): String =
-  DateTimeFormatter(pattern, locale).format(this)
+  dateTimeFormatterOf(pattern, locale).format(this)
 
 fun LocalDate.format(pattern: String, locale: Locale? = null): String =
-  DateTimeFormatter(pattern, locale).format(this)
+  dateTimeFormatterOf(pattern, locale).format(this)
 
 fun LocalDateTime.toInstant(zone: ZoneId = systemZoneId): Instant =
   atZone(zone).toInstant()
@@ -158,5 +158,9 @@ fun LocalDate.previous(dayOfWeek: DayOfWeek): LocalDate = with(TemporalAdjusters
 
 fun LocalDate.previousOrSame(dayOfWeek: DayOfWeek): LocalDate = with(TemporalAdjusters.previousOrSame(dayOfWeek))
 
-private fun DateTimeFormatter(pattern: String, locale: Locale?): DateTimeFormatter =
-  if (locale != null) DateTimeFormatter.ofPattern(pattern, locale) else DateTimeFormatter.ofPattern(pattern)
+private fun dateTimeFormatterOf(pattern: String, locale: Locale?): DateTimeFormatter =
+  if (locale != null) {
+    DateTimeFormatter.ofPattern(pattern, locale)
+  } else {
+    DateTimeFormatter.ofPattern(pattern)
+  }

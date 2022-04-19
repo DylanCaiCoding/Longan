@@ -18,4 +18,5 @@ package com.dylanc.longan
 
 import android.os.Bundle
 
-inline operator fun <reified T> Bundle?.get(key: String): T? = this?.get(key) as? T
+@Suppress("UNCHECKED_CAST")
+operator fun <T> Bundle?.get(key: String): T? = this?.get(key) as? T

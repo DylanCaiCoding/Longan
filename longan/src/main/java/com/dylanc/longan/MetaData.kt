@@ -22,49 +22,21 @@ import android.app.Activity
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.ComponentName
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.GET_META_DATA
 
 fun applicationMetaDataOf(name: String): String? =
-  try {
-    application.packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
-      .metaData.getString(name)
-  } catch (e: PackageManager.NameNotFoundException) {
-    e.printStackTrace()
-    null
-  }
+  application.packageManager.getApplicationInfo(packageName, GET_META_DATA).metaData.getString(name)
 
 inline fun <reified T : Activity> activityMetaDataOf(name: String): String? =
-  try {
-    application.packageManager.getActivityInfo(ComponentName(application, T::class.java), PackageManager.GET_META_DATA)
-      .metaData.getString(name)
-  } catch (e: PackageManager.NameNotFoundException) {
-    e.printStackTrace()
-    null
-  }
+  application.packageManager.getActivityInfo(ComponentName<T>(), GET_META_DATA).metaData.getString(name)
 
 inline fun <reified T : Service> serviceMetaDataOf(name: String): String? =
-  try {
-    application.packageManager.getServiceInfo(ComponentName(application, T::class.java), PackageManager.GET_META_DATA)
-      .metaData.getString(name)
-  } catch (e: PackageManager.NameNotFoundException) {
-    e.printStackTrace()
-    null
-  }
+  application.packageManager.getServiceInfo(ComponentName<T>(), GET_META_DATA).metaData.getString(name)
 
 inline fun <reified T : BroadcastReceiver> providerMetaDataOf(name: String): String? =
-  try {
-    application.packageManager.getProviderInfo(ComponentName(application, T::class.java), PackageManager.GET_META_DATA)
-      .metaData.getString(name)
-  } catch (e: PackageManager.NameNotFoundException) {
-    e.printStackTrace()
-    null
-  }
+  application.packageManager.getProviderInfo(ComponentName<T>(), GET_META_DATA).metaData.getString(name)
 
 inline fun <reified T : BroadcastReceiver> receiverMetaDataOf(name: String): String? =
-  try {
-    application.packageManager.getReceiverInfo(ComponentName(application, T::class.java), PackageManager.GET_META_DATA)
-      .metaData.getString(name)
-  } catch (e: PackageManager.NameNotFoundException) {
-    e.printStackTrace()
-    null
-  }
+  application.packageManager.getReceiverInfo(ComponentName<T>(), GET_META_DATA).metaData.getString(name)
+
+inline fun <reified T> ComponentName() = ComponentName(application, T::class.java)

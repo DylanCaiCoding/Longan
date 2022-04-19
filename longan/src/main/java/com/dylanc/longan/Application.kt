@@ -24,9 +24,9 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.graphics.drawable.Drawable
 import android.location.LocationManager
 import android.location.LocationManager.GPS_PROVIDER
 import android.net.Uri
@@ -40,16 +40,17 @@ lateinit var application: Application
 
 inline val packageName: String get() = application.packageName
 
-inline val activitiesPackageInfo: PackageInfo
-  get() = application.packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+inline val packageInfo: PackageInfo
+  get() = application.packageManager.getPackageInfo(packageName, 0)
 
 inline val appName: String
   get() = application.applicationInfo.loadLabel(application.packageManager).toString()
 
-inline val appVersionName: String get() = activitiesPackageInfo.versionName
+inline val appIcon: Drawable get() = packageInfo.applicationInfo.loadIcon(application.packageManager)
 
-inline val appVersionCode: Long
-  get() = PackageInfoCompat.getLongVersionCode(activitiesPackageInfo)
+inline val appVersionName: String get() = packageInfo.versionName
+
+inline val appVersionCode: Long get() = PackageInfoCompat.getLongVersionCode(packageInfo)
 
 inline val isAppDebug: Boolean
   get() = application.packageManager.getApplicationInfo(packageName, 0).flags and
@@ -61,7 +62,7 @@ inline val isAppDarkMode: Boolean
 inline val isLocationEnabled: Boolean
   get() = application.getSystemService<LocationManager>()?.isProviderEnabled(GPS_PROVIDER) == true
 
-fun launchAppDetailsSettings(): Boolean =
+fun launchAppSettings(): Boolean =
   Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
     .apply { data = Uri.fromParts("package", packageName, null) }
     .startForActivity()
