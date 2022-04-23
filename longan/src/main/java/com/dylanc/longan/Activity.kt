@@ -115,10 +115,11 @@ fun ComponentActivity.pressBackTwiceToExitApp(
   })
 
 fun ComponentActivity.pressBackToNotExitApp(owner: LifecycleOwner = this) =
+  doOnBackPressed(owner) { moveTaskToBack(false) }
+
+fun ComponentActivity.doOnBackPressed(owner: LifecycleOwner = this, onBackPressed: () -> Unit) =
   onBackPressedDispatcher.addCallback(owner, object : OnBackPressedCallback(true) {
-    override fun handleOnBackPressed() {
-      moveTaskToBack(false)
-    }
+    override fun handleOnBackPressed() = onBackPressed()
   })
 
 fun Context.checkPermission(permission: String): Boolean =

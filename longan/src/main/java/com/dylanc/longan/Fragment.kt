@@ -49,3 +49,6 @@ fun Fragment.pressBackTwiceToExitApp(delayMillis: Long = 2000, onFirstBackPresse
 
 fun Fragment.pressBackToNotExitApp() =
   requireActivity().pressBackToNotExitApp(viewLifecycleOwner)
+
+fun Fragment.doOnBackPressed(onBackPressed: () -> Unit) =
+  requireActivity().doOnBackPressed(viewLifecycleOwner, onBackPressed)
