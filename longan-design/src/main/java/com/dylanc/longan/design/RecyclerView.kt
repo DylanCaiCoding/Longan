@@ -19,12 +19,10 @@
 package com.dylanc.longan.design
 
 import android.content.Context
+import android.graphics.Rect
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_END
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_START
@@ -33,12 +31,11 @@ import androidx.recyclerview.widget.RecyclerView
 fun RecyclerView.setEmptyView(owner: LifecycleOwner, emptyView: View) =
   observeDataEmpty(owner) { emptyView.isVisible = it }
 
-fun RecyclerView.observeDataEmpty(owner: LifecycleOwner, block: (Boolean) -> Unit) {
-  owner.lifecycle.addObserver(object : LifecycleObserver {
+fun RecyclerView.observeDataEmpty(owner: LifecycleOwner, block: (Boolean) -> Unit) =
+  owner.lifecycle.addObserver(object : DefaultLifecycleObserver {
     private var observer: RecyclerView.AdapterDataObserver? = null
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
       if (observer == null) {
         val adapter = checkNotNull(adapter) {
           "RecyclerView needs to set up the adapter before setting up an empty view."
@@ -48,15 +45,13 @@ fun RecyclerView.observeDataEmpty(owner: LifecycleOwner, block: (Boolean) -> Uni
       }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
       observer?.let {
         adapter?.unregisterAdapterDataObserver(it)
         observer = null
       }
     }
   })
-}
 
 fun RecyclerView.smoothScrollToStartPosition(position: Int) =
   smoothScrollToPosition(position, SNAP_TO_START)
@@ -77,25 +72,29 @@ fun LinearSmoothScroller(context: Context, snapPreference: Int) =
     override fun getHorizontalSnapPreference() = snapPreference
   }
 
+fun RecyclerView.addItemPadding(padding: Int) = addItemPadding(padding, padding, padding, padding)
+
+fun RecyclerView.addItemPadding(top: Int, bottom: Int, left: Int = 0, right: Int = 0) =
+  addItemDecoration(object : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+      super.getItemOffsets(outRect, view, parent, state)
+      outRect.bottom = bottom
+      outRect.top = top
+      outRect.left = left
+      outRect.right = right
+    }
+  })
+
 class AdapterDataEmptyObserver(
   private val adapter: RecyclerView.Adapter<*>,
   private val checkEmpty: (Boolean) -> Unit
 ) : RecyclerView.AdapterDataObserver() {
 
-  override fun onChanged() {
-    super.onChanged()
-    checkEmpty(isDataEmpty)
-  }
+  override fun onChanged() = checkEmpty(isDataEmpty)
 
-  override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-    super.onItemRangeInserted(positionStart, itemCount)
-    checkEmpty(isDataEmpty)
-  }
+  override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = checkEmpty(isDataEmpty)
 
-  override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-    super.onItemRangeRemoved(positionStart, itemCount)
-    checkEmpty(isDataEmpty)
-  }
+  override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) = checkEmpty(isDataEmpty)
 
   private val isDataEmpty get() = adapter.itemCount == 0
 }
