@@ -2,7 +2,7 @@
 
 参考了 `AnkoLogger` 并进行了优化和改进。
 
-### 打印日志
+## 打印日志
 
 相对于 [android.util.Log](https://developer.android.com/reference/android/util/Log.html) 会更加易用，不需要传 tag，默认 tag 是当前的类名。例如：
 
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 | `e()`            | `logError()`   |
 | `wtf()`          | `logWtf()`     |
 
-### 修改 Tag
+## 修改 Tag
 
 实现 `Logger` 接口，重写 `loggerTag`  属性，就能修改在该类下打印日志的 tag。
 
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 过滤日志
+## 过滤日志
 
 可以在初始化时配置是否打印日志。
 
@@ -77,7 +77,7 @@ Logger.isLoggable = { level, tag ->
 }
 ```
 
-### 自定义打印格式
+## 自定义打印格式
 
 创建一个类实现 `LoggerPrinter` 接口，实现打印方法。
 

@@ -1,6 +1,6 @@
 # Uri 用法
 
-### 查询多媒体文件
+## 查询多媒体文件
 
 查询多媒体视频的示例：
 
@@ -38,7 +38,7 @@ contentResolver.queryMediaVideos(projection) { cursor ->
 }
 ```
 
-### 添加多媒体文件
+## 添加多媒体文件
 
 ```kotlin
 val audioUri = contentResolver.insertMediaAudio()
@@ -49,19 +49,19 @@ val videoUri = contentResolver.insertMediaVideo(
 )
 ```
 
-### 更新多媒体文件
+## 更新多媒体文件
 
 ```kotlin
 audioUri.update(MediaStore.Audio.Media.DISPLAY_NAME to "My Workout Playlist.mp3")
 ```
 
-### 删除多媒体文件
+## 删除多媒体文件
 
 ```kotlin
 contentResolver.delete(uri)
 ```
 
-### File 转 Uri
+## File 转 Uri
 
 在 `AndroidManifest` 配置 FileProvider。
 

@@ -2,10 +2,10 @@
 
 [Activity Result API](https://developer.android.com/training/basics/intents/result?hl=zh-cn) 是官方用于替代 `startActivityForResult()` 和 `onActivityResult()` 的工具。但是 API 用起来有点繁琐，本库对其封装优化了用法。并且支持了更多的使用场景，如开启蓝牙、开启定位、跳转 Wifi 设置页面等。
 
-### 替代 startActivityForResult()
+## 替代 startActivityForResult()
 
 ```kotlin
-val startActivityLauncher = startActivityLauncher {
+private val startActivityLauncher = startActivityLauncher {
   if (it.resultCode == Result_OK) {
     // 处理结果
   }
@@ -14,10 +14,10 @@ val startActivityLauncher = startActivityLauncher {
 startActivityLauncher.launch<SomeActivity>("id" to 5) 
 ```
 
-### 替代 startIntentSenderForResult()
+## 替代 startIntentSenderForResult()
 
 ```kotlin
-val startIntentSenderLauncher = startIntentSenderLauncher {
+private val startIntentSenderLauncher = startIntentSenderLauncher {
   if (it.resultCode == Result_OK) {
     // 处理结果
   }
@@ -26,12 +26,12 @@ val startIntentSenderLauncher = startIntentSenderLauncher {
 startIntentSenderLauncher.launch(intentSender) 
 ```
 
-### 拍照预览
+## 拍照预览
 
 调用系统相册拍照后返回 Bitmap，仅仅用作展示。
 
 ```kotlin
-val takePicturePreviewLauncher = takePicturePreviewLauncher { bitmap ->
+private val takePicturePreviewLauncher = takePicturePreviewLauncher { bitmap ->
   if (bitmap != null) {
     imageView.setImageBitmap(bitmap)
   }
@@ -40,48 +40,48 @@ val takePicturePreviewLauncher = takePicturePreviewLauncher { bitmap ->
 takePicturePreviewLauncher.launch()
 ```
 
-### 拍照
+## 拍照
 
 ```kotlin
 private lateinit var uri: Uri
-val takePictureLauncher = takePictureLauncher { takeSuccess ->
+private val takePictureLauncher = takePictureLauncher { takeSuccess ->
   if (takeSuccess) {
     // 处理 uri
   }
 }
 
-// 保存到应用缓存目录
-uri = takePictureLauncher.launch()
-
 // 保存到共享存储空间，可在相册中查看
 uri = contentResovler.insertMediaImage()
 takePictureLauncher.launch(uri)
+
+// 保存到应用缓存目录
+uri = takePictureLauncher.launchAndSaveToCache()
 ```
 
-### 录像
+## 录像
 
 ```kotlin
 private lateinit var uri: Uri
-val takeVideoLauncher = takeVideoLauncher {
+private val takeVideoLauncher = takeVideoLauncher {
   if (uri.size > 0) {
     // 处理 uri
   }
 }
 
-// 保存到应用缓存目录
-uri = takeVideoLauncher.launch()
-
 // 保存到共享存储空间，可在相册中查看
 uri = contentResovler.insertMediaVideo()
 takePictureLauncher.launch(uri)
+
+// 保存到应用缓存目录
+uri = takeVideoLauncher.launchAndSaveToCache()
 ```
 
-### 选择单个图片或视频
+## 选择单个图片或视频
 
 有 `pickContentLauncher {...}` 和 `getContentLauncher {...}` 两个方法可供选择，对应 Intent 的 action 分别是 `Intent.ACTION_PICK` 和 `Intent.ACTION_GET_CONTENT`。官方建议用 `Intent.ACTION_GET_CONTENT`，但是会跳转一个 Material Design 的选择文件页面，通常不符合需求，而用 `Intent.ACTION_PICK` 才会跳转相册页面。可以两个都试一下再做选择。
 
 ```kotlin
-val pickContentLauncher = pickContentLauncher { uri ->
+private val pickContentLauncher = pickContentLauncher { uri ->
   if (uri != null) {
     // 处理 uri
   }
@@ -91,12 +91,12 @@ pickContentLauncher.launchForImage()
 // pickContentLauncher.launchForVideo()
 ```
 
-### 选择多个图片或视频
+## 选择多个图片或视频
 
 只有 `getMultipleContentsLauncher {...}` 可以选择，对应 Intent 的 action 是 `Intent.ACTION_GET_CONTENT`。`Intent.ACTION_PICK` 不支持多选。
 
 ```kotlin
-val getMultipleContentsLauncher = getMultipleContentsLauncher { uris ->
+private val getMultipleContentsLauncher = getMultipleContentsLauncher { uris ->
   if (uris.isNotEmpty()) {
     // 处理 uri 列表
   }
@@ -106,22 +106,23 @@ getMultipleContentsLauncher.launchForImage()
 // pickContentLauncher.launchForVideo()
 ```
 
-### 裁剪图片
+## 裁剪图片
 
 ```kotlin
-val cropPictureLauncher = cropPictureLauncher { uri ->
-  if (uri != null) {
+private lateinit var outputUri: Uri
+private val cropPictureLauncher = cropPictureLauncher { cropSuccess ->
+  if (cropSuccess != null) {
     // 处理 uri
   }
 }
 
-cropPictureLauncher.launch(inputUri)
+cropPictureLauncher.launch(inputUri, outputUri, "aspectX" to 1, "aspectY" to 1)
 ```
 
-### 请求单个权限
+## 请求单个权限
 
 ```kotlin
-val requestPermissionLauncher = requestPermissionLauncher(
+private val requestPermissionLauncher = requestPermissionLauncher(
   onGranted = {
     // 已同意
   },
@@ -137,10 +138,10 @@ val requestPermissionLauncher = requestPermissionLauncher(
 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 ```
 
-### 请求多个权限
+## 请求多个权限
 
 ```kotlin
-val requestMultiplePermissionsLauncher = requestMultiplePermissionsLauncher(
+private val requestMultiplePermissionsLauncher = requestMultiplePermissionsLauncher(
   onAllGranted = {
     // 已全部同意
   },
@@ -159,30 +160,30 @@ requestMultiplePermissionsLauncher.launch(
 )
 ```
 
-### 启动系统设置的 App 详情页
+## 启动系统设置的 App 详情页
 
 ```kotlin
-val launchAppSettingsLauncher = launchAppSettingsLauncher {
+private val launchAppSettingsLauncher = launchAppSettingsLauncher {
   // ...
 }
 
 launchAppSettingsLauncher.launch()
 ```
 
-### 启动 Wifi 设置页
+## 启动 Wifi 设置页
 
 ```kotlin
-val launchWifiSettingsLauncher = launchWifiSettingsLauncher {
+private val launchWifiSettingsLauncher = launchWifiSettingsLauncher {
   // ...
 }
 
 launchWifiSettingsLauncher.launch()
 ```
 
-### 打开蓝牙
+## 打开蓝牙
 
 ```kotlin
-val enableBluetoothLauncher = enableBluetoothLauncher { enabled ->
+private val enableBluetoothLauncher = enableBluetoothLauncher { enabled ->
   if (enabled) {
     // 已开启蓝牙
   } else {
@@ -193,10 +194,10 @@ val enableBluetoothLauncher = enableBluetoothLauncher { enabled ->
 enableBluetoothLauncher.launch()
 ```
 
-### 打开定位
+## 打开定位
 
 ```kotlin
-val enableLocationLauncher = enableLocationLauncher { enabled ->
+private val enableLocationLauncher = enableLocationLauncher { enabled ->
   if (enabled) {
     // 已开启定位
   } else {
@@ -207,10 +208,10 @@ val enableLocationLauncher = enableLocationLauncher { enabled ->
 enableLocationLauncher.launch()
 ```
 
-### 创建文档
+## 创建文档
 
 ```kotlin
-val createDocumentLauncher = createDocumentLauncher { uri ->
+private val createDocumentLauncher = createDocumentLauncher { uri ->
   if (uri != null) {
     // 处理 uri
   }
@@ -219,10 +220,10 @@ val createDocumentLauncher = createDocumentLauncher { uri ->
 createDocumentLauncher.launch(filename)
 ```
 
-### 打开单个文档
+## 打开单个文档
 
 ```kotlin
-val openDocumentLauncher = openDocumentLauncher { uri ->
+private val openDocumentLauncher = openDocumentLauncher { uri ->
   if (uri != null) {
     // 处理 uri
   }
@@ -231,10 +232,10 @@ val openDocumentLauncher = openDocumentLauncher { uri ->
 openDocumentLauncher.launch("application/*")
 ```
 
-### 打开多个文档
+## 打开多个文档
 
 ```kotlin
-val openMultipleDocumentsLauncher = openMultipleDocumentsLauncher { uris ->
+private val openMultipleDocumentsLauncher = openMultipleDocumentsLauncher { uris ->
   if (uris.isNotEmpty()) {
     // 处理 uri 列表
   }
@@ -243,10 +244,10 @@ val openMultipleDocumentsLauncher = openMultipleDocumentsLauncher { uris ->
 openMultipleDocumentsLauncher.launch("application/*")
 ```
 
-### 访问目录内容
+## 访问目录内容
 
 ```kotlin
-val openDocumentTreeLauncher = openDocumentTreeLauncher { uri ->
+private val openDocumentTreeLauncher = openDocumentTreeLauncher { uri ->
   if (uri != null) {
     val documentFile = DocumentFile.fromTreeUri(context, uri)
     // 处理文档文件
@@ -256,10 +257,10 @@ val openDocumentTreeLauncher = openDocumentTreeLauncher { uri ->
 openDocumentTreeLauncher.launch(null)
 ```
 
-### 选择联系人
+## 选择联系人
 
 ```kotlin
-val pickContactLauncher = pickContactLauncher { uri ->
+private val pickContactLauncher = pickContactLauncher { uri ->
   if (uri != null) {
     // 处理 uri
   }

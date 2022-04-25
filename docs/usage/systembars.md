@@ -2,7 +2,7 @@
 
 使用最新的 `WindowInsets` 实现，兼容了 Android 10。
 
-### SystemBars
+## SystemBars
 
 应用全屏：
 
@@ -10,7 +10,7 @@
 isFullScreen = true
 ```
 
-### StatusBar
+## StatusBar
 
 实现沉浸式状态栏，并且给标题栏的顶边距增加状态栏高度，可以适配刘海水滴屏：
 
@@ -33,7 +33,7 @@ transparentStatusBar()
 - `isStatusBarVisible`，设置或判断状态栏是否为显示
 - `statusBarHeight`，获取状态栏高度
 
-### NavigationBar
+## NavigationBar
 
 给控件的底边距增加导航栏高度：
 

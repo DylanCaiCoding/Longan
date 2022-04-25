@@ -2,7 +2,7 @@
 
 基于 [Activity Result API](https://developer.android.com/training/basics/intents/result?hl=zh-cn) 进行封装。
 
-### 请求单个权限
+## 请求单个权限
 
 ```kotlin
 val requestPermissionLauncher = requestPermissionLauncher(
@@ -24,7 +24,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### 请求多个权限
+## 请求多个权限
 
 ```kotlin
 val requestMultiplePermissionsLauncher = requestMultiplePermissionsLauncher(

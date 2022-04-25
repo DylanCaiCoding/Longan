@@ -1,11 +1,10 @@
 # MMKV 用法
 
-由于官方已经不推荐用 `SharedPreferences`，所以把 `SharedPreferences` 工具类改成用 `MMKV` 实现。
+由于官方已经不推荐用 `SharedPreferences`，所以把之前封装的 `SharedPreferences` 工具类改成用 `MMKV` 实现。
 
 考虑到有些人可能会用官方的 `DataStore`，就另写了一个库 [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX) 作为可选项。
 
-### 用法
-
+## Gradle
 添加依赖到 `build.gradle`：
 
 ```groovy
@@ -13,6 +12,8 @@ dependencies {
     implementation 'com.github.DylanCaiCoding:MMKV-KTX:1.2.11'
 }
 ```
+
+## 用法
 
 让一个类实现 `MMKVOwner` 接口，即可通过 `by mmkvXXXX()` 方法将属性委托给 `MMKV`，例如：
 

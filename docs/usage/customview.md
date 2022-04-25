@@ -1,6 +1,6 @@
 # 自定义 View 用法
 
-### 获取自定义属性
+## 获取自定义属性
 
 获取自定义属性需要不少代码来实现。
 
@@ -24,7 +24,7 @@ withStyledAttrs(attrs, R.styleable.CustomView) {
 }
 ```
 
-### 绘制居中文字
+## 绘制居中文字
 
 绘制居中或者垂直居中的文字：
 
@@ -33,7 +33,7 @@ canvas.drawCenterText(text, centerX, centerY, paint)
 canvas.drawCenterVerticalText(text, centerX, centerY, paint)
 ```
 
-### 触摸相关
+## 触摸相关
 
 获取当前触摸位置的子 View:
 

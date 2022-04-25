@@ -10,11 +10,9 @@ dependencies {
 }
 ```
 
-## APIs
+> 下面用法中含有方括号 `[]` 的参数是可选的。
 
-下面用法中含有方括号 `[]` 的参数是可选的。
-
-### [Activity.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Activity.kt)
+## [Activity.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Activity.kt)
 
 | 用法                                                         | 作用                                                |
 | ------------------------------------------------------------ | --------------------------------------------------- |
@@ -39,7 +37,7 @@ dependencies {
 | `FragmentActivity.fragmentActivity`                          | 作用域的 this 不是 Activity 时获取 FragmentActivity |
 | `ComponentActivity.lifecycleOwner`                           | 作用域的 this 不是 Activity 时获取 LifecycleOwner   |
 
-### [ActivityResult.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ActivityResult.kt)
+## [ActivityResult.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ActivityResult.kt)
 
 | 用法                                                         | 作用                                         |
 | ------------------------------------------------------------ | -------------------------------------------- |
@@ -70,7 +68,7 @@ dependencies {
 | `ActivityResultLauncher<IntentSenderRequest>.launch(intentSender, ...)` | 启动 `startIntentSenderForResult()` 的启动器 |
 | `ActivityResultLauncher<CropPictureRequest>.launch(inputUri, ...)` | 启动裁剪图片的启动器                         |
 
-### [Application.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Application.kt)
+## [Application.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Application.kt)
 
 | 用法                         | 作用                       |
 | ---------------------------- | -------------------------- |
@@ -83,27 +81,27 @@ dependencies {
 | `launchAppDetailsSettings`   | 启动 App 详情设置          |
 | `relaunchApp([killProcess])` | 重启 App                   |
 
-### [Arrays.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Arrays.kt)
+## [Arrays.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Arrays.kt)
 
 | 用法                        | 作用                         |
 | --------------------------- | ---------------------------- |
 | `Array<T>.percentage {...}` | 获取条件判断所占数量的百分比 |
 
-### [Bluetooth.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Bluetooth.kt)
+## [Bluetooth.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Bluetooth.kt)
 
 | 用法                           | 作用                   |
 | ------------------------------ | ---------------------- |
 | `isBluetoothEnabled`           | 判断蓝牙是否开启       |
 | `BluetoothStateLiveData {...}` | 监听蓝牙设备的连接状态 |
 
-### [Canvas.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Canvas.kt)
+## [Canvas.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Canvas.kt)
 
 | 用法                                                         | 作用               |
 | ------------------------------------------------------------ | ------------------ |
 | `Canvas.drawCenterVerticalText(text, centerX, centerY, paint)` | 绘制垂直居中的文字 |
 | `Canvas.drawCenterText(text, centerX, centerY, paint)`       | 绘制居中的文字     |
 
-### [Clipboard.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Clipboard.kt)
+## [Clipboard.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Clipboard.kt)
 
 | 用法                                                     | 作用             |
 | -------------------------------------------------------- | ---------------- |
@@ -113,13 +111,13 @@ dependencies {
 | `doOnClipboardChanged(listener)`                         | 监听剪贴板的变化 |
 | `ClipboardManager.OnPrimaryClipChangedListener.cancel()` | 移除剪贴板监听器 |
 
-### [Collections.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Collections.kt)
+## [Collections.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Collections.kt)
 
 | 用法                       | 作用                         |
 | -------------------------- | ---------------------------- |
 | `List<T>.percentage {...}` | 获取条件判断所占数量的百分比 |
 
-### [ContentResolver.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ContentResolver.kt)
+## [ContentResolver.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ContentResolver.kt)
 
 | 用法                                                         | 作用                   |
 | ------------------------------------------------------------ | ---------------------- |
@@ -139,7 +137,7 @@ dependencies {
 | `ContentResolver.update(uri, [where], [selectionArgs]) {...}` | 更新 Uri               |
 | `ContentResolver.delete(uri, [where], [selectionArgs])`      | 删除 Uri               |
 
-### [ContentValues.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ContentValues.kt)
+## [ContentValues.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ContentValues.kt)
 
 | 用法                             | 作用                                         |
 | -------------------------------- | -------------------------------------------- |
@@ -152,14 +150,14 @@ dependencies {
 | `ContentValues.dateAdded`        | 设置 `MediaStore.MediaColumns.DATE_ADDED`    |
 | `ContentValues.dateModified`     | 设置 `MediaStore.MediaColumns.DATE_MODIFIED` |
 
-### [Crash.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Crash.kt)
+## [Crash.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Crash.kt)
 
 | 用法                             | 作用               |
 | -------------------------------- | ------------------ |
 | `saveCrashLogLocally([dirPath])` | 保存崩溃日志到本地 |
 | `handleUncaughtException {...}`  | 处理未捕获的异常   |
 
-### [DateTime.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DateTime.kt)
+## [DateTime.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DateTime.kt)
 
 | 用法                                                         | 作用                                       |
 | ------------------------------------------------------------ | ------------------------------------------ |
@@ -208,7 +206,7 @@ dependencies {
 | `Instant.yearsUntil(instant)`                                | 两时刻相差的多少年                          |
 | `Instant.periodUntil(instant)`                               | 两时刻相差的时间段                          |
 
-### [DeviceInfo.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DeviceInfo.kt)
+## [DeviceInfo.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DeviceInfo.kt)
 
 | 用法                 | 作用               |
 | -------------------- | ------------------ |
@@ -217,7 +215,7 @@ dependencies {
 | `deviceManufacturer` | 获取设备厂商       |
 | `deviceModel`        | 获取设备型号       |
 
-### [Dimensions.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Dimensions.kt)
+## [Dimensions.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Dimensions.kt)
 
 | 用法                             | 作用     |
 | -------------------------------- | -------- |
@@ -226,13 +224,13 @@ dependencies {
 | `Int/Long/Float/Double.pxToDp()` | px 转 dp |
 | `Int/Long/Float/Double.pxToSp()` | px 转 sp |
 
-### [DownloadManager.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DownloadManager.kt)
+## [DownloadManager.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DownloadManager.kt)
 
 | 用法                  | 作用                              |
 | --------------------- | --------------------------------- |
 | `download(url) {...}` | 使用原生 DownloadManager 下载文件 |
 
-### [Encode.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Encode.kt)
+## [Encode.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Encode.kt)
 
 | 用法                                     | 作用        |
 | ---------------------------------------- | ----------- |
@@ -242,7 +240,7 @@ dependencies {
 | `String.urlEncode(enc)`                  | Url 编码    |
 | `String.urlDecode(enc)`                  | Url 解码    |
 
-### [Encrypt.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Encrypt.kt)
+## [Encrypt.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Encrypt.kt)
 
 | 用法                                   | 作用             |
 | -------------------------------------- | ---------------- |
@@ -254,7 +252,7 @@ dependencies {
 | `String/ByteArray.encrtpyHmacSHA256(key)` | HMAC-SHA256 加密 |
 | `String/ByteArray.encrtpyHmacSHA512(key)` | HMAC-SHA512 加密 |
 
-### [File.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/File.kt)
+## [File.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/File.kt)
 
 | 用法                                    | 作用                               |
 | --------------------------------------- | ---------------------------------- |
@@ -280,13 +278,13 @@ dependencies {
 | `File.calculateHmacSHA256(key)`         | 计算 HMAC-SHA256 的值              |
 | `File.calculateHmacSHA512(key)`         | 计算 HMAC-SHA512 的值              |
 
-### [Flow.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Flow.kt)
+## [Flow.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Flow.kt)
 
 | 用法                                                        | 作用                           |
 | ----------------------------------------------------------- | ------------------------------ |
 | `Flow<T>.launchAndCollectIn(owner, [minActiveState]) {...}` | 启动 lifecycleScope 并收集数据 |
 
-### [Fragment.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Fragment.kt)
+## [Fragment.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Fragment.kt)
 
 | 用法                                  | 作用                                             |
 | ------------------------------------- | ------------------------------------------------ |
@@ -295,7 +293,7 @@ dependencies {
 | `by Fragment.arguments(key, default)` | 通过 Fragment 的 argments 获取含默认值的参数     |
 | `by Fragment.safeArguments(key)`      | 通过 Fragment 的 argments 获取人为保证非空的参数 |
 
-### [Intents.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Intents.kt)
+## [Intents.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Intents.kt)
 
 | 用法                                     | 作用                                            |
 | ---------------------------------------- | ----------------------------------------------- |
@@ -322,7 +320,7 @@ dependencies {
 | `Intent.clearTask()`                     | 添加 FLAG_ACTIVITY_CLEAR_TASK 的 flag           |
 | `Intent.clearTask()`                     | 添加 FLAG_ACTIVITY_CLEAR_TASK 的 flag           |
 
-### [Keyboard.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Keyboard.kt)
+## [Keyboard.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Keyboard.kt)
 
 | 用法                                       | 作用             |
 | ------------------------------------------ | ---------------- |
@@ -332,7 +330,7 @@ dependencies {
 | `Activity/Fragment/View.isKeyboardVisible` | 判断键盘是否可见 |
 | `Activity/Fragment/View.keyboardHeight`    | 获取键盘高度     |
 
-### [Lifecycle.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Lifecycle.kt)
+## [Lifecycle.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Lifecycle.kt)
 
 | 用法                                     | 作用                                   |
 | ---------------------------------------- | -------------------------------------- |
@@ -340,7 +338,7 @@ dependencies {
 | `LifecycleOwner.doOnLifecycle {...}`     | 监听当前 Activity 或 Fragment 生命周期 |
 | `Fragment.doOnViewLifecycle {...}`       | 监听当前 Fragment 视图的生命周期       |
 
-### [Logger.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Logger.kt)
+## [Logger.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Logger.kt)
 
 | 用法                                  | 作用                                     |
 | ------------------------------------- | ---------------------------------------- |
@@ -353,7 +351,7 @@ dependencies {
 | `[Logger].logVerWtf(message, [thr])`  | 打印 Wtf 等级的日志                      |
 | `initLogger([isLoggable], [printer])` | 初始化 Logger (可选)                     |
 
-### [MetaData.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/MetaData.kt)
+## [MetaData.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/MetaData.kt)
 
 | 用法                          | 作用                             |
 | ----------------------------- | -------------------------------- |
@@ -363,7 +361,7 @@ dependencies {
 | `providerMetaDataOf<T>(name)` | 获取 provider 的 meta-data 值    |
 | `receiverMetaDataOf<T>(name)` | 获取 receiver 的 meta-data 值    |
 
-### [Network.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Network.kt)
+## [Network.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Network.kt)
 
 | 用法                         | 作用                   |
 | ---------------------------- | ---------------------- |
@@ -373,7 +371,7 @@ dependencies {
 | `isWifiEnabled`              | 判断 Wifi 是否打开     |
 | `NetworkAvailableLiveData()` | 监听网络状态改变       |
 
-### [Paths.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Paths.kt)
+## [Paths.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Paths.kt)
 
 | 用法                           | 作用                         |
 | ------------------------------ | ---------------------------- |
@@ -403,14 +401,14 @@ dependencies {
 | `isExternalStorageReadable`    | 判断外存是否可读             |
 | `isExternalStorageRemovable`   | 判断外存是否可移除           |
 
-### [PdfDocument.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/PdfDocument.kt)
+## [PdfDocument.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/PdfDocument.kt)
 
 | 用法                                                  | 作用                           |
 | ----------------------------------------------------- | ------------------------------ |
 | `Bitmap/List<Bitmap>.toPdfDoc(pageWidth, pageHeight)` | Bitmap 转 PDF 文档             |
 | `Bitmap/List<Bitmap>.toA4PdfDoc()`                    | Bitmap 转 A4 纸大小的 PDF 文档 |
 
-### [Rescoures.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Rescoures.kt)
+## [Rescoures.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Rescoures.kt)
 
 | 用法                                          | 作用                  |
 | --------------------------------------------- | --------------------- |
@@ -421,7 +419,7 @@ dependencies {
 | `Context/Fragment/View.getCompatFont(id)`     | 根据 id 获取字体      |
 | `parseColor(colorString)`                     | 根据字符串获取颜色    |
 
-### [Screen.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Screen.kt)
+## [Screen.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Screen.kt)
 
 | 用法                             | 作用               |
 | -------------------------------- | ------------------ |
@@ -431,7 +429,7 @@ dependencies {
 | `Activity/Fragment.isLandscape`  | 判断或设置是否横屏 |
 | `Activity/Fragment.isPortrait`   | 判断或设置是否竖屏 |
 
-### [Share.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Share.kt)
+## [Share.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Share.kt)
 
 | 用法                                     | 作用               |
 | ---------------------------------------- | ------------------ |
@@ -443,7 +441,7 @@ dependencies {
 | `shareFile(text, [title], [mimeType])`   | 分享单个文件       |
 | `shareFiles(text, [title], [mimeType])`  | 分享多个文件       |
 
-### [SpannableStringBuilder.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/SpannableStringBuilder.kt)
+## [SpannableStringBuilder.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/SpannableStringBuilder.kt)
 
 | 用法                                                         | 作用                 |
 | ------------------------------------------------------------ | -------------------- |
@@ -467,7 +465,7 @@ dependencies {
 | `SpannableStringBuilder#appendSpace(size, [color]) {...}`    | 追加空白             |
 
 
-### [String.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/String.kt)
+## [String.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/String.kt)
 
 | 用法                              | 作用                               |
 | --------------------------------- | ---------------------------------- |
@@ -484,7 +482,7 @@ dependencies {
 | `String.isIDCard18()`             | 判断是否是 18 位身份证号码         |
 | `String.isJson()`                 | 判断是否是 Json 字符串             |
 
-### [SystemBars.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/SystemBars.kt)
+## [SystemBars.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/SystemBars.kt)
 
 | 用法                                                         | 作用                               |
 | ------------------------------------------------------------ | ---------------------------------- |
@@ -505,7 +503,7 @@ dependencies {
 | `View.addNavigationBarHeightToMarginBottom()`                | 控件的底部外边距增加虚拟导航栏高度 |
 | `View.subtractNavigationBarHeightToMarginBottom()`           | 控件的底部外边距减少虚拟导航栏高度 |
 
-### [TextView.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/TextView.kt)
+## [TextView.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/TextView.kt)
 
 | 用法                                                         | 作用                   |
 | ------------------------------------------------------------ | ---------------------- |
@@ -518,13 +516,13 @@ dependencies {
 | `TextView.enableWhenOtherTextNotEmpty(textViews)`            | 当其它文本非空时可用   |
 | `TextView.enableWhenOtherTextChanged(textViews) {...}`       | 当其它文本改变时可用   |
 
-### [Threads.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Threads.kt)
+## [Threads.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Threads.kt)
 
 | 用法                              | 作用         |
 | --------------------------------- | ------------ |
 | `mainThread([delayMillis]) {...}` | 在主线程运行 |
 
-### [Toast.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Toast.kt)
+## [Toast.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Toast.kt)
 
 | 用法                                  | 作用                          |
 | ------------------------------------- | ----------------------------- |
@@ -532,7 +530,7 @@ dependencies {
 | `Context/Fragment.longToast(message)` | 长吐司                        |
 | `Toast.fixBadTokenException()`        | 修复 7.1 的 BadTokenException |
 
-### [Uri.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Uri.kt)
+## [Uri.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Uri.kt)
 
 | 用法                                             | 作用                           |
 | ------------------------------------------------ | ------------------------------ |
@@ -547,7 +545,7 @@ dependencies {
 | `Uri.fileExtension`                              | 获取 Uri 的文件拓展名          |
 | `Uri.mimeType`                                   | 获取 Uri 的 MIME 类型          |
 
-### [View.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/View.kt)
+## [View.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/View.kt)
 
 | 用法                                                         | 作用                              |
 | ------------------------------------------------------------ | --------------------------------- |
@@ -562,7 +560,7 @@ dependencies {
 | `View.rootWindowInsetsCompat`                                | 获取根视图的 WinowInsetsCompat    |
 | `View.windowInsetsControllerCompat`                          | 获取 WindowInsetsControllerCompat |
 
-### [ViewModel.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ViewModel.kt)
+## [ViewModel.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ViewModel.kt)
 
 | 用法                                                    | 作用                                              |
 | ------------------------------------------------------- | ------------------------------------------------- |

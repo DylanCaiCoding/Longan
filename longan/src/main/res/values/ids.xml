@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <item name="tag_is_added_margin_top" type="id" />
+  <item name="tag_is_added_margin_bottom" type="id" />
+  <item name="tag_is_added_padding_top" type="id" />
+  <item name="tag_last_click_time" type="id" />
+  <item name="tag_root_window_insets" type="id" />
+  <item name="tag_window_insets_controller" type="id" />
+</resources>

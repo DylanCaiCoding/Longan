@@ -1,6 +1,6 @@
 # Fragment 用法
 
-### 创建带参数的 Fragment
+## 创建带参数的 Fragment
 
 传参给 Fragment 需要设置 Bundle 对象，通常 Bundle 对象每增加一个额外的参数，就需要增加一行代码。例如：
 
@@ -18,7 +18,7 @@ fragment.arguments = arguments
 val fragment = SomeFragment().withArguments("id" to 5, "title" to title)
 ```
 
-### Fragment 的 arguments 委托
+## Fragment 的 arguments 委托
 
 使用 `arguments()` 委托获取传递给 Fragment 的数据。
 

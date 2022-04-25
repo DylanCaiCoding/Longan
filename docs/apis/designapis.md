@@ -10,11 +10,9 @@ dependencies {
 }
 ```
 
-## APIs
+> 下面用法中含有方括号 `[]` 的参数是可选的。
 
-下面用法中含有方括号 `[]` 的参数是可选的。
-
-### [Dialogs.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/Dialogs.kt)
+## [Dialogs.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/Dialogs.kt)
 
 | 用法                                                         | 作用               |
 | ------------------------------------------------------------ | ------------------ |
@@ -28,7 +26,7 @@ dependencies {
 | `Dialog/DialogInterface.doOnDismiss{...}`                    | 监听消失事件       |
 | `Dialog/DialogInterface.doOnShow{...}`                       | 监听显示事件       |
 
-### [RecyclerView.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/RecyclerView.kt)
+## [RecyclerView.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/RecyclerView.kt)
 
 | 用法                                                    | 作用                 |
 | ------------------------------------------------------- | -------------------- |
@@ -37,7 +35,7 @@ dependencies {
 | `RecyclerView.smoothScrollToStartPosition(position)`    | 顺滑地滚动到起始位置 |
 | `RecyclerView.smoothScrollToEndPosition(position)`      | 顺滑地滚动到末端位置 |
 
-### [Snackbar.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/Snackbar.kt)
+## [Snackbar.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/Snackbar.kt)
 
 | 用法                                                         | 作用                |
 | ------------------------------------------------------------ | ------------------- |
@@ -45,7 +43,7 @@ dependencies {
 | `Activity/Fragment/View.longSnackbar(message, [actionText], [action])` | 长时间显示 Snackbar |
 | `Activity/Fragment/View.indefiniteSnackbar(message, [actionText], [action])` | 永久显示 Snackbar   |
 
-### [TabLayout.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/TabLayout.kt)
+## [TabLayout.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/TabLayout.kt)
 
 | 用法                                                         | 作用             |
 | ------------------------------------------------------------ | ---------------- |
@@ -58,7 +56,7 @@ dependencies {
 | `TabLayout.doOnTabReselected {...}`                          | 监听标签重新选中 |
 | `TabLayout.addOnTabSelectedListener(onTabSelected, onTabUnselected, onTabReselected) ` | 监听标签选中事件 |
 
-### [ViewPager2.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/ViewPager2.kt)
+## [ViewPager2.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/ViewPager2.kt)
 
 | 用法                                                         | 作用                      |
 | ------------------------------------------------------------ | ------------------------- |
