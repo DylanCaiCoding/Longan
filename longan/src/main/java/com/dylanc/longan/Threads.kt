@@ -23,12 +23,10 @@ import android.os.Looper
 
 val mainThreadHandler by lazy { Handler(Looper.getMainLooper()) }
 
+val isMainThread: Boolean get() = Looper.myLooper() != Looper.getMainLooper()
+
 fun mainThread(block: () -> Unit) {
-  if (Looper.myLooper() != Looper.getMainLooper()) {
-    mainThreadHandler.post(block)
-  } else {
-    block()
-  }
+  if (isMainThread) mainThreadHandler.post(block) else block()
 }
 
 fun mainThread(delayMillis: Long, block: () -> Unit) =
