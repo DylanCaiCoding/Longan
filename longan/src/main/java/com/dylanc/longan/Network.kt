@@ -135,7 +135,7 @@ class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
   }
 }
 
-class WifiListLiveData @RequiresPermission(allOf = [ACCESS_WIFI_STATE, CHANGE_WIFI_STATE]) constructor() : LiveData<List<ScanResult>>() {
+class WifiListLiveData @RequiresPermission(allOf = [ACCESS_WIFI_STATE, CHANGE_WIFI_STATE]) constructor() : LiveData<List<ScanResult>?>() {
 
   private val wifiManager: WifiManager by lazy(LazyThreadSafetyMode.NONE) {
     application.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -143,19 +143,28 @@ class WifiListLiveData @RequiresPermission(allOf = [ACCESS_WIFI_STATE, CHANGE_WI
 
   @Suppress("DEPRECATION")
   @Deprecated("The ability for apps to trigger scan requests will be removed in a future release.")
-  fun startScan() = wifiManager.startScan()
+  fun startScan() {
+    if (!wifiManager.startScan()) {
+      value = null
+    }
+  }
 
   override fun onActive() {
-    application.registerReceiver(broadcastReceiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+    application.registerReceiver(wifiScanReceiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
   }
 
   override fun onInactive() {
-    application.unregisterReceiver(broadcastReceiver)
+    application.unregisterReceiver(wifiScanReceiver)
   }
 
-  private val broadcastReceiver = object : BroadcastReceiver() {
+  private val wifiScanReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-      value = wifiManager.scanResults
+      val success = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+      } else {
+        true
+      }
+      value = if (success) wifiManager.scanResults else null
     }
   }
 }
