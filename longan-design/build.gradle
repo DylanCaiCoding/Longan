@@ -9,8 +9,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -28,12 +26,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    compileOptions {
-        kotlinOptions.freeCompilerArgs += ['-module-name', "longan_design"]
-    }
-
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += ['-module-name', "longan_design"]
     }
 }
 

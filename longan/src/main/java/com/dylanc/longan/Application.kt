@@ -52,9 +52,10 @@ inline val appVersionName: String get() = packageInfo.versionName
 
 inline val appVersionCode: Long get() = PackageInfoCompat.getLongVersionCode(packageInfo)
 
-inline val isAppDebug: Boolean
-  get() = application.packageManager.getApplicationInfo(packageName, 0).flags and
-      ApplicationInfo.FLAG_DEBUGGABLE != 0
+inline val isAppDebug: Boolean get() = application.isAppDebug
+
+inline val Application.isAppDebug: Boolean
+  get() = packageManager.getApplicationInfo(packageName, 0).flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
 inline val isAppDarkMode: Boolean
   get() = (application.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES

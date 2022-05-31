@@ -53,7 +53,7 @@ fun TextView.addUnderline() {
   paint.flags = Paint.UNDERLINE_TEXT_FLAG
 }
 
-fun TextView.transparentHighlightColor(){
+fun TextView.transparentHighlightColor() {
   highlightColor = Color.TRANSPARENT
 }
 
@@ -62,8 +62,8 @@ fun TextView.startCountDown(
   secondInFuture: Int = 60,
   onTick: TextView.(secondUntilFinished: Int) -> Unit,
   onFinish: TextView.() -> Unit,
-) {
-  val countDownTimer = object : CountDownTimer(secondInFuture * 1000L, 1000) {
+): CountDownTimer =
+  object : CountDownTimer(secondInFuture * 1000L, 1000) {
     override fun onTick(millisUntilFinished: Long) {
       isEnabled = false
       onTick((millisUntilFinished / 1000f).roundToInt())
@@ -73,12 +73,12 @@ fun TextView.startCountDown(
       isEnabled = true
       this@startCountDown.onFinish()
     }
+  }.also { countDownTimer ->
+    countDownTimer.start()
+    lifecycleOwner.doOnLifecycle(onDestroy = {
+      countDownTimer.cancel()
+    })
   }
-  countDownTimer.start()
-  lifecycleOwner.doOnLifecycle(onDestroy = {
-    countDownTimer.cancel()
-  })
-}
 
 fun TextView.enableWhenOtherTextNotEmpty(vararg textViews: TextView) =
   enableWhenOtherTextChanged(*textViews) { textViews.all { it.isTextNotEmpty() } }

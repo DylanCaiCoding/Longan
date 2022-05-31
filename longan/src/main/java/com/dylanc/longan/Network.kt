@@ -159,12 +159,11 @@ class WifiListLiveData @RequiresPermission(allOf = [ACCESS_WIFI_STATE, CHANGE_WI
 
   private val wifiScanReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-      val success = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
         intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
-      } else {
-        true
+      ) {
+        value = wifiManager.scanResults
       }
-      value = if (success) wifiManager.scanResults else null
     }
   }
 }
