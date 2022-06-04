@@ -30,6 +30,10 @@ import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 
+private var View.isAddedMarginTop: Boolean? by viewTags(R.id.tag_is_added_margin_top)
+private var View.isAddedPaddingTop: Boolean? by viewTags(R.id.tag_is_added_padding_top)
+private var View.isAddedMarginBottom: Boolean? by viewTags(R.id.tag_is_added_margin_bottom)
+
 fun Fragment.immerseStatusBar(lightMode: Boolean = true) {
   activity?.immerseStatusBar(lightMode)
 }

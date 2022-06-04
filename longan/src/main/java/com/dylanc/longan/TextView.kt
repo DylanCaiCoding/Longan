@@ -22,15 +22,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.CountDownTimer
 import android.text.method.HideReturnsTransformationMethod
-import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
+import android.widget.CheckBox
 import android.widget.TextView
-import androidx.annotation.ColorInt
 import androidx.core.widget.doAfterTextChanged
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
 import kotlin.math.roundToInt
 
 inline val TextView.textString: String get() = text.toString()
@@ -81,16 +77,25 @@ fun TextView.startCountDown(
   }
 
 fun TextView.enableWhenOtherTextNotEmpty(vararg textViews: TextView) =
-  enableWhenOtherTextChanged(*textViews) { textViews.all { it.isTextNotEmpty() } }
+  enableWhenOtherTextChanged(*textViews) { all { it.isTextNotEmpty() } }
 
 inline fun TextView.enableWhenOtherTextChanged(
   vararg textViews: TextView,
-  crossinline block: (Array<out TextView>) -> Boolean
+  crossinline block: Array<out TextView>.() -> Boolean
 ) {
   isEnabled = block(textViews)
   textViews.forEach { tv ->
     tv.doAfterTextChanged {
       isEnabled = block(textViews)
+    }
+  }
+}
+
+fun TextView.enableWhenAllChecked(vararg checkBoxes: CheckBox) {
+  isEnabled = checkBoxes.all { it.isChecked }
+  checkBoxes.forEach { cb ->
+    cb.setOnCheckedChangeListener { _, _ ->
+      isEnabled = checkBoxes.all { it.isChecked }
     }
   }
 }

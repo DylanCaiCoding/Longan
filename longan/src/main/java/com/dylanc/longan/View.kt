@@ -31,8 +31,11 @@ import androidx.core.content.withStyledAttributes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
+
+private var View.lastClickTime: Long? by viewTags(R.id.tag_last_click_time)
 
 fun List<View>.doOnClick(clickIntervals: Int, isSharingIntervals: Boolean = false, block: () -> Unit) =
   forEach { it.doOnClick(clickIntervals, isSharingIntervals, block) }
@@ -132,21 +135,13 @@ inline fun View.withStyledAttributes(
 ) =
   context.withStyledAttributes(set, attrs, defStyleAttr, defStyleRes, block)
 
-val View.rootWindowInsetsCompat: WindowInsetsCompat?
-  get() {
-    if (rootWindowInsetsCompatCache == null) {
-      rootWindowInsetsCompatCache = ViewCompat.getRootWindowInsets(this)
-    }
-    return rootWindowInsetsCompatCache
-  }
+val View.rootWindowInsetsCompat: WindowInsetsCompat? by viewTags(R.id.tag_root_window_insets) {
+  ViewCompat.getRootWindowInsets(this)
+}
 
-val View.windowInsetsControllerCompat: WindowInsetsControllerCompat?
-  get() {
-    if (windowInsetsControllerCompatCache == null) {
-      windowInsetsControllerCompatCache = ViewCompat.getWindowInsetsController(this)
-    }
-    return windowInsetsControllerCompatCache
-  }
+val View.windowInsetsControllerCompat: WindowInsetsControllerCompat? by viewTags(R.id.tag_window_insets_controller) {
+  ViewCompat.getWindowInsetsController(this)
+}
 
 fun View.doOnApplyWindowInsets(action: (View, WindowInsetsCompat) -> WindowInsetsCompat) =
   ViewCompat.setOnApplyWindowInsetsListener(this, action)
@@ -158,4 +153,12 @@ fun <T> viewTags(key: Int) = object : ReadWriteProperty<View, T?> {
 
   override fun setValue(thisRef: View, property: KProperty<*>, value: T?) =
     thisRef.setTag(key, value)
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T> viewTags(key: Int, block: View.() -> T) = ReadOnlyProperty<View, T> { thisRef, _ ->
+  if (thisRef.getTag(key) == null) {
+    thisRef.setTag(key, block(thisRef))
+  }
+  thisRef.getTag(key) as T
 }
