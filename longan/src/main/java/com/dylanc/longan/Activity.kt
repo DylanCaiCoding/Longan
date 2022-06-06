@@ -62,9 +62,9 @@ val activityList: List<Activity> get() = activityCache.toList()
 val topActivity: Activity get() = activityCache.last()
 
 inline fun <reified T : Activity> isActivityExistsInStack(): Boolean =
-  isActivityExistsInStack(T::class)
+  isActivityExistsInStack(T::class.java)
 
-fun <T : Activity> isActivityExistsInStack(clazz: KClass<T>): Boolean =
+fun <T : Activity> isActivityExistsInStack(clazz: Class<T>): Boolean =
   activityCache.any { it.javaClass == clazz }
 
 inline fun <reified T : Activity> finishActivity(): Boolean = finishActivity(T::class)
