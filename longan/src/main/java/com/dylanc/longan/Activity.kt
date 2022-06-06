@@ -75,19 +75,35 @@ fun <T : Activity> finishActivity(clazz: KClass<T>): Boolean =
     it.javaClass == clazz
   }
 
+inline fun <reified T : Activity> finishToActivity(): Boolean = finishToActivity(T::class)
+
+fun <T : Activity> finishToActivity(clazz: KClass<T>): Boolean {
+  for (i in activityCache.count() - 1 downTo 0) {
+    if (clazz == activityCache[i].javaClass) {
+      return true
+    }
+    activityCache.removeAt(i)
+  }
+  return false
+}
+
 fun finishAllActivities(): Boolean =
   activityCache.removeAll {
     it.finish()
     true
   }
 
-fun finishAllActivitiesExceptNewest(): Boolean =
-  topActivity.let { topActivity ->
-    activityCache.removeAll {
-      if (it != topActivity) it.finish()
-      it != topActivity
-    }
+inline fun <reified T : Activity> finishAllActivitiesExcept(): Boolean =
+  finishAllActivitiesExcept(T::class.java)
+
+fun <T : Activity> finishAllActivitiesExcept(clazz: Class<T>): Boolean =
+  activityCache.removeAll {
+    if (it.javaClass != clazz) it.finish()
+    it.javaClass != clazz
   }
+
+fun finishAllActivitiesExceptNewest(): Boolean =
+  finishAllActivitiesExcept(topActivity.javaClass)
 
 fun ComponentActivity.pressBackTwiceToExitApp(toastText: String, delayMillis: Long = 2000, owner: LifecycleOwner = this) =
   pressBackTwiceToExitApp(delayMillis, owner) { toast(toastText) }
