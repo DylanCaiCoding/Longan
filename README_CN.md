@@ -34,7 +34,7 @@ dependencies {
 
 ## 用法
 
-:pencil: **[使用文档](https://dylancaicoding.github.io/Longan)**
+:pencil: **[>> 使用文档 <<](https://dylancaicoding.github.io/Longan)**
 
 ## 示例
 
