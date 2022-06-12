@@ -31,7 +31,7 @@ dependencies {
 ```
 ## Usage
 
-:pencil: **[Usage documentation](https://dylancaicoding.github.io/Longan)**
+:pencil: **[>> Usage documentation <<](https://dylancaicoding.github.io/Longan)**
 
 ## Sample
 
