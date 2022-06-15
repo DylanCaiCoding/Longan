@@ -194,7 +194,7 @@ mainThread {
 
 ## 反馈
 
-有任何使用上的问题或者想要的功能都可以提 [issues](https://github.com/DylanCaiCoding/Longan/issues/new) 或者加我微信直接反馈，微信号 `DylanCaiCoding` ，我会拉个群。加好友时备注个 GitHub，个人不乱加陌生人。
+有任何使用上的问题或者想要的功能都可以提 [issues](https://github.com/DylanCaiCoding/Longan/issues/new) 或者加我微信 `DylanCaiCoding` 直接反馈。
 
 ## 作者其它的库
 
