@@ -44,6 +44,7 @@ dependencies {
 | [LoadingStateView](https://github.com/DylanCaiCoding/LoadingStateView) | 深度解耦标题栏或加载中、加载失败、无数据等视图 |
 | [ViewBindingKTX](https://github.com/DylanCaiCoding/ViewBindingKTX)     | 最全面的 ViewBinding 工具                |
 | [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX)                 | 用属性委托的方式使用 MMKV                  |
+| [Tracker](https://github.com/DylanCaiCoding/Tracker)         | 基于西瓜视频的责任链埋点思路实现的轻量级埋点框架          |
 
 ## License
 
