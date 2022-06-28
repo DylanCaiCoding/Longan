@@ -10,12 +10,11 @@ import com.dylanc.longan.startActivity
 import com.dylanc.viewbinding.base.simpleIntListAdapter
 import com.dylanc.viewbinding.binding
 
-
 class MainActivity : AppCompatActivity() {
 
   private val binding: ActivityRecyclerViewBinding by binding()
-  private val items = listOf(R.string.dialogs, R.string.spannable_string)
-  private val adapter = simpleIntListAdapter<ItemTextBinding> {
+  private val items = listOf(R.string.dialogs, R.string.spannable_string, R.string.activity_result)
+  private val adapter by simpleIntListAdapter<ItemTextBinding> {
     tvTitle.setText(it)
   }
 
@@ -27,6 +26,7 @@ class MainActivity : AppCompatActivity() {
       when (item) {
         R.string.dialogs -> startActivity<DialogsActivity>()
         R.string.spannable_string -> startActivity<SpannableStringActivity>()
+        R.string.activity_result -> startActivity<ActivityResultActivity>()
       }
     }
     pressBackTwiceToExitApp(R.string.exit_app)

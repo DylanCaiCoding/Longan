@@ -19,6 +19,9 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
     <activity
+      android:name=".ui.PictureActivity"
+      android:exported="false" />
+    <activity
       android:name=".ui.MainActivity"
       android:exported="true">
       <intent-filter>
@@ -28,9 +31,11 @@
       </intent-filter>
     </activity>
     <activity android:name=".ui.DialogsActivity" />
-    <activity android:name=".ui.SpannableStringActivity"
-      android:exported="true">
-    </activity>
+    <activity
+      android:name=".ui.SpannableStringActivity"
+      android:exported="true"></activity>
+    <activity android:name=".ui.InputTextActivity" />
+    <activity android:name=".ui.ActivityResultActivity" />
 
     <provider
       android:name="androidx.core.content.FileProvider"

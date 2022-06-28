@@ -45,7 +45,7 @@ class SpannableStringActivity : AppCompatActivity() {
         url("https://www.baidu.com") { append("https://www.baidu.com") }
         appendLine(")")
         fontFamily("monospace") { appendLine("fontFamily(\"monospace\")") }
-        bullet(8.dp) { appendLine("bullet(8.dp, Color.RED)") }
+        bullet(8.dp) { appendLine("bullet(8.dp)") }
         quote(Color.RED) { appendLine("quote(Color.RED)") }
         appendClickable(R.mipmap.ic_launcher) { toast("click image") }
         appendLine()

@@ -3,8 +3,25 @@
   <string name="exit_app">To exit app, pressing again</string>
   <string name="dialogs">Dialogs</string>
   <string name="spannable_string">SpannableString</string>
+  <string name="activity_result">ActivityResult</string>
   <string name="selector">selector</string>
   <string name="single_choice_selector">single choice selector</string>
   <string name="multi_choice_selector">multi choice selector</string>
-  <string name="no_read_permission">Please go to settings to authorize read permission</string>
+  <string name="need_permission_title">Need permission</string>
+  <string name="no_read_permission">Please go to settings to grant read permission</string>
+  <string name="no_location_permission">Please go to settings to grant location permission</string>
+  <string name="enable_location_reason">To ensure the normal use of Bluetooth, please turn on position</string>
+  <string name="read_permission_granted">Location permission is granted</string>
+  <string name="location_permission_granted">Location permission is granted</string>
+  <string name="location_permission_denied">Location permission is denied</string>
+  <string name="location_and_read_permissions_granted">Location permission and read permission are granted</string>
+  <string name="need_location_and_read_permissions">Location permission and read permission are required for proper use</string>
+  <string name="need_location_permission">Location permission is required for proper use</string>
+  <string name="need_read_permission">Read permission is required for proper use</string>
+  <string name="location_enabled">Location is enabled</string>
+  <string name="location_disabled">Location is disabled</string>
+  <string name="documents">Documents</string>
+  <string name="selected_files">Selected files</string>
+  <string name="bluetooth_enabled">Bluetooth enabled</string>
+  <string name="bluetooth_need_location_permission">Please grant location permission to use Bluetooth</string>
 </resources>

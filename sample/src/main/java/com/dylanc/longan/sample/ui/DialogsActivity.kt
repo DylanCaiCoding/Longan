@@ -12,19 +12,12 @@ import com.dylanc.longan.sample.databinding.ItemTextBinding
 import com.dylanc.longan.toast
 import com.dylanc.viewbinding.base.simpleIntListAdapter
 import com.dylanc.viewbinding.binding
-import com.dylanc.viewbinding.updateCustomTab
-import com.google.android.material.tabs.TabLayout
 
 
 class DialogsActivity : AppCompatActivity() {
 
   private val binding: ActivityRecyclerViewBinding by binding()
-  private val items = listOf(
-    R.string.selector,
-    R.string.single_choice_selector,
-    R.string.multi_choice_selector,
-  )
-  private val adapter = simpleIntListAdapter<ItemTextBinding> {
+  private val adapter by simpleIntListAdapter<ItemTextBinding> {
     tvTitle.setText(it)
   }
 
@@ -34,7 +27,11 @@ class DialogsActivity : AppCompatActivity() {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     supportActionBar?.setDisplayShowHomeEnabled(true)
     binding.recyclerView.adapter = adapter
-    adapter.submitList(items)
+    adapter.submitList(listOf(
+      R.string.selector,
+      R.string.single_choice_selector,
+      R.string.multi_choice_selector,
+    ))
     adapter.doOnItemClick { item, _ ->
       when (item) {
         R.string.selector -> checkCountry()
