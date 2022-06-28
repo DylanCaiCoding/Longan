@@ -86,17 +86,29 @@ fun LifecycleOwner.doOnLifecycle(
   onDestroy: (() -> Unit)? = null,
 ) =
   lifecycle.addObserver(object : DefaultLifecycleObserver {
-    fun onCreate() = onCreate?.invoke()
+    override fun onCreate(owner: LifecycleOwner) {
+      onCreate?.invoke()
+    }
 
-    fun onStart() = onStart?.invoke()
+    override fun onStart(owner: LifecycleOwner) {
+      onStart?.invoke()
+    }
 
-    fun onResume() = onResume?.invoke()
+    override fun onResume(owner: LifecycleOwner) {
+      onResume?.invoke()
+    }
 
-    fun onPause() = onPause?.invoke()
+    override fun onPause(owner: LifecycleOwner) {
+      onPause?.invoke()
+    }
 
-    fun onStop() = onStop?.invoke()
+    override fun onStop(owner: LifecycleOwner) {
+      onStop?.invoke()
+    }
 
-    fun onDestroy() = onDestroy?.invoke()
+    override fun onDestroy(owner: LifecycleOwner) {
+      onDestroy?.invoke()
+    }
   })
 
 val Fragment.viewLifecycleScope get() = viewLifecycleOwner.lifecycleScope
