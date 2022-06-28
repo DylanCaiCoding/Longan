@@ -4,11 +4,10 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.targetSdkVersion
+    compileSdkVersion buildConfig.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdkVersion buildConfig.minSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -32,6 +31,7 @@ android {
         freeCompilerArgs += ['-module-name', "longan"]
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
         freeCompilerArgs += "-Xcontext-receivers"
+        freeCompilerArgs += "-Xskip-prerelease-check"
     }
 }
 
