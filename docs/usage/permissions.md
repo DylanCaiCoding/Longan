@@ -5,7 +5,7 @@
 ## 请求单个权限
 
 ```kotlin
-val requestPermissionLauncher = requestPermissionLauncher(
+private val requestPermissionLauncher = registerForRequestPermissionResult(
   onGranted = {
     // 已同意
   },
@@ -27,7 +27,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ## 请求多个权限
 
 ```kotlin
-val requestMultiplePermissionsLauncher = requestMultiplePermissionsLauncher(
+private val requestMultiplePermissionsLauncher = requestMultiplePermissionsLauncher(
   onAllGranted = {
     // 已全部同意
   },

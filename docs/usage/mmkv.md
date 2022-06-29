@@ -9,7 +9,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding:MMKV-KTX:1.2.11'
+    implementation 'com.github.DylanCaiCoding:MMKV-KTX:1.2.13'
 }
 ```
 

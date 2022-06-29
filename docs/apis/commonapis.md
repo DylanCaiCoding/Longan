@@ -6,7 +6,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.5'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.1.0'
 }
 ```
 
@@ -21,12 +21,15 @@ dependencies {
 | `activityList`                                               | 获取 Activity 栈链表                                |
 | `topActivity`                                                | 获取栈顶 Activity                                   |
 | `isActivityExistsInStack<SomeOtherActivity>`                 | 判断 Activity 是否存在栈中                          |
-| `finishActivity<SomeOtherActivity>`                          | 结束 Activity                                       |
+| `finishActivity<SomeOtherActivity>`                          | 结束某个 Activity                                    |
+| `finishToActivity<SomeOtherActivity>`                        | 结束到某个 Activity                                   |
 | `finishAllActivities`                                        | 结束所有 Activity                                   |
-| `finishAllActivitiesExceptNewest`                            | 结束除最新之外的所有 Activity                       |
-| `ComponentActivity.pressBackTwiceToExitApp(toastText, [delayMillis])` | 双击返回退出 App                                    |
+| `finishAllActivitiesExcept<SomeOtherActivity>`               | 结束除某个 Activity 之外的所有 Activity             |
+| `finishAllActivitiesExceptNewest`                            | 结束除最新 Activity 之外的所有 Activity                  |
+| `ComponentActivity.pressBackTwiceToExitApp(toastText, [delayMillis])` | 双击返回退出 App                                  |
 | `ComponentActivity.pressBackTwiceToExitApp([delayMillis]) {...}` | 双击返回退出 App，自定义 Toast                      |
 | `ComponentActivity.pressBackToNotExit()`                     | 点击返回不退出 App                                  |
+| `ComponentActivity.doOnBackPressed {...}`                     | 监听手机的返回事件                                  |
 | `Context.checkPermission(permission)`                        | 判断是否有权限                                      |
 | `Activity.windowInsetsControllerCompat`                      | 获取 WindowInsetsControllerCompat                   |
 | `Activity.decorFitsSystemWindows`                            | 设置布局适应系统窗口                                |
@@ -37,31 +40,31 @@ dependencies {
 | `FragmentActivity.fragmentActivity`                          | 作用域的 this 不是 Activity 时获取 FragmentActivity |
 | `ComponentActivity.lifecycleOwner`                           | 作用域的 this 不是 Activity 时获取 LifecycleOwner   |
 
-## [ActivityResult.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/ActivityResult.kt)
+## [ActivityResult](https://github.com/DylanCaiCoding/Longan/tree/master/longan/src/main/java/com/dylanc/longan/activityresult)
 
 | 用法                                                         | 作用                                         |
 | ------------------------------------------------------------ | -------------------------------------------- |
-| `ActivityResultCaller.startActivityLauncher {...}`           | 注册 `startActivityForResult()` 的启动器     |
-| `ActivityResultCaller.startIntentSenderLauncher {...}`       | 注册 `startIntentSenderForResult()` 的启动器 |
-| `ActivityResultCaller.requestPermissionLauncher {...}`       | 注册请求单个权限的启动器                     |
-| `ActivityResultCaller.requestMultiplePermissionsLauncher {...}` | 注册请求多个权限的启动器                     |
-| `ActivityResultCaller.takePicturePreviewLauncher {...}`      | 注册拍照预览的启动器                         |
-| `ActivityResultCaller.takePictureLauncher {...}`             | 注册拍照的启动器                             |
-| `ActivityResultCaller.takeVideoLauncher {...}`               | 注册录像的启动器                             |
-| `ActivityResultCaller.pickContactLauncher{...}`              | 注册选择联系人的启动器                       |
-| `ActivityResultCaller.pickContentLauncher {...}`             | 注册选择单个图片、视频的启动器               |
-| `ActivityResultCaller.getContentLauncher {...}`              | 注册选择单个图片、视频的启动器               |
-| `ActivityResultCaller.getMultipleContentsLauncher {...}`     | 注册选择多个图片、视频的启动器               |
-| `ActivityResultCaller.openDocumentLauncher {...}`            | 注册打开单个文档的启动器                     |
-| `ActivityResultCaller.openMultipleDocumentsLauncher {...}`   | 注册打开多个文档的启动器                     |
-| `ActivityResultCaller.openDocumentTreeLauncher {...}`        | 注册打开文档目录的启动器                     |
-| `ActivityResultCaller.createDocumentLauncher {...}`          | 注册创建文档的启动器                         |
-| `ActivityResultCaller.launchAppSettingsLauncher {...}`       | 注册启动 App 设置页的启动器                  |
-| `ActivityResultCaller.cropPictureLauncher {...}`             | 注册裁剪图片的启动器                         |
-| `ActivityResultCaller.enableLocationLauncher {...}`          | 注册开启定位的启动器                         |
-| `ActivityResultCaller.enableBluetoothLauncher {...}`         | 注册开启蓝牙的启动器                         |
-| `ActivityResultCaller.launchWifiSettingsLauncher {...}`      | 注册启动 Wifi 设置页的启动器                 |
-| `ActivityResultCaller.openWifiPanelLauncher {...}`           | 注册打开 Wifi 面板的启动器                   |
+| `ActivityResultCaller.registerForStartActivityResult {...}`           | 注册 `startActivityForResult()` 的启动器     |
+| `ActivityResultCaller.registerForStartIntentSenderResult {...}`       | 注册 `startIntentSenderForResult()` 的启动器 |
+| `ActivityResultCaller.registerForRequestPermissionResult {...}`       | 注册请求单个权限的启动器                     |
+| `ActivityResultCaller.registerForRequestMultiplePermissionsResult {...}` | 注册请求多个权限的启动器                     |
+| `ActivityResultCaller.registerForTakePicturePreviewResult {...}`      | 注册拍照预览的启动器                         |
+| `ActivityResultCaller.registerForTakePictureResult {...}`             | 注册拍照的启动器                             |
+| `ActivityResultCaller.registerForTakeVideoResult {...}`               | 注册录像的启动器                             |
+| `ActivityResultCaller.registerForPickContactResult{...}`              | 注册选择联系人的启动器                       |
+| `ActivityResultCaller.registerForPickContentResult {...}`             | 注册选择单个图片、视频的启动器               |
+| `ActivityResultCaller.registerForGetContentResult {...}`              | 注册选择单个图片、视频的启动器               |
+| `ActivityResultCaller.registerForGetMultipleContentsResult {...}`     | 注册选择多个图片、视频的启动器               |
+| `ActivityResultCaller.registerForOpenDocumentResult {...}`            | 注册打开单个文档的启动器                     |
+| `ActivityResultCaller.registerForOpenMultipleDocumentsResult {...}`   | 注册打开多个文档的启动器                     |
+| `ActivityResultCaller.registerForOpenDocumentTreeResult {...}`        | 注册打开文档目录的启动器                     |
+| `ActivityResultCaller.registerForCreateDocumentResult {...}`          | 注册创建文档的启动器                         |
+| `ActivityResultCaller.registerForLaunchAppSettingsResult {...}`       | 注册启动 App 设置页的启动器                  |
+| `ActivityResultCaller.registerForLaunchNotificationSettingsResult {...}`  | 注册启动通知设置页的启动器                  |
+| `ActivityResultCaller.registerForCropPictureResult {...}`             | 注册裁剪图片的启动器                         |
+| `ActivityResultCaller.registerForEnableLocationResult {...}`          | 注册开启定位的启动器                         |
+| `ActivityResultCaller.registerForEnableBluetoothResult {...}`         | 注册开启蓝牙的启动器                         |
+| `ActivityResultCaller.registerForLaunchWifiSettingsResult {...}`      | 注册启动 Wifi 设置页的启动器                 |
 | `ActivityResultLauncher<Unit/Viod>.launch()`                 | 启动无参的启动器                             |
 | `ActivityResultLauncher<Array<T>>.launch(varage input)`      | 启动可变参数的启动器                         |
 | `ActivityResultLauncher<Intent>.launch<SomeActivity>(...)`   | 启动 `startActivityForResult()` 的启动器     |
@@ -74,6 +77,8 @@ dependencies {
 | ---------------------------- | -------------------------- |
 | `application`                | 获取 Application           |
 | `packageName`                | 获取包名                   |
+| `appName`                    | 获取 App 名字           |
+| `appIcon`                    | 获取 App 图标            |
 | `appVersionName`             | 获取 App 版本号            |
 | `appVersionCode`             | 获取 App 版本码            |
 | `isAppDebug`                 | 判断 App 是否是 Debug 版本 |
@@ -152,35 +157,30 @@ dependencies {
 
 ## [Crash.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Crash.kt)
 
-| 用法                             | 作用               |
-| -------------------------------- | ------------------ |
-| `saveCrashLogLocally([dirPath])` | 保存崩溃日志到本地 |
-| `handleUncaughtException {...}`  | 处理未捕获的异常   |
+| 用法                                 | 作用               |
+| ----------------------------------- | ------------------ |
+| `saveCrashLogLocally([dirPath])`    | 保存崩溃日志到本地 |
+| `handleUncaughtException {...}`     | 处理未捕获的异常   |
+| `handleMainThreadException  {...}`  | 处理主线程的异常   |
 
 ## [DateTime.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DateTime.kt)
 
 | 用法                                                         | 作用                                       |
 | ------------------------------------------------------------ | ------------------------------------------ |
-| `Instant.Companion.parse(text, pattern, [timeZone])`         | 字符串转 Instant                           |
-| `LocalDateTime.Companion.parse(text, pattern)`               | 字符串转 LocalDateTime                     |
-| `LocalDate.Companion.parse(text, pattern)`                   | 字符串转 LocalDate                         |
-| `String.toInstant(pattern, [timeZone])`                      | 字符串转 Instant                           |
+| `Instant.format(pattern, [zone], [locale])`                  | Instant 转字符串                            |
+| `LocalDateTime.format(pattern, [locale])`                    | LocalDateTime 转字符串                     |
+| `LocalDate.format(pattern, [locale])`                        | LocalDate 转字符串                        |
+| `LocalDateTime.toInstant(pattern, [zone])`                   | LocalDateTime 转 Instant                 |
+| `Instant.toLocalDateTime(pattern, [zone])`                   | Instant 转 LocalDateTime                 |
+| `LocalDateTime.toEpochSecond(pattern, [zone])`               | LocalDateTime 转秒数                      |
+| `LocalDateTime.toEpochMilli(pattern, [zone])`                | LocalDateTime 转毫秒                      |
+| `String.toInstant(pattern, [zone])`                          | 字符串转 Instant                           |
 | `String.toLocalDateTime(pattern)`                            | 字符串转 LocalDateTime                     |
 | `String.toLocalDate(pattern)`                                | 字符串转 LocalDate                         |
-| `Instant.format(pattern, [timeZone])`                        | Instant 转字符串                           |
-| `LocalDateTime.format(pattern)`                              | LocalDateTime 转字符串                     |
-| `LocalDate.format(pattern)`                                  | LocalDateTime 转字符串                     |
-| `LocalDateTime/LocalDate.isToday([timeZone])`                | 判断是不是今天                              |
-| `LocalDateTime/LocalDate.isYesterday([timeZone])`            | 判断是不是昨天                              |
-| `LocalDateTime/LocalDate.withYear(year))`                    | 修改年份                                   |
-| `LocalDateTime/LocalDate.withMonth(month))`                  | 修改月份                                   |
-| `LocalDateTime/LocalDate.withDayOfMonth(dayOfMonth)`         | 修改当月的天数                              |
-| `LocalDateTime/LocalDate.withDayOfYear(dayOfYear)`           | 修改今年的天数                              |
-| `LocalDateTime/LocalDate.with {...})`                        | 修改日期或时间                              |
-| `LocalDateTime.withHour(hour)`                               | 修改小时                                   |
-| `LocalDateTime.withMinute(minute)`                           | 修改分钟                                   |
-| `LocalDateTime.withSecond(second)`                           | 修改秒                                     |
-| `LocalDateTime.withNano(nano)`                               | 修改纳秒                                   |
+| `String.toEpochMilliseconds(pattern)`                        | 字符串转毫秒                                |
+| `String.toEpochSeconds(pattern)`                             | 字符串转秒数                                |
+| `LocalDateTime/LocalDate.isToday([zone])`                    | 判断是不是今天                              |
+| `LocalDateTime/LocalDate.isYesterday([zone])`                | 判断是不是昨天                              |
 | `LocalDateTime/LocalDate.firstDayOfYear()`                   | 今年的第一天                                |
 | `LocalDateTime/LocalDate.lastDayOfYear()`                    | 今年的最后一天                              |
 | `LocalDateTime/LocalDate.firstDayOfNextYear()`               | 名年的第一天                                |
@@ -196,15 +196,6 @@ dependencies {
 | `LocalDateTime/LocalDate.nextOrSame(dayOfWeek)`              | 下一个周几，包含今天                         |
 | `LocalDateTime/LocalDate.previous(dayOfWeek)`                | 上一个周几，不包含今天                       |
 | `LocalDateTime/LocalDate.previousOrSame(dayOfWeek)`          | 上一个周几，包含今天                         |
-| `Instant.plus(period)`                                       | 增加一个周期                               |
-| `Instant.plus([value], unit)`                                | 增加指定数量的日期或时间单位                  |
-| `Instant.minus(period)`                                      | 减少一个周期                               |
-| `Instant.minus([value], unit)`                               | 减少指定数量的日期或时间单位                  |
-| `Instant.until(instant, unit)`                               | 将两时刻差值计算为指定日期或时间单位的数量      |
-| `Instant.daysUntil(instant)`                                 | 两时刻相差的多少天                          |
-| `Instant.monthsUntil(instant)`                               | 两时刻相差的多少个月                        |
-| `Instant.yearsUntil(instant)`                                | 两时刻相差的多少年                          |
-| `Instant.periodUntil(instant)`                               | 两时刻相差的时间段                          |
 
 ## [DeviceInfo.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/DeviceInfo.kt)
 
@@ -292,6 +283,10 @@ dependencies {
 | `by Fragment.arguments(key)`          | 通过 Fragment 的 argments 获取可空的参数         |
 | `by Fragment.arguments(key, default)` | 通过 Fragment 的 argments 获取含默认值的参数     |
 | `by Fragment.safeArguments(key)`      | 通过 Fragment 的 argments 获取人为保证非空的参数 |
+| `Fragment.pressBackTwiceToExitApp(toastText, [delayMillis])` | 双击返回退出 App                                  |
+| `Fragment.pressBackTwiceToExitApp([delayMillis]) {...}` | 双击返回退出 App，自定义 Toast                      |
+| `Fragment.pressBackToNotExit()`                     | 点击返回不退出 App                                  |
+| `Fragment.doOnBackPressed {...}`                     | 监听手机的返回事件                                  |
 
 ## [Intents.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Intents.kt)
 
@@ -322,13 +317,13 @@ dependencies {
 
 ## [Keyboard.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Keyboard.kt)
 
-| 用法                                       | 作用             |
-| ------------------------------------------ | ---------------- |
-| `Activity/Fragment/View.showKeyboard()`    | 显示键盘         |
-| `Activity/Fragment/View.hideKeyboard()`    | 隐藏键盘         |
-| `Activity/Fragment/View.toggleKeyboard()`  | 切换键盘显示状态 |
-| `Activity/Fragment/View.isKeyboardVisible` | 判断键盘是否可见 |
-| `Activity/Fragment/View.keyboardHeight`    | 获取键盘高度     |
+| 用法                      | 作用             |
+| ------------------------ | ---------------- |
+| `View.showKeyboard()`    | 显示键盘         |
+| `View.hideKeyboard()`    | 隐藏键盘         |
+| `View.toggleKeyboard()`  | 切换键盘显示状态 |
+| `View.isKeyboardVisible` | 判断键盘是否可见 |
+| `View.keyboardHeight`    | 获取键盘高度     |
 
 ## [Lifecycle.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Lifecycle.kt)
 
@@ -370,6 +365,9 @@ dependencies {
 | `isMobileData`               | 判断网络是否是移动数据 |
 | `isWifiEnabled`              | 判断 Wifi 是否打开     |
 | `NetworkAvailableLiveData()` | 监听网络状态改变       |
+| `WifiListLiveData()`         | 监听扫描的 Wifi 列表   |
+| `ScanResult.is24GHz`         | 判断扫描结果是否是 2.4GHz |
+| `ScanResult.is5GHz`          | 判断扫描结果是否是 5GHz |
 
 ## [Paths.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Paths.kt)
 
@@ -441,6 +439,12 @@ dependencies {
 | `shareFile(text, [title], [mimeType])`   | 分享单个文件       |
 | `shareFiles(text, [title], [mimeType])`  | 分享多个文件       |
 
+## [Shell.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Shell.kt)
+
+| 用法                                     | 作用               |
+| ---------------------------------------- | ------------------ |
+| `executeCmd(command)`                   | 执行命令             |
+
 ## [SpannableStringBuilder.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/SpannableStringBuilder.kt)
 
 | 用法                                                         | 作用                 |
@@ -481,6 +485,7 @@ dependencies {
 | `String.isIDCard15()`             | 判断是否是 15 位身份证号码         |
 | `String.isIDCard18()`             | 判断是否是 18 位身份证号码         |
 | `String.isJson()`                 | 判断是否是 Json 字符串             |
+| `Float/Double.toNumberString(...)` | 小数转为字符串，默认保留小数点后两位  |
 
 ## [SystemBars.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/SystemBars.kt)
 
@@ -513,13 +518,15 @@ dependencies {
 | `TextView.isPasswordVisible`                                 | 判断或设置密码是否可见 |
 | `TextView.addUnderline()`                                    | 添加下划线             |
 | `TextView.startCountDown(lifecycleOwner, [secondInFuture], onTick, onFinish)` | 开启倒计时并修改文字   |
-| `TextView.enableWhenOtherTextNotEmpty(textViews)`            | 当其它文本非空时可用   |
-| `TextView.enableWhenOtherTextChanged(textViews) {...}`       | 当其它文本改变时可用   |
+| `TextView.enableWhenOtherTextNotEmpty(textViews)`            | 当其它文本非空时按钮可点击   |
+| `TextView.enableWhenOtherTextChanged(textViews) {...}`       | 当其它文本改变时按钮可点击   |
+| `TextView.enableWhenAllChecked(checkBoxes)`                  | 当选项全选中时按钮可点击     |
 
 ## [Threads.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Threads.kt)
 
 | 用法                              | 作用         |
 | --------------------------------- | ------------ |
+| `isMainThread`                    | 是否在主线程 |
 | `mainThread([delayMillis]) {...}` | 在主线程运行 |
 
 ## [Toast.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Toast.kt)

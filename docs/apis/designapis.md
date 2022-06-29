@@ -6,7 +6,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.5'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.1.0'
 }
 ```
 
@@ -34,6 +34,7 @@ dependencies {
 | `RecyclerView.Adapter<*>.observeDataEmpty(owner) {...}` | 观察数据是否为空     |
 | `RecyclerView.smoothScrollToStartPosition(position)`    | 顺滑地滚动到起始位置 |
 | `RecyclerView.smoothScrollToEndPosition(position)`      | 顺滑地滚动到末端位置 |
+| `RecyclerView.addItemPadding(...)`                      | 列表每一项都加边距   |
 
 ## [Snackbar.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan-design/src/main/java/com/dylanc/longan/design/Snackbar.kt)
 

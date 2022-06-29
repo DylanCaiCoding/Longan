@@ -6,7 +6,6 @@ English | [中文](README_CN.md)
 
 Longan is a collection of Kotlin utils which makes Android application development faster and easier. It makes your code clean and easy to read.
 
-
 ## Gradle
 
 Add it in your root build.gradle at the end of repositories:
@@ -24,9 +23,9 @@ Add dependencies：
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.0.5'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.1.0'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.0.5'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.1.0'
 }
 ```
 ## Usage
