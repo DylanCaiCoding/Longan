@@ -47,7 +47,7 @@ inline fun handleUncaughtException(crossinline block: (Thread, Throwable) -> Uni
   }
 }
 
-inline fun handleLooperException(crossinline block: (Throwable) -> Unit){
+inline fun handleMainThreadException(crossinline block: (Throwable) -> Unit){
   mainThreadHandler.post {
     while (true){
       try {
