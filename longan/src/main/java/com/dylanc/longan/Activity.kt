@@ -75,14 +75,14 @@ fun <T : Activity> finishActivity(clazz: KClass<T>): Boolean =
     it.javaClass == clazz
   }
 
-inline fun <reified T : Activity> finishToActivity(): Boolean = finishToActivity(T::class)
+inline fun <reified T : Activity> finishToActivity(): Boolean = finishToActivity(T::class.java)
 
-fun <T : Activity> finishToActivity(clazz: KClass<T>): Boolean {
+fun <T : Activity> finishToActivity(clazz: Class<T>): Boolean {
   for (i in activityCache.count() - 1 downTo 0) {
-    if (clazz == activityCache[i].javaClass) {
+    if (clazz.name == activityCache[i].javaClass.name) {
       return true
     }
-    activityCache.removeAt(i)
+    activityCache.removeAt(i).finish()
   }
   return false
 }
@@ -98,7 +98,7 @@ inline fun <reified T : Activity> finishAllActivitiesExcept(): Boolean =
 
 fun <T : Activity> finishAllActivitiesExcept(clazz: Class<T>): Boolean =
   activityCache.removeAll {
-    if (it.javaClass != clazz) it.finish()
+    if (it.javaClass.name != clazz.name) it.finish()
     it.javaClass != clazz
   }
 
