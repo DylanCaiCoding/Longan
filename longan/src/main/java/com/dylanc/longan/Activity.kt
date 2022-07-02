@@ -141,6 +141,15 @@ fun ComponentActivity.doOnBackPressed(owner: LifecycleOwner = this, onBackPresse
 fun Context.checkPermission(permission: String): Boolean =
   ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
 
+fun Context.asActivity(): Activity? {
+  var context: Context? = this
+  while (context is ContextWrapper) {
+    if (context is Activity) return context
+    context = context.baseContext
+  }
+  return null
+}
+
 var Activity.decorFitsSystemWindows: Boolean
   @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
   get() = noGetter()
@@ -149,17 +158,8 @@ var Activity.decorFitsSystemWindows: Boolean
 inline val Activity.contentView: View
   get() = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0)
 
-val Context.activity: Activity?
-  get() {
-    var context: Context? = this
-    while (context is ContextWrapper) {
-      if (context is Activity) {
-        return context
-      }
-      context = context.baseContext
-    }
-    return null
-  }
+@Deprecated("Use `Context.asActivity()` instead", ReplaceWith("asActivity()"))
+val Context.activity: Activity? get() = asActivity()
 
 inline val Context.context: Context get() = this
 
