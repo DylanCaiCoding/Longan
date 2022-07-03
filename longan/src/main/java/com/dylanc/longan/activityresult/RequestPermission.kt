@@ -29,7 +29,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import com.dylanc.longan.isPermissionGranted
 import com.dylanc.longan.topActivity
 
 fun ActivityResultCaller.registerForRequestPermissionResult(
@@ -60,11 +60,10 @@ fun ActivityResultCaller.registerForRequestPermissionResult(callback: ActivityRe
 class RequestPermissionContract : ActivityResultContract<String, Pair<String, Boolean>>() {
   private lateinit var permission: String
 
-  override fun createIntent(context: Context, input: String): Intent {
-    permission = input
-    return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
+  override fun createIntent(context: Context, input: String) =
+    Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
       .putExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS, arrayOf(input))
-  }
+      .also { permission = input }
 
   override fun parseResult(resultCode: Int, intent: Intent?): Pair<String, Boolean> {
     if (intent == null || resultCode != Activity.RESULT_OK) return permission to false
@@ -75,9 +74,7 @@ class RequestPermissionContract : ActivityResultContract<String, Pair<String, Bo
   override fun getSynchronousResult(context: Context, input: String?): SynchronousResult<Pair<String, Boolean>>? =
     when {
       input == null -> SynchronousResult("" to false)
-      ContextCompat.checkSelfPermission(context, input) == PackageManager.PERMISSION_GRANTED -> {
-        SynchronousResult(input to true)
-      }
+      context.isPermissionGranted(input) -> SynchronousResult(input to true)
       else -> null
     }
 }
