@@ -34,7 +34,6 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import java.util.*
-import kotlin.reflect.KClass
 
 internal val activityCache = LinkedList<Activity>()
 
@@ -65,14 +64,14 @@ inline fun <reified T : Activity> isActivityExistsInStack(): Boolean =
   isActivityExistsInStack(T::class.java)
 
 fun <T : Activity> isActivityExistsInStack(clazz: Class<T>): Boolean =
-  activityCache.any { it.javaClass == clazz }
+  activityCache.any { it.javaClass.name == clazz.name }
 
-inline fun <reified T : Activity> finishActivity(): Boolean = finishActivity(T::class)
+inline fun <reified T : Activity> finishActivity(): Boolean = finishActivity(T::class.java)
 
-fun <T : Activity> finishActivity(clazz: KClass<T>): Boolean =
+fun <T : Activity> finishActivity(clazz: Class<T>): Boolean =
   activityCache.removeAll {
-    if (it.javaClass == clazz) it.finish()
-    it.javaClass == clazz
+    if (it.javaClass.name == clazz.name) it.finish()
+    it.javaClass.name == clazz.name
   }
 
 inline fun <reified T : Activity> finishToActivity(): Boolean = finishToActivity(T::class.java)
@@ -99,7 +98,7 @@ inline fun <reified T : Activity> finishAllActivitiesExcept(): Boolean =
 fun <T : Activity> finishAllActivitiesExcept(clazz: Class<T>): Boolean =
   activityCache.removeAll {
     if (it.javaClass.name != clazz.name) it.finish()
-    it.javaClass != clazz
+    it.javaClass.name != clazz.name
   }
 
 fun finishAllActivitiesExceptNewest(): Boolean =
