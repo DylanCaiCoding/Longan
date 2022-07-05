@@ -22,8 +22,7 @@ import android.content.res.TypedArray
 import android.graphics.Outline
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.view.View
-import android.view.ViewOutlineProvider
+import android.view.*
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
@@ -80,6 +79,32 @@ inline fun View.doOnLongClick(crossinline block: () -> Unit) =
     true
   }
 
+fun View.expandClickArea(expandSize: Float) = expandClickArea(expandSize.toInt())
+
+fun View.expandClickArea(expandSize: Int) =
+  expandClickArea(expandSize, expandSize, expandSize, expandSize)
+
+fun View.expandClickArea(top: Float, left: Float, right: Float, bottom: Float) =
+  expandClickArea(top.toInt(), left.toInt(), right.toInt(), bottom.toInt())
+
+fun View.expandClickArea(top: Int, left: Int, right: Int, bottom: Int) {
+  val parent = parent as? ViewGroup ?: return
+  parent.post {
+    val rect = Rect()
+    getHitRect(rect)
+    rect.top -= top
+    rect.left -= left
+    rect.right += right
+    rect.bottom += bottom
+    val touchDelegate = parent.touchDelegate
+    if (touchDelegate == null || touchDelegate !is MultiTouchDelegate) {
+      parent.touchDelegate = MultiTouchDelegate(rect, this)
+    } else {
+      touchDelegate.put(rect, this)
+    }
+  }
+}
+
 var View.roundCorners: Float
   @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
   get() = noGetter()
@@ -96,7 +121,7 @@ fun View?.isTouchedAt(x: Float, y: Float): Boolean =
   isTouchedAt(x.toInt(), y.toInt())
 
 fun View?.isTouchedAt(x: Int, y: Int): Boolean =
-  this?.locationOnScreen?.run { x in left..right && y in top..bottom } ?: false
+  this?.locationOnScreen?.contains(x, y) == true
 
 fun View.findTouchedChild(x: Float, y: Float): View? =
   findTouchedChild(x.toInt(), y.toInt())
@@ -161,4 +186,31 @@ fun <T> viewTags(key: Int, block: View.() -> T) = ReadOnlyProperty<View, T> { th
     thisRef.setTag(key, block(thisRef))
   }
   thisRef.getTag(key) as T
+}
+
+class MultiTouchDelegate(bound: Rect, delegateView: View) : TouchDelegate(bound, delegateView) {
+  private val map = mutableMapOf<View, Pair<Rect, TouchDelegate>>()
+  private var targetDelegate: TouchDelegate? = null
+
+  init {
+    put(bound, delegateView)
+  }
+
+  fun put(bound: Rect, delegateView: View) {
+    map[delegateView] = bound to TouchDelegate(bound, delegateView)
+  }
+
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    val x = event.x.toInt()
+    val y = event.y.toInt()
+    when (event.actionMasked) {
+      MotionEvent.ACTION_DOWN -> {
+        targetDelegate = map.entries.find { it.value.first.contains(x, y) }?.value?.second
+      }
+      MotionEvent.ACTION_CANCEL -> {
+        targetDelegate = null
+      }
+    }
+    return targetDelegate?.onTouchEvent(event) ?: false
+  }
 }
