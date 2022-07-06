@@ -28,6 +28,8 @@ import android.text.style.*
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.FloatRange
+import androidx.annotation.IntRange
 import androidx.core.text.inSpans
 
 private const val IMAGE_SPAN_TEXT = "<img/>"
@@ -92,18 +94,14 @@ inline fun SpannableStringBuilder.bullet(
   gapWidth: Int = BulletSpan.STANDARD_GAP_WIDTH,
   @ColorInt color: Int? = null,
   builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder {
-  val span = if (color == null) BulletSpan(gapWidth) else BulletSpan(gapWidth, color)
-  return inSpans(span, builderAction)
-}
+): SpannableStringBuilder =
+  inSpans(if (color == null) BulletSpan(gapWidth) else BulletSpan(gapWidth, color), builderAction)
 
 inline fun SpannableStringBuilder.quote(
   @ColorInt color: Int? = null,
   builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder {
-  val span = if (color == null) QuoteSpan() else QuoteSpan(color)
-  return inSpans(span, builderAction)
-}
+): SpannableStringBuilder =
+  inSpans(if (color == null) QuoteSpan() else QuoteSpan(color), builderAction)
 
 inline fun SpannableStringBuilder.leadingMargin(
   first: Float,
@@ -116,22 +114,6 @@ inline fun SpannableStringBuilder.leadingMargin(
   rest: Int = first,
   builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder = inSpans(LeadingMarginSpan.Standard(first, rest), builderAction)
-
-fun SpannableStringBuilder.clickable(
-  @ColorInt color: Int? = null,
-  isUnderlineText: Boolean = true,
-  onClick: (View) -> Unit,
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = inSpans(object : ClickableSpan() {
-  override fun onClick(widget: View) {
-    onClick(widget)
-  }
-
-  override fun updateDrawState(ds: TextPaint) {
-    ds.color = color ?: ds.linkColor
-    ds.isUnderlineText = isUnderlineText
-  }
-}, builderAction)
 
 fun SpannableStringBuilder.append(
   drawable: Drawable,
@@ -157,36 +139,49 @@ fun SpannableStringBuilder.appendClickable(
   @ColorInt color: Int? = null,
   isUnderlineText: Boolean = true,
   onClick: (View) -> Unit
-): SpannableStringBuilder = clickable(color, isUnderlineText, onClick) { append(text) }
+): SpannableStringBuilder = inSpans(ClickableSpan(color, isUnderlineText, onClick)) { append(text) }
 
 fun SpannableStringBuilder.appendClickable(
   drawable: Drawable,
   width: Int = drawable.intrinsicWidth,
   height: Int = drawable.intrinsicHeight,
   onClick: (View) -> Unit
-): SpannableStringBuilder = clickable(onClick = onClick) { append(drawable, width, height) }
+): SpannableStringBuilder = inSpans(ClickableSpan(onClick = onClick)) { append(drawable, width, height) }
 
 fun SpannableStringBuilder.appendClickable(
   @DrawableRes resourceId: Int,
   context: Context = application,
   onClick: (View) -> Unit
-): SpannableStringBuilder = clickable(onClick = onClick) { append(resourceId, context) }
+): SpannableStringBuilder = inSpans(ClickableSpan(onClick = onClick)) { append(resourceId, context) }
 
 fun SpannableStringBuilder.appendClickable(
   bitmap: Bitmap,
   context: Context = application,
   onClick: (View) -> Unit
-): SpannableStringBuilder = clickable(onClick = onClick) { append(bitmap, context) }
+): SpannableStringBuilder = inSpans(ClickableSpan(onClick = onClick)) { append(bitmap, context) }
 
 fun SpannableStringBuilder.appendSpace(
-  @androidx.annotation.FloatRange(from = 0.0) size: Float,
+  @FloatRange(from = 0.0) size: Float,
   @ColorInt color: Int = Color.TRANSPARENT
 ): SpannableStringBuilder = appendSpace(size.toInt(), color)
 
 fun SpannableStringBuilder.appendSpace(
-  @androidx.annotation.IntRange(from = 0) size: Int,
+  @IntRange(from = 0) size: Int,
   @ColorInt color: Int = Color.TRANSPARENT
 ): SpannableStringBuilder = inSpans(SpaceSpan(size, color)) { append(SPACE_SPAN_TEXT) }
+
+fun ClickableSpan(
+  @ColorInt color: Int? = null,
+  isUnderlineText: Boolean = true,
+  onClick: (View) -> Unit,
+): ClickableSpan = object : ClickableSpan() {
+  override fun onClick(widget: View) = onClick(widget)
+
+  override fun updateDrawState(ds: TextPaint) {
+    ds.color = color ?: ds.linkColor
+    ds.isUnderlineText = isUnderlineText
+  }
+}
 
 class SpaceSpan constructor(private val width: Int, color: Int = Color.TRANSPARENT) : ReplacementSpan() {
   private val paint = Paint().apply {
@@ -196,18 +191,17 @@ class SpaceSpan constructor(private val width: Int, color: Int = Color.TRANSPARE
 
   override fun getSize(
     paint: Paint, text: CharSequence?,
-    @androidx.annotation.IntRange(from = 0) start: Int,
-    @androidx.annotation.IntRange(from = 0) end: Int,
+    @IntRange(from = 0) start: Int,
+    @IntRange(from = 0) end: Int,
     fm: Paint.FontMetricsInt?
   ): Int = width
 
   override fun draw(
     canvas: Canvas, text: CharSequence?,
-    @androidx.annotation.IntRange(from = 0) start: Int,
-    @androidx.annotation.IntRange(from = 0) end: Int,
+    @IntRange(from = 0) start: Int,
+    @IntRange(from = 0) end: Int,
     x: Float, top: Int, y: Int, bottom: Int, paint: Paint
-  ) =
-    canvas.drawRect(x, top.toFloat(), x + width, bottom.toFloat(), this.paint)
+  ) = canvas.drawRect(x, top.toFloat(), x + width, bottom.toFloat(), this.paint)
 }
 
 class TypefaceSpanCompat(private val newType: Typeface) : TypefaceSpan(null) {
