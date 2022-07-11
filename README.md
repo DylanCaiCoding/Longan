@@ -23,9 +23,9 @@ Add dependencies：
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.1.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.1.1'
     // Optional
-    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.1.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan-design:1.1.1'
 }
 ```
 ## Usage

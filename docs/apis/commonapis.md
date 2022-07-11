@@ -6,7 +6,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.github.DylanCaiCoding.Longan:longan:1.1.0'
+    implementation 'com.github.DylanCaiCoding.Longan:longan:1.1.1'
 }
 ```
 
@@ -34,7 +34,7 @@ dependencies {
 | `Activity.windowInsetsControllerCompat`                      | 获取 WindowInsetsControllerCompat                   |
 | `Activity.decorFitsSystemWindows`                            | 设置布局适应系统窗口                                |
 | `Activity.contentView`                                       | 获取布局的根视图                                    |
-| `Context.activity`                                           | 通过 Context 获取 Activity                          |
+| `Context.asActivity()`                                       | 把 Context 作为 Activity 使用                      |
 | `Context.context`                                            | 作用域的 this 不是 Activity 时获取 Context          |
 | `Activity.activity`                                          | 作用域的 this 不是 Activity 时获取 Activity         |
 | `FragmentActivity.fragmentActivity`                          | 作用域的 this 不是 Activity 时获取 FragmentActivity |
@@ -406,7 +406,7 @@ dependencies {
 | `Bitmap/List<Bitmap>.toPdfDoc(pageWidth, pageHeight)` | Bitmap 转 PDF 文档             |
 | `Bitmap/List<Bitmap>.toA4PdfDoc()`                    | Bitmap 转 A4 纸大小的 PDF 文档 |
 
-## [Rescoures.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Rescoures.kt)
+## [Resource.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Resource.kt)
 
 | 用法                                          | 作用                  |
 | --------------------------------------------- | --------------------- |
@@ -416,6 +416,23 @@ dependencies {
 | `Context/Fragment/View.getCompatDrawable(id)` | 根据 id 获取 Drawable |
 | `Context/Fragment/View.getCompatFont(id)`     | 根据 id 获取字体      |
 | `parseColor(colorString)`                     | 根据字符串获取颜色    |
+
+## [Rom.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Rom.kt)
+
+| 用法             | 作用               |
+| ---------------- | ---------------- |
+| `isXiaomiRom`    | 判断是否是小米 Rom  |
+| `isHuaweiRom`    | 判断是否是华为 Rom  |
+| `isOppoRom`      | 判断是否是 OPPO Rom |
+| `isVivoRom`      | 判断是否是 vivo Rom |
+| `isOnePlusRom`   | 判断是否是一加 Rom  |
+| `isSmartisanRom` | 判断是否是锤子 Rom  |
+| `isMeiZuRom`     | 判断是否是魅族 Rom  |
+| `isSamsungRom`   | 判断是否是三星 Rom  |
+| `isGoogleRom`    | 判断是否是谷歌 Rom  |
+| `isSonyRom`      | 判断是否是索尼 Rom  |
+| `isRomOf(names)` | 判断是否是某个 Rom  |
+| `isHarmonyOS`    | 判断是否是鸿蒙系统  |
 
 ## [Screen.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Screen.kt)
 
@@ -442,7 +459,7 @@ dependencies {
 ## [Shell.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/Shell.kt)
 
 | 用法                                     | 作用               |
-| ---------------------------------------- | ------------------ |
+| --------------------------------------- | ------------------ |
 | `executeCmd(command)`                   | 执行命令             |
 
 ## [SpannableStringBuilder.kt](https://github.com/DylanCaiCoding/Longan/blob/master/longan/src/main/java/com/dylanc/longan/SpannableStringBuilder.kt)
@@ -558,6 +575,7 @@ dependencies {
 | ------------------------------------------------------------ | --------------------------------- |
 | `View/List<View>.doOnClick([clickIntervals], [isSharingIntervals])  {...}` | 设置点击事件                      |
 | `View/List<View>.doOnLongClick([clickIntervals], [isSharingIntervals])  {...}` | 设置长按事件                      |
+| `View.expandClickArea(...)`                                  | 增大点击区域                      |
 | `View.roundCorners`                                          | 设置圆角                          |
 | `View?.isTouchedAt(x, y)`                                    | 判断控件是否在触摸位置上          |
 | `View.findTouchedChild(view, x, y)`                          | 寻找触摸位置上的子控件            |
