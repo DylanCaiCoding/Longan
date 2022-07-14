@@ -60,9 +60,6 @@ inline val Application.isAppDebug: Boolean
 inline val isAppDarkMode: Boolean
   get() = (application.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
 
-inline val isLocationEnabled: Boolean
-  get() = application.getSystemService<LocationManager>()?.isProviderEnabled(GPS_PROVIDER) == true
-
 fun launchAppSettings(): Boolean =
   Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
     .apply { data = Uri.fromParts("package", packageName, null) }
