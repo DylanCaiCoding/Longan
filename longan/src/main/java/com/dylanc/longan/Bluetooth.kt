@@ -32,28 +32,33 @@ import androidx.lifecycle.LiveData
 inline val isBluetoothEnabled: Boolean
   get() = BluetoothAdapter.getDefaultAdapter()?.isEnabled == true
 
-class BluetoothStateLiveData @RequiresPermission(BLUETOOTH) constructor(
+class BluetoothEnabledLiveData @RequiresPermission(BLUETOOTH) constructor(
   private val filter: ((BluetoothDevice) -> Boolean)? = null
 ) : LiveData<Boolean>() {
-
-  private var receiver: BluetoothStateBroadcastReceive? = null
+  private var receiver = BluetoothStateBroadcastReceive()
 
   override fun onActive() {
-    val intentFilter = IntentFilter()
-    intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
-    if (filter != null) {
-      intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
-      intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
-      intentFilter.addAction("android.bluetooth.BluetoothAdapter.STATE_OFF")
-      intentFilter.addAction("android.bluetooth.BluetoothAdapter.STATE_ON")
+    val intentFilter = IntentFilter().apply {
+      addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+      if (filter != null) {
+        addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
+        addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+        addAction("android.bluetooth.BluetoothAdapter.STATE_OFF")
+        addAction("android.bluetooth.BluetoothAdapter.STATE_ON")
+      }
     }
-    receiver = BluetoothStateBroadcastReceive()
     application.registerReceiver(receiver, intentFilter)
+    value = isBluetoothEnabled
   }
 
   override fun onInactive() {
     application.unregisterReceiver(receiver)
-    receiver = null
+  }
+
+  override fun setValue(value: Boolean?) {
+    if (this.value != value) {
+      super.setValue(value)
+    }
   }
 
   private inner class BluetoothStateBroadcastReceive : BroadcastReceiver() {
@@ -62,11 +67,11 @@ class BluetoothStateLiveData @RequiresPermission(BLUETOOTH) constructor(
     override fun onReceive(context: Context, intent: Intent) {
       when (intent.action) {
         BluetoothDevice.ACTION_ACL_CONNECTED ->
-          if (filter?.invoke(intent.bluetoothDevice!!) == true) value = true
+          if (filterBluetoothDevice(intent)) value = true
         BluetoothDevice.ACTION_ACL_DISCONNECTED ->
-          if (filter?.invoke(intent.bluetoothDevice!!) == true) value = false
+          if (filterBluetoothDevice(intent)) value = false
         BluetoothAdapter.ACTION_STATE_CHANGED -> {
-          when (intent.bluetoothState) {
+          when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)) {
             BluetoothAdapter.STATE_OFF -> value = false
             BluetoothAdapter.STATE_ON -> if (filter == null) value = true
           }
@@ -74,10 +79,8 @@ class BluetoothStateLiveData @RequiresPermission(BLUETOOTH) constructor(
       }
     }
 
-    private val Intent.bluetoothState: Int
-      get() = getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)
-
-    private val Intent.bluetoothDevice: BluetoothDevice?
-      get() = getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+    private fun filterBluetoothDevice(intent: Intent) =
+      intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+        ?.let { device -> filter?.invoke(device) } == true
   }
 }

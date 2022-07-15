@@ -100,7 +100,7 @@ class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
     connectivityManager?.unregisterNetworkCallback(networkCallback)
   }
 
-  override fun setValue(value: Boolean) {
+  override fun setValue(value: Boolean?) {
     if (this.value != value) {
       super.setValue(value)
     }
