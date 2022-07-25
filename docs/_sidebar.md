@@ -17,6 +17,7 @@
     * [Logger](/usage/logger)
     * [MMKV](/usage/mmkv)
     * [Permissions](/usage/permissions)
+    * [SpannableString](/usage/spannablestring)
     * [SystemBars](/usage/systembars)
     * [Uri](/usage/uri)
     * [ViewModels](/usage/viewmodels)
