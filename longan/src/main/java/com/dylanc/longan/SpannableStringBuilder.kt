@@ -45,19 +45,6 @@ inline fun SpannableStringBuilder.size(
   builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder = inSpans(AbsoluteSizeSpan(size), builderAction)
 
-inline fun SpannableStringBuilder.alignCenter(
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = alignment(Layout.Alignment.ALIGN_CENTER, builderAction)
-
-inline fun SpannableStringBuilder.alignOpposite(
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = alignment(Layout.Alignment.ALIGN_OPPOSITE, builderAction)
-
-inline fun SpannableStringBuilder.alignment(
-  alignment: Layout.Alignment,
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = inSpans(AlignmentSpan.Standard(alignment), builderAction)
-
 inline fun SpannableStringBuilder.blur(
   radius: Float,
   style: BlurMaskFilter.Blur = BlurMaskFilter.Blur.NORMAL,
@@ -84,6 +71,31 @@ inline fun SpannableStringBuilder.url(
   builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder = inSpans(URLSpan(url), builderAction)
 
+inline fun SpannableStringBuilder.alignCenter(
+  builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = alignment(Layout.Alignment.ALIGN_CENTER, builderAction)
+
+inline fun SpannableStringBuilder.alignOpposite(
+  builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = alignment(Layout.Alignment.ALIGN_OPPOSITE, builderAction)
+
+inline fun SpannableStringBuilder.alignment(
+  alignment: Layout.Alignment,
+  builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = inSpans(AlignmentSpan.Standard(alignment), builderAction)
+
+inline fun SpannableStringBuilder.leadingMargin(
+  first: Float,
+  rest: Float = first,
+  builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = leadingMargin(first.toInt(), rest.toInt(), builderAction)
+
+inline fun SpannableStringBuilder.leadingMargin(
+  first: Int,
+  rest: Int = first,
+  builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = inSpans(LeadingMarginSpan.Standard(first, rest), builderAction)
+
 inline fun SpannableStringBuilder.bullet(
   gapWidth: Float,
   @ColorInt color: Int? = null,
@@ -102,18 +114,6 @@ inline fun SpannableStringBuilder.quote(
   builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder =
   inSpans(if (color == null) QuoteSpan() else QuoteSpan(color), builderAction)
-
-inline fun SpannableStringBuilder.leadingMargin(
-  first: Float,
-  rest: Float = first,
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = leadingMargin(first.toInt(), rest.toInt(), builderAction)
-
-inline fun SpannableStringBuilder.leadingMargin(
-  first: Int,
-  rest: Int = first,
-  builderAction: SpannableStringBuilder.() -> Unit
-): SpannableStringBuilder = inSpans(LeadingMarginSpan.Standard(first, rest), builderAction)
 
 fun SpannableStringBuilder.append(
   drawable: Drawable,
