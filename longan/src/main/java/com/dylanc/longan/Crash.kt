@@ -18,26 +18,10 @@
 
 package com.dylanc.longan
 
+import android.content.Context
 import android.os.Looper
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
-
-fun saveCrashLogLocally(dirPath: String = cacheDirPath) =
-  handleUncaughtException { thread, e ->
-    val dateTime = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault()).format(Date())
-    val file = File(dirPath, "crash_$dateTime.txt")
-    file.print {
-      println("Time:          $dateTime")
-      println("App version:   $appVersionName ($appVersionCode)")
-      println("OS version:    Android $sdkVersionName ($sdkVersionCode)")
-      println("Manufacturer:  $deviceManufacturer")
-      println("Model:         $deviceModel")
-      println("Thread:        ${thread.name}")
-      println()
-      e.printStackTrace(this)
-    }
-  }
+import java.time.Instant
 
 inline fun handleUncaughtException(crossinline block: (Thread, Throwable) -> Unit) {
   val defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler()
@@ -47,9 +31,9 @@ inline fun handleUncaughtException(crossinline block: (Thread, Throwable) -> Uni
   }
 }
 
-inline fun handleMainThreadException(crossinline block: (Throwable) -> Unit){
+inline fun handleMainThreadException(crossinline block: (Throwable) -> Unit) {
   mainThreadHandler.post {
-    while (true){
+    while (true) {
       try {
         Looper.loop()
       } catch (e: Throwable) {
@@ -58,3 +42,21 @@ inline fun handleMainThreadException(crossinline block: (Throwable) -> Unit){
     }
   }
 }
+
+fun Context.saveCrashLogLocally(dirPath: String = cacheDirPath) =
+  handleUncaughtException { thread, e ->
+    val now = Instant.now()
+    File(dirPath, "crash_${now.format("yyyy-MM-dd")}.txt").print(append = true) {
+      println("Time:          ${now.format("yyyy-MM-dd HH:mm:ss")}")
+      println("App version:   $appVersionName ($appVersionCode)")
+      println("OS version:    Android $sdkVersionName ($sdkVersionCode)")
+      println("Manufacturer:  $deviceManufacturer")
+      println("Model:         $deviceModel")
+      println("Thread:        ${thread.name}")
+      println()
+      e.printStackTrace(this)
+      println()
+      println("-----------------------------------------------------")
+      println()
+    }
+  }

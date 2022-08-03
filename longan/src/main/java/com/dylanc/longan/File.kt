@@ -39,10 +39,10 @@ fun File.isExistOrCreateNewFile(): Boolean =
   }
 
 fun File?.isExistOrCreateNewDir(): Boolean =
-  when{
-    this == null ->false
+  when {
+    this == null -> false
     exists() -> isDirectory
-    else ->mkdir()
+    else -> mkdir()
   }
 
 fun File.createNewFileAfterDeleteExist(): Boolean =
@@ -67,8 +67,8 @@ inline val File.mimeType: String? get() = URLConnection.guessContentTypeFromName
 
 inline val fileSeparator: String get() = File.separator
 
-inline fun File.print(crossinline block: PrintWriter.() -> Unit) =
-  PrintWriter(BufferedWriter(FileWriter(this))).apply(block).close()
+inline fun File.print(append: Boolean = false, crossinline block: PrintWriter.() -> Unit) =
+  PrintWriter(BufferedWriter(FileWriter(this, append))).apply(block).close()
 
 fun File.checkMD5(md5: String): Boolean = calculateMD5().equals(md5, true)
 
