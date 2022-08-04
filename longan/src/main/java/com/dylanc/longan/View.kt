@@ -35,43 +35,55 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 private var View.lastClickTime: Long? by viewTags(R.id.tag_last_click_time)
+var debouncingClickIntervals = 500
 
+@Deprecated("Use doOnDebouncingClick instead", ReplaceWith("doOnDebouncingClick(clickIntervals, isSharingIntervals, block)"))
 fun List<View>.doOnClick(clickIntervals: Int, isSharingIntervals: Boolean = false, block: () -> Unit) =
-  forEach { it.doOnClick(clickIntervals, isSharingIntervals, block) }
+  doOnDebouncingClick(clickIntervals, isSharingIntervals, block)
 
+@Deprecated("Use doOnDebouncingClick instead", ReplaceWith("doOnDebouncingClick(clickIntervals, isSharingIntervals, block)"))
 fun View.doOnClick(clickIntervals: Int, isSharingIntervals: Boolean = false, block: () -> Unit) =
+  doOnDebouncingClick(clickIntervals, isSharingIntervals, block)
+
+fun List<View>.doOnDebouncingClick(clickIntervals: Int = debouncingClickIntervals, isSharingIntervals: Boolean = false, block: () -> Unit) =
+  forEach { it.doOnDebouncingClick(clickIntervals, isSharingIntervals, block) }
+
+fun View.doOnDebouncingClick(clickIntervals: Int = debouncingClickIntervals, isSharingIntervals: Boolean = false, block: () -> Unit) =
   setOnClickListener {
-    val view = if (isSharingIntervals) context.activity?.window?.decorView ?: this else this
+    val view = if (isSharingIntervals) context.asActivity()?.window?.decorView ?: this else this
     val currentTime = System.currentTimeMillis()
-    val lastTime = view.lastClickTime ?: 0L
-    if (currentTime - lastTime > clickIntervals) {
+    if (currentTime - (view.lastClickTime ?: 0L) > clickIntervals) {
       view.lastClickTime = currentTime
       block()
     }
   }
 
-inline fun List<View>.doOnClick(crossinline block: () -> Unit) =
-  forEach { it.doOnClick(block) }
+inline fun List<View>.doOnClick(crossinline block: () -> Unit) = forEach { it.doOnClick(block) }
 
-inline fun View.doOnClick(crossinline block: () -> Unit) =
-  setOnClickListener { block() }
+inline fun View.doOnClick(crossinline block: () -> Unit) = setOnClickListener { block() }
 
+@Deprecated("Use doOnDebouncingLongClick instead", ReplaceWith("doOnDebouncingLongClick(clickIntervals, isSharingIntervals, block)"))
 fun List<View>.doOnLongClick(clickIntervals: Int, isSharingIntervals: Boolean = false, block: () -> Unit) =
-  forEach { it.doOnLongClick(clickIntervals, isSharingIntervals, block) }
+  doOnDebouncingLongClick(clickIntervals, isSharingIntervals, block)
 
+@Deprecated("Use doOnDebouncingLongClick instead", ReplaceWith("doOnDebouncingLongClick(clickIntervals, isSharingIntervals, block)"))
 fun View.doOnLongClick(clickIntervals: Int, isSharingIntervals: Boolean = false, block: () -> Unit) =
+  doOnDebouncingLongClick(clickIntervals, isSharingIntervals, block)
+
+fun List<View>.doOnDebouncingLongClick(clickIntervals: Int = debouncingClickIntervals, isSharingIntervals: Boolean = false, block: () -> Unit) =
+  forEach { it.doOnDebouncingLongClick(clickIntervals, isSharingIntervals, block) }
+
+fun View.doOnDebouncingLongClick(clickIntervals: Int = debouncingClickIntervals, isSharingIntervals: Boolean = false, block: () -> Unit) =
   doOnLongClick {
-    val view = if (isSharingIntervals) context.activity?.window?.decorView ?: this else this
+    val view = if (isSharingIntervals) context.asActivity()?.window?.decorView ?: this else this
     val currentTime = System.currentTimeMillis()
-    val lastTime = view.lastClickTime ?: 0L
-    if (currentTime - lastTime > clickIntervals) {
+    if (currentTime - (view.lastClickTime ?: 0L) > clickIntervals) {
       view.lastClickTime = currentTime
       block()
     }
   }
 
-inline fun List<View>.doOnLongClick(crossinline block: () -> Unit) =
-  forEach { it.doOnLongClick(block) }
+inline fun List<View>.doOnLongClick(crossinline block: () -> Unit) = forEach { it.doOnLongClick(block) }
 
 inline fun View.doOnLongClick(crossinline block: () -> Unit) =
   setOnLongClickListener {
