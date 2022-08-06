@@ -26,86 +26,59 @@ class SpannableStringActivity : AppCompatActivity() {
       textView.text = buildSpannedString {
         appendLine()
         append("我要一步一步往上爬，")
-        bold {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        bold { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        italic {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        italic { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        underline {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        underline { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        color(Color.RED) {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        color(Color.RED) { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        backgroundColor(Color.RED) {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        backgroundColor(Color.RED) { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        strikeThrough {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        strikeThrough { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        scale(1.3f) {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        scale(1.3f) { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        superscript {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        superscript { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        subscript {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        subscript { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        size(11.sp) {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        size(11.sp) { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        blur(10f) {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        blur(10f) { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        fontFamily("serif") {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        fontFamily("serif") { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
-        url("https://www.baidu.com") {
-          appendLine("在最高点乘着叶片往前飞")
-        }
+        url("https://www.baidu.com") { appendLine("在最高点乘着叶片往前飞") }
         appendLine()
 
         append("我要一步一步往上爬，")
         appendClickable("在最高点乘着叶片往前飞") { toast("text") }
-        appendLine()
         appendLine()
 
         append("我要一步一步往上爬，")
@@ -125,29 +98,19 @@ class SpannableStringActivity : AppCompatActivity() {
         appendLine("在最高点乘着叶片往前飞")
         appendLine()
 
-        alignCenter {
-          appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞")
-        }
+        alignCenter { appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞") }
         appendLine()
 
-        alignOpposite {
-          appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞")
-        }
+        alignOpposite { appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞") }
         appendLine()
 
-        leadingMargin(textView.textSize * 2) {
-          appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞")
-        }
+        leadingMargin(textView.textSize * 2) { appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞") }
         appendLine()
 
-        bullet(4.dp) {
-          appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞")
-        }
+        bullet(4.dp) { appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞") }
         appendLine()
 
-        quote {
-          appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞")
-        }
+        quote { appendLine("我要一步一步往上爬，在最高点乘着叶片往前飞") }
         appendLine()
       }
       textView.movementMethod = LinkMovementMethod.getInstance()
