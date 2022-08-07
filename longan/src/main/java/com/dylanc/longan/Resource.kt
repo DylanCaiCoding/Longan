@@ -70,5 +70,6 @@ fun Context.getCompatFont(@FontRes id: Int): Typeface? =
   ResourcesCompat.getFont(this, id)
 
 @ColorInt
+@Deprecated("Use `String.parseColor()` instead.", ReplaceWith("colorString.parseColor()"))
 fun parseColor(colorString: String): Int =
   Color.parseColor(colorString)

@@ -18,6 +18,7 @@
 
 package com.dylanc.longan
 
+import android.graphics.Color
 import android.text.format.Formatter
 import androidx.core.util.PatternsCompat
 import org.json.JSONObject
@@ -53,6 +54,9 @@ fun Long.toFileSizeString(): String =
 
 fun Long.toShortFileSizeString(): String =
   Formatter.formatShortFileSize(application, this)
+
+fun String.parseColor(): Int =
+  Color.parseColor(this)
 
 fun String.limitLength(length: Int): String =
   if (this.length <= length) this else substring(0, length)
