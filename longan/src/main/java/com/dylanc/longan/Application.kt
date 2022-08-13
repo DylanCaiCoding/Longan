@@ -27,16 +27,16 @@ import android.content.pm.PackageInfo
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.drawable.Drawable
-import android.location.LocationManager
-import android.location.LocationManager.GPS_PROVIDER
 import android.net.Uri
 import android.os.Process
 import android.provider.Settings
-import androidx.core.content.getSystemService
 import androidx.core.content.pm.PackageInfoCompat
 
 lateinit var application: Application
   internal set
+
+val isApplicationInitialized: Boolean
+  get() = ::application.isInitialized
 
 inline val packageName: String get() = application.packageName
 
