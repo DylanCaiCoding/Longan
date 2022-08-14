@@ -21,9 +21,7 @@ package com.dylanc.longan
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.text.Layout
-import android.text.SpannableStringBuilder
-import android.text.TextPaint
+import android.text.*
 import android.text.style.*
 import android.view.View
 import androidx.annotation.ColorInt
@@ -34,6 +32,16 @@ import androidx.core.text.inSpans
 
 private const val IMAGE_SPAN_TEXT = "<img/>"
 private const val SPACE_SPAN_TEXT = "<space/>"
+
+operator fun Spannable.set(string: String, span: Any) =
+  toString().indexOf(string).takeIf { it != -1 }?.let { start ->
+    setSpan(span, start, start + string.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+  }
+
+operator fun Spannable.set(string: String, spans: List<Any>) =
+  toString().indexOf(string).takeIf { it != -1 }?.let { start ->
+    spans.forEach { span -> setSpan(span, start, start + string.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE) }
+  }
 
 inline fun SpannableStringBuilder.size(
   size: Float,
@@ -183,7 +191,7 @@ fun ClickableSpan(
   }
 }
 
-class SpaceSpan constructor(private val width: Int, color: Int = Color.TRANSPARENT) : ReplacementSpan() {
+class SpaceSpan(private val width: Int, color: Int = Color.TRANSPARENT) : ReplacementSpan() {
   private val paint = Paint().apply {
     this.color = color
     style = Paint.Style.FILL
@@ -205,13 +213,9 @@ class SpaceSpan constructor(private val width: Int, color: Int = Color.TRANSPARE
 }
 
 class TypefaceSpanCompat(private val newType: Typeface) : TypefaceSpan(null) {
-  override fun updateDrawState(ds: TextPaint) {
-    ds.applyTypeFace(newType)
-  }
+  override fun updateDrawState(ds: TextPaint) = ds.applyTypeFace(newType)
 
-  override fun updateMeasureState(paint: TextPaint) {
-    paint.applyTypeFace(newType)
-  }
+  override fun updateMeasureState(paint: TextPaint) = paint.applyTypeFace(newType)
 
   private fun TextPaint.applyTypeFace(tf: Typeface) {
     val oldStyle: Int
