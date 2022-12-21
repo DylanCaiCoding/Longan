@@ -20,11 +20,13 @@ package com.dylanc.longan
 
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.CountDownTimer
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.annotation.FontRes
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LifecycleOwner
 import kotlin.math.roundToInt
@@ -43,6 +45,26 @@ inline var TextView.isPasswordVisible: Boolean
     } else {
       PasswordTransformationMethod.getInstance()
     }
+  }
+
+inline var TextView.isFakeBoldText: Boolean
+  get() = paint.isFakeBoldText
+  set(value) {
+    paint.isFakeBoldText = value
+  }
+
+var TextView.font: Int
+  @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+  get() = noGetter()
+  set(@FontRes value) {
+    typeface = context.getCompatFont(value)
+  }
+
+var TextView.typefaceFromAssets: String
+  @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+  get() = noGetter()
+  set(value) {
+    typeface = Typeface.createFromAsset(context.assets, value)
   }
 
 fun TextView.addUnderline() {

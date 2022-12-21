@@ -60,6 +60,10 @@ val activityList: List<Activity> get() = activityCache.toList()
 
 val topActivity: Activity get() = activityCache.last()
 
+val topActivityOrNull: Activity? get() = activityCache.lastOrNull()
+
+val topActivityOrApplication: Context get() = topActivityOrNull ?: application
+
 inline fun <reified T : Activity> isActivityExistsInStack(): Boolean =
   isActivityExistsInStack(T::class.java)
 

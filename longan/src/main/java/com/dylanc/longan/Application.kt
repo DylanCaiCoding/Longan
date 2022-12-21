@@ -18,6 +18,7 @@
 
 package com.dylanc.longan
 
+import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -34,9 +35,6 @@ import androidx.core.content.pm.PackageInfoCompat
 
 lateinit var application: Application
   internal set
-
-val isApplicationInitialized: Boolean
-  get() = ::application.isInitialized
 
 inline val packageName: String get() = application.packageName
 
@@ -71,3 +69,23 @@ fun relaunchApp(killProcess: Boolean = true) =
     startActivity(it)
     if (killProcess) Process.killProcess(Process.myPid())
   }
+
+fun doOnAppStatusChanged(onForeground: ((Activity) -> Unit)? = null, onBackground: ((Activity) -> Unit)? = null) =
+  doOnAppStatusChanged(object : OnAppStatusChangedListener {
+    override fun onForeground(activity: Activity) {
+      onForeground?.invoke(activity)
+    }
+
+    override fun onBackground(activity: Activity) {
+      onBackground?.invoke(activity)
+    }
+  })
+
+fun doOnAppStatusChanged(listener: OnAppStatusChangedListener) {
+  AppInitializer.onAppStatusChangedListener = listener
+}
+
+interface OnAppStatusChangedListener {
+  fun onForeground(activity: Activity)
+  fun onBackground(activity: Activity)
+}

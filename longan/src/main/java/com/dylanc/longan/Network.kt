@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate", "CanBeParameter", "PropertyName")
 
 package com.dylanc.longan
 
@@ -135,7 +135,7 @@ class NetworkAvailableLiveData @RequiresPermission(ACCESS_NETWORK_STATE) constru
   }
 }
 
-class WifiListLiveData @RequiresPermission(allOf = [ACCESS_WIFI_STATE, CHANGE_WIFI_STATE]) constructor() : LiveData<List<ScanResult>?>() {
+class WifiListLiveData @RequiresPermission(allOf = [ACCESS_WIFI_STATE, CHANGE_WIFI_STATE]) constructor() : LiveData<List<WifiScanResult>?>() {
 
   private val wifiManager: WifiManager by lazy(LazyThreadSafetyMode.NONE) {
     application.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -162,8 +162,55 @@ class WifiListLiveData @RequiresPermission(allOf = [ACCESS_WIFI_STATE, CHANGE_WI
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
         intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
       ) {
-        value = wifiManager.scanResults
+        val results = mutableMapOf<String, WifiScanResult>()
+        wifiManager.scanResults.filter { it.SSID.isNotEmpty() }.forEach { result ->
+          if (results[result.SSID] == null) {
+            results[result.SSID] = WifiScanResult(result)
+          } else {
+            results[result.SSID]?.addFrequency(result.frequency)
+          }
+        }
+        value = results.values.toList()
       }
+    }
+  }
+}
+
+class WifiScanResult(val data: ScanResult) {
+  @JvmField
+  val SSID: String = data.SSID
+
+  @JvmField
+  val BSSID: String = data.BSSID
+
+  @JvmField
+  val capabilities: String = data.capabilities
+
+  @JvmField
+  val frequency: Int = data.frequency
+
+  @JvmField
+  val level: Int = data.level
+
+  @JvmField
+  val timestamp: Long = data.timestamp
+
+  var is24GHz: Boolean = false
+    private set
+
+  var is5GHz: Boolean = false
+    private set
+
+  val isDualBand: Boolean get() = is24GHz && is5GHz
+
+  init {
+    addFrequency(data.frequency)
+  }
+
+  fun addFrequency(frequency: Int) {
+    when (frequency) {
+      in 2400..2550 -> is24GHz = true
+      in 5500..5800 -> is5GHz = true
     }
   }
 }

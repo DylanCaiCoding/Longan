@@ -27,7 +27,11 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.LiveData
 
 inline val isLocationEnabled: Boolean
-  get() = application.getSystemService<LocationManager>()?.isProviderEnabled(LocationManager.GPS_PROVIDER) == true
+  get() = try {
+    application.getSystemService<LocationManager>()?.isProviderEnabled(LocationManager.GPS_PROVIDER) == true
+  } catch (e: Exception) {
+    false
+  }
 
 class LocationEnabledLiveDate : LiveData<Boolean>() {
 
