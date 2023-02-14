@@ -29,7 +29,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Process
 import android.provider.Settings
 import androidx.core.content.pm.PackageInfoCompat
 
@@ -67,7 +66,7 @@ fun relaunchApp(killProcess: Boolean = true) =
   application.packageManager.getLaunchIntentForPackage(packageName)?.let {
     it.addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_CLEAR_TOP)
     startActivity(it)
-    if (killProcess) Process.killProcess(Process.myPid())
+    if (killProcess) killProcess()
   }
 
 fun doOnAppStatusChanged(onForeground: ((Activity) -> Unit)? = null, onBackground: ((Activity) -> Unit)? = null) =
@@ -82,7 +81,7 @@ fun doOnAppStatusChanged(onForeground: ((Activity) -> Unit)? = null, onBackgroun
   })
 
 fun doOnAppStatusChanged(listener: OnAppStatusChangedListener) {
-  AppInitializer.onAppStatusChangedListener = listener
+  Longan.onAppStatusChangedListener = listener
 }
 
 interface OnAppStatusChangedListener {
