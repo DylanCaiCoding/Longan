@@ -5,15 +5,27 @@
 考虑到有些人可能会用官方的 `DataStore`，就另写了一个库 [MMKV-KTX](https://github.com/DylanCaiCoding/MMKV-KTX) 作为可选项。
 
 ## Gradle
-添加依赖到 `build.gradle`：
+
+在根目录的 `build.gradle` 添加:
 
 ```groovy
-dependencies {
-    implementation 'com.github.DylanCaiCoding:MMKV-KTX:1.2.13'
+allprojects {
+    repositories {
+        //...
+        maven { url 'https://www.jitpack.io' }
+    }
 }
 ```
 
-## 用法
+在模块的 `build.gradle` 添加依赖：
+
+```groovy
+dependencies {
+    implementation 'com.github.DylanCaiCoding:MMKV-KTX:1.2.15'
+}
+```
+
+## 基础用法
 
 让一个类实现 `MMKVOwner` 接口，即可通过 `by mmkvXXXX()` 方法将属性委托给 `MMKV`，例如：
 
@@ -24,7 +36,7 @@ object DataRepository : MMKVOwner {
 }
 ```
 
-设置或获取属性的值则调用对应的 encode 或 decode 方法，key 值为属性名。
+设置或获取属性的值会调用对应的 encode() 或 decode() 函数，**用属性名作为 key 值**。
 
 支持以下类型：
 
@@ -40,6 +52,20 @@ object DataRepository : MMKVOwner {
 | `mmkvBytes()`      | /      |
 | `mmkvParcelable()` | /      |
 
+1.2.15 版本新增 `mmkvXXXX().asLiveData()` 函数将属性委托给 `LiveData`，例如：
+
+```kotlin
+object SettingRepository : MMKVOwner {
+  val nightMode by mmkvBool().asLiveData()
+}
+
+SettingRepository.nightMode.observe(this) {
+  checkBox.isChecked = it
+}
+
+SettingRepository.nightMode.value = true
+```
+
 在 `MMKVOwner` 的实现类可以获取 `kv` 对象进行删除值或清理缓存等操作：
 
 ```kotlin
@@ -47,12 +73,69 @@ kv.removeValueForKey(::isFirstLaunch.name)
 kv.clearAll()
 ```
 
-如果不同业务需要**区别存储**，可以重写 `kv` 属性来创建不同的 `MMKV` 实例：
+## 进阶用法
+
+### 手动初始化 MMKV
+
+在 Application 设置 `MMKVOwner.default` 即可取消默认的初始化操作。比如自定义文件保存的根目录：
 
 ```kotlin
-object DataRepository : MMKVOwner {
-  override val kv: MMKV = MMKV.mmkvWithID("MyID")
+val dir = filesDir.absolutePath + "/mmkv_2"
+MMKV.initialize(this, dir)
+MMKVOwner.default = MMKV.defaultMMKV()
+```
+
+或者需要修改默认的 MMKV 实例，比如业务需要支持多进程：
+
+```kotlin
+MMKV.initialize(this)
+MMKVOwner.default = MMKV.mmkvWithID("InterProcessKV", MMKV.MULTI_PROCESS_MODE)
+```
+
+在老项目使用本库时需要避免多次初始化 MMKV，否则数据可能会有异常。
+
+### 重写 kv 对象
+
+有一些场景需要使用新的 MMKV 对象，此时可以重写 `kv` 属性。
+
+#### 区别存储
+
+比如我们在组件化项目进行开发，各自负责的模块是不知道别人用了什么 key 值，重名了可能被覆盖。这就可以重写 `kv` 属性创建不同的 `MMKV` 实例来规避这个问题。
+
+```kotlin
+object UserRepository : MMKVOwner {
+  // ...
+  
+  override val kv: MMKV = MMKV.mmkvWithID("user")
 }
 ```
 
-完整的用法可查看[单元测试](https://github.com/DylanCaiCoding/MMKV-KTX/blob/master/library/src/androidTest/java/com/dylanc/mmkv/MMKVTest.kt)代码。
+#### 多进程
+
+MMKV 默认是单进程模式，如果你需要多进程支持：
+
+```kotlin
+object DataRepository : MMKVOwner {
+  // ...
+
+  override val kv: MMKV = MMKV.mmkvWithID("InterProcessKV", MMKV.MULTI_PROCESS_MODE)
+}
+```
+
+#### 加密
+
+MMKV 默认明文存储所有 key-value，依赖 Android 系统的沙盒机制保证文件加密。如果你担心信息泄露，你可以选择加密 MMKV。
+
+```kotlin
+object DataRepository : MMKVOwner {
+  // ...
+  
+  private const val cryptKey = "My-Encrypt-Key"
+  
+  override val kv: MMKV = MMKV.mmkvWithID("MyID", MMKV.SINGLE_PROCESS_MODE, cryptKey)
+}
+```
+
+## 更新日志
+
+[Releases](https://github.com/DylanCaiCoding/MMKV-KTX/releases)
