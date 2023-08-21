@@ -20,9 +20,14 @@ package com.dylanc.longan.design
 
 import android.content.Context
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_END
 import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_START
@@ -84,6 +89,15 @@ fun RecyclerView.addItemPadding(top: Int, bottom: Int, left: Int = 0, right: Int
       outRect.right = right
     }
   })
+
+fun RecyclerView.addItemDivider(@DrawableRes drawableId: Int, orientation: Int = this.orientation ?: RecyclerView.VERTICAL) =
+  addItemDivider(ContextCompat.getDrawable(context, drawableId), orientation)
+
+fun RecyclerView.addItemDivider(drawable: Drawable? = null, orientation: Int = this.orientation ?: RecyclerView.VERTICAL) =
+  addItemDecoration(DividerItemDecoration(context, orientation).apply { drawable?.let(::setDrawable) })
+
+val RecyclerView.orientation: Int?
+  get() = if (layoutManager is LinearLayoutManager) (layoutManager as LinearLayoutManager).orientation else null
 
 class AdapterDataEmptyObserver(
   private val adapter: RecyclerView.Adapter<*>,
