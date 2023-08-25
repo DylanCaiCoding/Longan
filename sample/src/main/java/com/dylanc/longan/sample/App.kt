@@ -12,7 +12,7 @@ class App : Application() {
 
   override fun onCreate() {
     super.onCreate()
-    initLogger(BuildConfig.DEBUG)
+    initLogger(true, isLog2File = true)
     saveCrashLogLocally()
     fileProviderAuthority = "$packageName.provider"
   }
