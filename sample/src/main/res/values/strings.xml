@@ -4,6 +4,7 @@
   <string name="dialogs">Dialogs</string>
   <string name="spannable_string">SpannableString</string>
   <string name="activity_result">ActivityResult</string>
+  <string name="activity_process">OtherProcessInit</string>
   <string name="selector">selector</string>
   <string name="single_choice_selector">single choice selector</string>
   <string name="multi_choice_selector">multi choice selector</string>
